@@ -52,11 +52,11 @@
 <header>
   <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
       <div class="container-fluid">
-          <a class="navbar-brand d-flex" href="#">
+          <a class="navbar-brand d-flex" routerLink="/dashboard" routerLinkActive="active">
               <img src="assets/smartschool-icon.svg" width="25" height="25" class="d-inline-block align-top mx-1" alt="SmartSchool Logo">
               <span class="mx-1"><strong><u>S</u></strong>mart<strong><u>S</u></strong>chool</span>
               <span class="badge rounded-pill text-bg-warning px-1 py-0 mb-auto">
-                <small>beta</small>
+                beta
                 <span class="visually-hidden">beta version</span>
               </span>
           </a>
@@ -66,39 +66,80 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
               <ul class="navbar-nav me-auto mb-2 mb-md-0">
-                  <li class="nav-item">
+                  <!-- <li class="nav-item">
                       <a class="nav-link active" aria-current="page" href="#">Home</a>
+                  </li> -->
+                  <li class="nav-item">
+                      <div class="btn-group">
+                        <a class="nav-link btn" routerLink="/students" routerLinkActive="active">Students</a>
+                        <a class="nav-link dropdown-toggle dropdown-toggle-split ps-1 pe-2" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                          <span class="visually-hidden">Toggle Dropdown</span>
+                        </a>
+                        <ul class="dropdown-menu bg-dark border-0 mt-3 py-0">
+                          <li><a class="dropdown-item nav-link" href="#">Registration</a></li>
+                          <li><a class="dropdown-item nav-link" href="#">Enrollment</a></li>
+                          <li><a class="dropdown-item nav-link" href="#">Attendance</a></li>
+                          <li><a class="dropdown-item nav-link" href="#">Performance</a></li>
+                          <li><a class="dropdown-item nav-link" href="#">Guardians</a></li>
+                          <!-- <li><hr class="dropdown-divider"></li> -->
+                        </ul>
+                      </div>
                   </li>
                   <li class="nav-item">
-                      <a class="nav-link" href="#">Students</a>
-                  </li>
-                  <li class="nav-item">
+                    <div class="btn-group">
                       <a class="nav-link" href="#">Teachers</a>
+                      <a class="nav-link dropdown-toggle dropdown-toggle-split ps-1 pe-2" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span class="visually-hidden">Toggle Dropdown</span>
+                      </a>
+                      <ul class="dropdown-menu bg-dark border-0 mt-3 py-0">
+                        <li><a class="dropdown-item nav-link disabled" aria-disabled="true" href="#">Registration</a></li>
+                        <li><a class="dropdown-item nav-link" href="#">Enrollment</a></li>
+                        <li><a class="dropdown-item nav-link" href="#">Attendance</a></li>
+                        <li><a class="dropdown-item nav-link" href="#">Paysheet</a></li>
+                        <!-- <li><hr class="dropdown-divider"></li> -->
+                      </ul>
+                    </div>
                   </li>
                   <li class="nav-item">
-                      <a class="nav-link" href="#">Exams</a>
-                  </li>
-                  <li class="nav-item">
-                      <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+                    <div class="btn-group">
+                      <a class="nav-link" href="#">Academic</a>
+                      <a class="nav-link dropdown-toggle dropdown-toggle-split ps-1 pe-2" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span class="visually-hidden">Toggle Dropdown</span>
+                      </a>
+                      <ul class="dropdown-menu bg-dark border-0 mt-3 py-0">
+                        <li><a class="dropdown-item nav-link" href="#">Classes</a></li>
+                        <li><a class="dropdown-item nav-link" href="#">Subjects</a></li>
+                        <li><a class="dropdown-item nav-link disabled" href="#">Books</a></li>
+                        <li><a class="dropdown-item nav-link" href="#">Exams</a></li>
+                        <li><a class="dropdown-item nav-link disabled" href="#">Events</a></li>
+                        <!-- <li><hr class="dropdown-divider"></li> -->
+                      </ul>
+                    </div>
                   </li>
               </ul>
-              <form class="d-flex" role="search">
-                  <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                  <button class="btn btn-outline-success" type="submit">Search</button>
-              </form>
+
+              <!-- <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
+                <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
+              </form> -->
+
+              <div class="dropdown text-end">
+                <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                  <img src="https://github.com/nifraz.png" alt="mdo" width="32" height="32" class="rounded-circle">
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end text-small">
+                  <li><a class="dropdown-item" href="#">Settings</a></li>
+                  <li><a class="dropdown-item" href="#">Profile</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item" href="#">Sign out</a></li>
+                </ul>
+              </div>
           </div>
       </div>
   </nav>
 </header>
 
 <main class="flex-shrink-0 min-vh-100">
-  <div class="container">
-      <p>The SmartSchool project introduces a comprehensive web-based management system designed to transform the administrative landscape of Sri Lankan government schools. Addressing the significant challenge of outdated manual record-keeping systems, this initiative seeks to enhance data integrity, security, and accessibility, thereby facilitating improved educational outcomes and administrative efficiency.</p>
-
-      <p>Motivated by the need to modernize school management, the project employs a robust digital platform that integrates key functionalities to manage students, staff, guardians, and academic evaluations, alongside an interactive event calendar. The system architecture is built on a .NET framework, utilizing MariaDB for database management, GraphQL for efficient data handling, and Angular combined with Bootstrap and Angular Material for a responsive front-end design.</p>
-
-      <p>Our approach encompasses a comprehensive analysis and design phase, focusing on user requirements and streamlined processes for data input and output. The implementation phase adheres to a modular development strategy, ensuring scalability and ease of use. Continuous evaluation through manual testing and user feedback has been critical in refining the system's functionalities.</p>
-  </div>
+  <router-outlet></router-outlet>
 </main>
 
 <footer class="footer mt-auto py-3 bg-body-tertiary">

@@ -75,6 +75,12 @@
     display: block !important;
 }
 
-main > .container {
+
+main {
     padding: 60px 15px 0;
+}
+
+.dropdown-item:hover, .dropdown-item:focus {
+    color: var(--bs-nav-link-hover-color);
+    background-color: var(--bs-nav-link-hover-bg);
 }
