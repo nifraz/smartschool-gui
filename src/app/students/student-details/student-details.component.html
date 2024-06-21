@@ -1,37 +1,45 @@
-<div *ngIf="student" class="card">
-    <div class="card-header">
-        <h3>Student Details</h3>
-    </div>
-    <div class="card-body">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="mb-3">
-                    <label class="form-label"><strong>Full Name:</strong></label>
-                    <p class="form-control-static">{{ student.fullName }}</p>
+<div *ngIf="student; then content else notFound"></div>
+
+<ng-template #content>
+    <div *ngIf="student" class="card">
+        <div class="card-header">
+            <h3>Student Details</h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label"><strong>Full Name:</strong></label>
+                        <p class="form-control-static">{{ student.fullName }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label"><strong>Nickname:</strong></label>
+                        <p class="form-control-static">{{ student.nickName }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label"><strong>Date of Birth:</strong></label>
+                        <p class="form-control-static">{{ student.dateOfBirth | date:'longDate' }}</p>
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label class="form-label"><strong>Nickname:</strong></label>
-                    <p class="form-control-static">{{ student.nickName }}</p>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label"><strong>Date of Birth:</strong></label>
-                    <p class="form-control-static">{{ student.dateOfBirth | date:'longDate' }}</p>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="mb-3">
-                    <label class="form-label"><strong>Student ID:</strong></label>
-                    <p class="form-control-static">{{ student.studentId }}</p>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label"><strong>Mobile Number:</strong></label>
-                    <p class="form-control-static">{{ student.mobileNo }}</p>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label"><strong>Student ID:</strong></label>
+                        <p class="form-control-static">{{ student.studentId }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label"><strong>Mobile Number:</strong></label>
+                        <p class="form-control-static">{{ student.mobileNo }}</p>
+                    </div>
                 </div>
             </div>
         </div>
+        <div class="card-footer">
+            <button class="btn btn-primary" (click)="editStudent()">Edit</button>
+            <button class="btn btn-danger" (click)="deleteStudent()">Delete</button>
+        </div>
     </div>
-    <div class="card-footer">
-        <button class="btn btn-primary" (click)="editStudent()">Edit</button>
-        <button class="btn btn-danger" (click)="deleteStudent()">Delete</button>
-    </div>
-</div>
+</ng-template>
+
+<ng-template #notFound>
+    <app-not-found></app-not-found>
+</ng-template>
