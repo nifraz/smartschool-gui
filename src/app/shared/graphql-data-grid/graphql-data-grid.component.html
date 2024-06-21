@@ -1,0 +1,16 @@
+<ag-grid-angular style="height: calc(100vh - 74px);"
+    [class]="themeClass"
+    [rowData]="rowData"
+    [columnDefs]="colDefs"
+    [defaultColDef]="defaultColDef"
+    [rowSelection]="'multiple'"
+    [rowMultiSelectWithClick]="true"
+    [suppressRowClickSelection]="true"
+    [pagination]="false"
+    [paginationPageSize]="paginationPageSize"
+    [paginationPageSizeSelector]="paginationPageSizeSelector"
+
+    (gridReady)="onGridReady($event)"
+
+>
+ </ag-grid-angular>
