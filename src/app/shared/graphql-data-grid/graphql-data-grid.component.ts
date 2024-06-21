@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AgGridAngular } from 'ag-grid-angular'; // Angular Data Grid Component
 import { 
   ColDef,
@@ -10,6 +10,7 @@ import {
   GridReadyEvent,
   MenuItemDef,
   ModuleRegistry,
+  RowClickedEvent,
   createGrid,
 } from 'ag-grid-community'; // Column Definition Type Interface
 
@@ -23,9 +24,17 @@ import {
   styleUrl: './graphql-data-grid.component.scss'
 })
 export class GraphqlDataGridComponent<T> implements OnInit {
+
+  @Output()recordClicked: EventEmitter<T> = new EventEmitter<T>();
+
+  onRowClicked($event: RowClickedEvent<T,any>) {
+    this.recordClicked.emit($event.data);
+  }
+
   ngOnInit(): void {
     console.log('graphql');
   }
+  
   @Input()themeClass: string = "ag-theme-quartz-dark";
 
   // Row Data: The data to be displayed.

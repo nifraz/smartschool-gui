@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { StudentsComponent } from './students/students.component';
+import { StudentDetailsComponent } from './students/student-details/student-details.component';
 
 export const routes: Routes = [
     {
@@ -17,5 +18,10 @@ export const routes: Routes = [
         path: 'students',
         title: 'Students | SmartSchool',
         component: StudentsComponent,
+    },
+    {
+        path: 'students/:id',
+        title: 'Student Details | SmartSchool',
+        component: StudentDetailsComponent,
     },
 ];
