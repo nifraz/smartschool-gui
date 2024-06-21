@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { StudentsService, Student } from '../students.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NotFoundComponent } from "../../shared/not-found/not-found.component";
 
@@ -19,16 +19,18 @@ export class StudentDetailsComponent implements OnInit {
   deleteStudent() {
     throw new Error('Method not implemented.');
   }
+
   editStudent() {
-    throw new Error('Method not implemented.');
+    this.router.navigate(['/students', this.id, 'edit']);
   }
 
   id?: string | null;
   student?: Student;
 
   constructor(
-    private StudentsService: StudentsService,
+    private studentsService: StudentsService,
     private activatedRoute: ActivatedRoute,
+    private router: Router,
   ) {
     // this.activatedRoute.params.subscribe(params => {
     //   this.id = params['id'];
@@ -38,10 +40,7 @@ export class StudentDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.id = this.activatedRoute.snapshot.paramMap.get('id');
     if (this.id) {
-      const student = this.StudentsService.getStudents().find(x => x.id == this.id);
-      if (student) {
-        this.student = student;
-      }
+      this.student = this.studentsService.getStudentById(this.id);
     }
   }
 }

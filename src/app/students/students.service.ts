@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class StudentsService {
-
+ 
   private students: Student[] = [
     {
       id: "1",
@@ -212,6 +212,31 @@ export class StudentsService {
 
   getStudents(): Student[] {
     return this.students;
+  }
+
+  getStudentById(id: string): Student | undefined {
+    return this.students.find(x => x.id == id);
+  }
+
+  createStudent(student: Student): boolean {
+    const existingStudent = this.students.find(x => x.id == student.id);
+    if (existingStudent) {
+      return false;
+    }
+    student.id = Date.now().toString(); //change
+    this.students.push(student);
+    return true;
+  }
+
+  updateStudent(student: Student): boolean {
+    let existingStudent = this.students.find(x => x.id == student.id);
+    if (!existingStudent) {
+      return false;
+    }
+    this.students = this.students.map(x => 
+      x.id === student.id ? student : x
+    );
+    return true;
   }
 }
 
