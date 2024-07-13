@@ -1,4 +1,6 @@
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { AgGridAngular } from 'ag-grid-angular'; // Angular Data Grid Component
 import { 
   ColDef,
@@ -13,12 +15,15 @@ import {
   RowClickedEvent,
   createGrid,
 } from 'ag-grid-community'; // Column Definition Type Interface
+import { Apollo, gql } from 'apollo-angular';
 
 @Component({
   selector: 'app-graphql-data-grid',
   standalone: true,
   imports: [
-    AgGridAngular
+    AgGridAngular,
+    CommonModule,
+    RouterLink
   ],
   templateUrl: './graphql-data-grid.component.html',
   styleUrl: './graphql-data-grid.component.scss'
@@ -27,14 +32,35 @@ export class GraphqlDataGridComponent<T> implements OnInit {
 
   @Output()recordClicked: EventEmitter<T> = new EventEmitter<T>();
 
+  constructor(private apollo: Apollo) {}
+  
+  ngOnInit(): void {
+    console.log('graphql');
+    this.apollo
+      .watchQuery({
+        query: gql`
+          query {
+            students {
+              items {
+                dateOfBirth
+                id
+                nickName
+                studentId
+              }
+            }
+          }
+        `
+      })
+      .valueChanges.subscribe((result: any) => {
+        // this.rowData = result?.data?.students;
+        console.log(result);
+      });
+  }
+    
   onRowClicked($event: RowClickedEvent<T,any>) {
     this.recordClicked.emit($event.data);
   }
 
-  ngOnInit(): void {
-    console.log('graphql');
-  }
-  
   @Input()themeClass: string = "ag-theme-quartz-dark";
 
   // Row Data: The data to be displayed.
