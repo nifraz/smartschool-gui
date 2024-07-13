@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StudentsService, Student } from '../students.service';
 import { CommonModule } from '@angular/common';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-student-form',
@@ -16,16 +17,21 @@ import { CommonModule } from '@angular/common';
 })
 export class StudentFormComponent implements OnInit {
   studentForm: FormGroup;
-  isEditMode: boolean = false;
-  id?: string | null;
+  //id?: string | null;
+  
+  isLoading: boolean = false;
+  isEdit: boolean = false;
+  isAddAnother: boolean = false;
 
   constructor(
-    private fb: FormBuilder,
+    private formBuilder: FormBuilder,
     private studentsService: StudentsService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private dialogRef: MatDialogRef<StudentFormComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any
   ) {
-    this.studentForm = this.fb.group({
+    this.studentForm = this.formBuilder.group({
       id: [''],
       studentId: ['', Validators.required],
       fullName: ['', Validators.required],
@@ -36,10 +42,9 @@ export class StudentFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.id = this.route.snapshot.paramMap.get('id');
-    if (this.id) {
-      this.isEditMode = true;
-      const student = this.studentsService.getStudentById(this.id);
+    this.isEdit = this.data.isEdit;
+    if (this.data.isEdit && this.data.id) {
+      const student = this.studentsService.getStudentById(this.data.id);
       if (student) {
         // Convert dateOfBirth to string in YYYY-MM-DD format
         const formattedDate = student.dateOfBirth.toISOString().split('T')[0];
@@ -56,13 +61,23 @@ export class StudentFormComponent implements OnInit {
         dateOfBirth: new Date(this.studentForm.value.dateOfBirth),
       };
 
-      if (this.isEditMode) {
+      if (this.isEdit) {
         this.studentsService.updateStudent(studentData);
-        this.router.navigate(['/students', studentData.id]);
+        this.closeModal();
       } else {
         this.studentsService.createStudent(studentData);
-        this.router.navigate(['/students', studentData.id]);
+        if (this.isAddAnother) {
+          //reset the form
+
+        }
+        else {
+          this.closeModal();
+        }
       }
     }
+  }
+
+  closeModal(): void {
+    this.dialogRef.close(this.studentForm.value);
   }
 }

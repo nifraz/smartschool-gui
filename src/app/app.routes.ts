@@ -21,23 +21,19 @@ export const routes: Routes = [
         title: 'Students | SmartSchool',
         component: StudentsComponent,
     },
-    {
-        path: 'students/create',
-        title: 'New Student | SmartSchool',
-        component: StudentFormComponent
-
-    },
-    {
-        path: 'students/:id/edit',
-        title: 'Edit Student | SmartSchool',
-        component: StudentFormComponent
-
-    },
+    { path: 'students/create', title: 'New Student | SmartSchool', component: StudentsComponent, data: { isCreate: true } },
+    { path: 'students/:id/edit', title: 'Edit Student | SmartSchool', component: StudentDetailsComponent, data: { isEdit: true } },
     {
         path: 'students/:id',
         title: 'Student Details | SmartSchool',
         component: StudentDetailsComponent,
     },
+    // {
+    //     path: 'students/:id/edit',
+    //     title: 'Edit Student | SmartSchool',
+    //     component: StudentFormComponent
+
+    // },
 
     //Wild Card Route for 404 request 
     {

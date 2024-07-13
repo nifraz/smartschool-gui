@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ColDef } from 'ag-grid-community'; // Column Definition Type Interface
 import { GraphqlDataGridComponent } from '../shared/graphql-data-grid/graphql-data-grid.component';
 import { StudentsService, Student } from './students.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { StudentFormComponent } from './student-form/student-form.component';
 
 @Component({
   selector: 'app-students',
@@ -18,6 +20,8 @@ export class StudentsComponent implements OnInit {
   constructor(
     private StudentsService: StudentsService,
     private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private matDialog: MatDialog,
   ) {
     
   }
@@ -29,6 +33,32 @@ export class StudentsComponent implements OnInit {
 
   ngOnInit(): void {
     console.log('students');
+    this.activatedRoute.data.subscribe(data => {
+      if (data['isCreate']) {
+        this.openStudentFormModal();
+      }
+    });
+  }
+
+  openStudentFormModal(): void {
+    const dialogRef = this.matDialog.open(StudentFormComponent, {
+      width: '1000px',
+      data: { isEdit: false },
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      //reload data
+      this.router.navigate(['/students']);
+      console.log(result);
+    });
+  }
+
+  navigateToCreateStudent(): void {
+    this.router.navigate(['create'], { relativeTo: this.activatedRoute });
+  }
+
+  navigateToEditStudent(id: string): void {
+    this.router.navigate([id, 'edit'], { relativeTo: this.activatedRoute });
   }
   
   themeClass = "ag-theme-quartz";
