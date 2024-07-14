@@ -13,7 +13,7 @@ import {
 import { Apollo, gql } from 'apollo-angular';
 import { ApolloQueryResult } from '@apollo/client'
 import { Observable, catchError, map, of } from 'rxjs';
-import { AgGridFilterType, RemoteGridApi, convertToEndOfDay } from '../services/graphql.service';
+import { AgGridFilter, AgGridFilterType, AgGridType, ConditionalOperator, RemoteGridApi, convertToEndOfDay } from '../services/graphql.service';
 import { RemoteGridBindingDirective } from '../directives/remote-grid-binding.directive';
 import { ISimpleFilterModelType } from 'ag-grid-community/dist/types/core/filter/provided/simpleFilter';
 
@@ -107,47 +107,66 @@ export class GraphqlDataGridComponent<T extends object> implements OnInit, Remot
   }
 
   constructQuery(params: IGetRowsParams): string {
-    const filterModel = params.filterModel;
+    const filterModel: {[key: string]: AgGridFilter} = params.filterModel;
     const sortModel = params.sortModel;
     const visibleColumns = this.gridApi?.getAllDisplayedColumns().map(col => col.getColId()).filter(colId => colId != 'id') || [];
 
     // Construct filtering part of the query
-    const filterQuery = Object.entries(filterModel)
+    const filteredColumns = Object.entries(filterModel)
       .map(([colId, filter]) => {
-        const filterObj: any = filter;
-        let filterValue1 = filterObj.filter;
-        let filterValue2 = filterObj.filter;
-        switch(filterObj.filterType) {
-          case 'number':
-            filterValue1 = `${filterObj.filter}`;
-            filterValue2 = `${filterObj.filterTo ?? ''}`;
-            break;
-          case 'text':
-            filterValue1 = `"${filterObj.filter}"`;
-            break;
-          case 'date':
-            filterValue1 = `"${filterObj.dateFrom}"`;
-            filterValue2 =  `"${filterObj.dateTo ? convertToEndOfDay(filterObj.dateTo) : ''}"`;
-            break;
-          default:
-            filterValue1 = `${filterObj.filter}`;
+        if (filter.conditions?.length == 2) {
+          const filterObjects = filter.conditions
+            .map((x: AgGridFilter) => {
+              const filters: AgGridFilter[] = [];
+              if (x.type == AgGridType.IN_RANGE) {
+                filters.push(
+                  {
+                    field: colId,
+                    filterType: x.filterType,
+                    type: AgGridType.GREATER_THAN_OR_EQUAL,
+                    filter: this.getGqlFilterValue(x.filterType, x.filterType == AgGridFilterType.NUMBER ? x.filter : x.dateFrom),
+                  },
+                  {
+                    field: colId,
+                    filterType: x.filterType,
+                    type: AgGridType.LESS_THAN_OR_EQUAL,
+                    filter: this.getGqlFilterValue(x.filterType, x.filterType == AgGridFilterType.NUMBER ? x.filterTo : convertToEndOfDay(filter.dateTo)),
+                  }
+                );
+                return this.constructGqlCondition(filters, ConditionalOperator.AND);
+              }
+              return `{${colId}: {${this.getGqlFilterOperation(x.type)}: ${this.getGqlFilterValue(x.filterType, x.filter)}}}`;
+            })
+            .join(' ');
+          return `{${filter?.operator?.toLowerCase()}: [${filterObjects}]}`;
         }
-
-        if (filterObj.type == AgGridFilterType.IN_RANGE) {
-          return `${colId}: { ${this.getGqlFilterOperation(AgGridFilterType.GREATER_THAN_OR_EQUAL)}: ${filterValue1}, ${this.getGqlFilterOperation(AgGridFilterType.LESS_THAN_OR_EQUAL)}: ${filterValue2} }`;
-        } else if(filterObj.type == AgGridFilterType.BLANK || filterObj.type == AgGridFilterType.NOT_BLANK) {
-          return `${colId}: { ${this.getGqlFilterOperation(filterObj.type)}: null }`;
-        } else {
-          return `${colId}: { ${this.getGqlFilterOperation(filterObj.type)}: ${filterValue1} }`;
+        else {
+          const filters: AgGridFilter[] = [];
+          if (filter.type == AgGridType.IN_RANGE) {
+            filters.push(
+              {
+                field: colId,
+                filterType: filter.filterType,
+                type: AgGridType.GREATER_THAN_OR_EQUAL,
+                filter: this.getGqlFilterValue(filter.filterType, filter.filterType == AgGridFilterType.NUMBER ? filter.filter : filter.dateFrom),
+              },
+              {
+                field: colId,
+                filterType: filter.filterType,
+                type: AgGridType.LESS_THAN_OR_EQUAL,
+                filter: this.getGqlFilterValue(filter.filterType, filter.filterType == AgGridFilterType.NUMBER ? filter.filterTo : convertToEndOfDay(filter.dateTo)),
+              }
+            );
+            return this.constructGqlCondition(filters, ConditionalOperator.AND);
+          }
+          return `{${colId}: {${this.getGqlFilterOperation(filter.type)}: ${this.getGqlFilterValue(filter.filterType, filter.filter)}}}`;
         }
-      })
-      .filter(Boolean)
-      .join(', ');
+      });
 
+    const filterQuery = `${ConditionalOperator.AND.toLowerCase()}: [${filteredColumns.join(' ')}]`
     // Construct sorting part of the query
     const sortQuery = sortModel
       .map(column => `${column.colId}: ${column.sort.toUpperCase()}`)
-      .filter(Boolean)
       .join(', ');
 
     // Construct the full GraphQL query dynamically
@@ -170,55 +189,94 @@ export class GraphqlDataGridComponent<T extends object> implements OnInit, Remot
     return query;
   }
 
-  getGqlFilterOperation(filterModelType: ISimpleFilterModelType): string {
-    let filterOperation: string = '';
-    switch (filterModelType) {
-      case AgGridFilterType.EMPTY:
-        // filterOperation = 'eq';
+  private constructGqlCondition(filterObjects: AgGridFilter[], operator: ConditionalOperator | undefined): string {
+    if (operator == undefined) {
+      throw new Error(`Invalid conditional operator`);
+    }
+    return `{${operator.toLowerCase()}: [${filterObjects.map(x => `{${x.field}: {${this.getGqlFilterOperation(x.type)}: ${x.filter}}}`).join(' ')}]}`;
+  }
+
+  private getGqlFilterOperationKeyValuePair(filterObj: any): string {
+    let filterValue1 = filterObj.filter;
+    let filterValue2 = filterObj.filter;
+    switch(filterObj.filterType) {
+      case 'number':
+        filterValue1 = `${filterObj.filter}`;
+        filterValue2 = `${filterObj.filterTo ?? ''}`;
         break;
-      case AgGridFilterType.EQUALS:
-        filterOperation = 'eq';
+      case 'text':
+        filterValue1 = `"${filterObj.filter}"`;
         break;
-      case AgGridFilterType.NOT_EQUAL:
-        filterOperation = 'neq';
-        break;
-      case AgGridFilterType.LESS_THAN:
-        filterOperation = 'lt';
-        break;
-      case AgGridFilterType.LESS_THAN_OR_EQUAL:
-        filterOperation = 'lte';
-        break;
-      case AgGridFilterType.GREATER_THAN:
-        filterOperation = 'gt';
-        break;
-      case AgGridFilterType.GREATER_THAN_OR_EQUAL:
-        filterOperation = 'gte';
-        break;
-      case AgGridFilterType.IN_RANGE:
-        // filterOperation = 'equals';
-        break;
-      case AgGridFilterType.CONTAINS:
-        filterOperation = 'contains';
-        break;
-      case AgGridFilterType.NOT_CONTAINS:
-        filterOperation = 'ncontains';
-        break;
-      case AgGridFilterType.STARTS_WITH:
-        filterOperation = 'startsWith';
-        break;
-      case AgGridFilterType.ENDS_WITH:
-        filterOperation = 'endsWith';
-        break;
-      case AgGridFilterType.BLANK:
-        filterOperation = 'eq';
-        break;
-      case AgGridFilterType.NOT_BLANK:
-        filterOperation = 'neq';
+      case 'date':
+        filterValue1 = `"${filterObj.dateFrom}"`;
+        filterValue2 =  `"${filterObj.dateTo ? convertToEndOfDay(filterObj.dateTo) : ''}"`;
         break;
       default:
-        filterOperation = '';
+        filterValue1 = `${filterObj.filter}`;
     }
-    return filterOperation;
+
+    if (filterObj.type == AgGridType.IN_RANGE) {
+      return `${this.getGqlFilterOperation(AgGridType.GREATER_THAN_OR_EQUAL)}: ${filterValue1}, ${this.getGqlFilterOperation(AgGridType.LESS_THAN_OR_EQUAL)}: ${filterValue2}`;
+    } else if(filterObj.type == AgGridType.BLANK || filterObj.type == AgGridType.NOT_BLANK) {
+      return `${this.getGqlFilterOperation(filterObj.type)}: null`;
+    } else {
+      return `${this.getGqlFilterOperation(filterObj.type)}: ${filterValue1}`;
+    }
+  }
+
+  private getGqlFilterValue(filterType: AgGridFilterType, filterValue: string | number | undefined): string {
+    if (filterValue == undefined) {
+      throw new Error(`Invalid filter value`);
+    }
+
+    switch (filterType) {
+      case AgGridFilterType.NUMBER:
+        return `${filterValue}`;
+      case AgGridFilterType.TEXT:
+      case AgGridFilterType.DATE:
+        return `"${filterValue}"`;
+      default:
+        throw new Error(`Unsupported filterType: ${filterType}`);
+    }
+  }
+
+  private getGqlFilterOperation(filterModelType: ISimpleFilterModelType | undefined): string {
+    if (filterModelType == undefined) {
+      throw new Error('Invalid filter type');
+    }
+
+    switch (filterModelType) {
+      case AgGridType.EMPTY:
+        return 'eq';
+      case AgGridType.EQUALS:
+        return 'eq';
+      case AgGridType.NOT_EQUAL:
+        return 'neq';
+      case AgGridType.LESS_THAN:
+        return 'lt';
+      case AgGridType.LESS_THAN_OR_EQUAL:
+        return 'lte';
+      case AgGridType.GREATER_THAN:
+        return 'gt';
+      case AgGridType.GREATER_THAN_OR_EQUAL:
+        return 'gte';
+      case AgGridType.IN_RANGE:
+        return 'equals';
+      case AgGridType.CONTAINS:
+        return 'contains';
+      case AgGridType.NOT_CONTAINS:
+        return 'ncontains';
+      case AgGridType.STARTS_WITH:
+        return 'startsWith';
+      case AgGridType.ENDS_WITH:
+        return 'endsWith';
+      case AgGridType.BLANK:
+        return 'eq';
+      case AgGridType.NOT_BLANK:
+        return 'neq';
+      default:
+        throw new Error('Invalid filter type');
+    }
   }
 
 }

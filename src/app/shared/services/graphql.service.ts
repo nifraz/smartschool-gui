@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { GridApi, IGetRowsParams } from 'ag-grid-community';
+import { ISimpleFilterModelType } from 'ag-grid-community/dist/types/core/filter/provided/simpleFilter';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -17,7 +18,10 @@ export interface RemoteGridApi<T> {
   gridApi?: GridApi<T>;
 }
 
-export function convertToEndOfDay(dateString: string): string {
+export function convertToEndOfDay(dateString: string | undefined): string {
+  if (!dateString) {
+    return '';
+  }
   // Parse the input date string to a Date object
   const date = new Date(dateString);
 
@@ -35,7 +39,28 @@ export function convertToEndOfDay(dateString: string): string {
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
 
+export interface AgGridFilter {
+  filterType: AgGridFilterType,
+  type?: ISimpleFilterModelType,
+  filter?: number | string,
+  filterTo?: number | string,
+  dateFrom?: string,
+  dateTo?: string,
+  operator?: ConditionalOperator,
+  condition1?: AgGridFilter,
+  condition2?: AgGridFilter,
+  conditions?: AgGridFilter[],
+
+  field?: string,
+}
+
 export enum AgGridFilterType {
+  NUMBER = 'number',
+  TEXT = 'text',
+  DATE = 'date',
+}
+
+export enum AgGridType {
   EMPTY = 'empty',
   EQUALS = 'equals',
   NOT_EQUAL = 'notEqual',
@@ -50,4 +75,10 @@ export enum AgGridFilterType {
   ENDS_WITH = 'endsWith',
   BLANK = 'blank',
   NOT_BLANK = 'notBlank'
+}
+
+export enum ConditionalOperator {
+  AND = 'AND',
+  OR = 'OR',
+  // NOT = 'NOT',
 }
