@@ -63,26 +63,43 @@ export class StudentsComponent implements OnInit {
   
   themeClass = "ag-theme-quartz";
 
-  // Row Data: The data to be displayed.
-  rowData: Student[] = this.StudentsService.getStudents();
-
   // Column Definitions: Defines & controls grid columns.
   colDefs: ColDef<Student>[] = [
     { 
       field: "id",
-      hide: true,
+      filter: "agNumberColumnFilter",
+      hide: false,
+      floatingFilter: true,
      },
     { 
       field: "studentId",
+      filter: 'agTextColumnFilter',
       pinned: true,
+      floatingFilter: true,
     },
-    { field: "fullName" },
-    { field: "nickName" },
-    { field: "dateOfBirth" },
-    { field: "mobileNo" },
+    { 
+      field: "fullName",
+      filter: 'agTextColumnFilter',
+      floatingFilter: true,
+    },
+    { 
+      field: "nickName",
+      filter: 'agTextColumnFilter',
+      floatingFilter: true,
+    },
+    { 
+      field: "dateOfBirth",
+      filter: "agDateColumnFilter",
+      floatingFilter: true,
+    },
+    { 
+      field: "mobileNo",
+      filter: 'agTextColumnFilter',
+      floatingFilter: true,
+    },
   ];
 
-  defaultColDef: ColDef = {
-    flex: 1,
-  }
+  // colDefs: ColDef<Student>[] = generateColDefs<Student>();
+
+  
 }

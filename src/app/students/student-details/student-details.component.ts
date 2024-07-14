@@ -57,14 +57,14 @@ export class StudentDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.id = this.activatedRoute.snapshot.paramMap.get('id');
-    if (this.id) {
-      this.student = this.studentsService.getStudentById(this.id);
-    }
+    // if (this.id) {
+    //   this.student = this.studentsService.getStudentById(this.id);
+    // }
 
-    this.activatedRoute.data.subscribe(data => {
-      if (data['isEdit']) {
-        this.openStudentFormModal();
-      }
-    });
+    // this.activatedRoute.data.subscribe(data => {
+    //   if (data['isEdit']) {
+    //     this.openStudentFormModal();
+    //   }
+    // });
   }
 }

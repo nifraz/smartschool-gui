@@ -44,12 +44,12 @@ export class StudentFormComponent implements OnInit {
   ngOnInit(): void {
     this.isEdit = this.data.isEdit;
     if (this.data.isEdit && this.data.id) {
-      const student = this.studentsService.getStudentById(this.data.id);
-      if (student) {
-        // Convert dateOfBirth to string in YYYY-MM-DD format
-        const formattedDate = student.dateOfBirth.toISOString().split('T')[0];
-        this.studentForm.patchValue({ ...student, dateOfBirth: formattedDate });
-      }
+      // const student = this.studentsService.getStudentById(this.data.id);
+      // if (student) {
+      //   // Convert dateOfBirth to string in YYYY-MM-DD format
+      //   const formattedDate = student.dateOfBirth.toISOString().split('T')[0];
+      //   this.studentForm.patchValue({ ...student, dateOfBirth: formattedDate });
+      // }
     }
   }
 
