@@ -13,8 +13,9 @@ import {
 import { Apollo, gql } from 'apollo-angular';
 import { ApolloQueryResult } from '@apollo/client'
 import { Observable, map } from 'rxjs';
-import { RemoteGridApi } from '../services/graphql.service';
+import { AgGridFilterType, RemoteGridApi, convertToEndOfDay } from '../services/graphql.service';
 import { RemoteGridBindingDirective } from '../directives/remote-grid-binding.directive';
+import { ISimpleFilterModelType } from 'ag-grid-community/dist/types/core/filter/provided/simpleFilter';
 
 @Component({
   selector: 'app-graphql-data-grid',
@@ -101,24 +102,31 @@ export class GraphqlDataGridComponent<T extends object> implements OnInit, Remot
     // Construct filtering part of the query
     const filterQuery = Object.entries(filterModel)
       .map(([colId, filter]) => {
-        const column: any = filter;
-        switch(column.filterType) {
-          case 'text':
-            switch(column.type) {
-              case 'contains':
-                return `${colId}: { contains: "${column.filter}" }`;
-              default:
-                return '';
-            }
+        const filterObj: any = filter;
+        let filterValue1 = filterObj.filter;
+        let filterValue2 = filterObj.filter;
+        switch(filterObj.filterType) {
           case 'number':
-            switch(column.type) {
-              case 'equals':
-                return `${colId}: { eq: ${column.filter} }`;
-              default:
-                return '';
-            }
+            filterValue1 = `${filterObj.filter}`;
+            filterValue2 = `${filterObj.filterTo ?? ''}`;
+            break;
+          case 'text':
+            filterValue1 = `"${filterObj.filter}"`;
+            break;
+          case 'date':
+            filterValue1 = `"${filterObj.dateFrom}"`;
+            filterValue2 =  `"${filterObj.dateTo ? convertToEndOfDay(filterObj.dateTo) : ''}"`;
+            break;
           default:
-            return '';
+            filterValue1 = `${filterObj.filter}`;
+        }
+
+        if (filterObj.type == AgGridFilterType.IN_RANGE) {
+          return `${colId}: { ${this.getGqlFilterOperation(AgGridFilterType.GREATER_THAN_OR_EQUAL)}: ${filterValue1}, ${this.getGqlFilterOperation(AgGridFilterType.LESS_THAN_OR_EQUAL)}: ${filterValue2} }`;
+        } else if(filterObj.type == AgGridFilterType.BLANK || filterObj.type == AgGridFilterType.NOT_BLANK) {
+          return `${colId}: { ${this.getGqlFilterOperation(filterObj.type)}: null }`;
+        } else {
+          return `${colId}: { ${this.getGqlFilterOperation(filterObj.type)}: ${filterValue1} }`;
         }
       })
       .filter(Boolean)
@@ -145,10 +153,61 @@ export class GraphqlDataGridComponent<T extends object> implements OnInit, Remot
         totalCount
       }
     }`;
-
+    
+    console.log(query);
     return query;
   }
 
+  getGqlFilterOperation(filterModelType: ISimpleFilterModelType): string {
+    let filterOperation: string = '';
+    switch (filterModelType) {
+      case AgGridFilterType.EMPTY:
+        // filterOperation = 'eq';
+        break;
+      case AgGridFilterType.EQUALS:
+        filterOperation = 'eq';
+        break;
+      case AgGridFilterType.NOT_EQUAL:
+        filterOperation = 'neq';
+        break;
+      case AgGridFilterType.LESS_THAN:
+        filterOperation = 'lt';
+        break;
+      case AgGridFilterType.LESS_THAN_OR_EQUAL:
+        filterOperation = 'lte';
+        break;
+      case AgGridFilterType.GREATER_THAN:
+        filterOperation = 'gt';
+        break;
+      case AgGridFilterType.GREATER_THAN_OR_EQUAL:
+        filterOperation = 'gte';
+        break;
+      case AgGridFilterType.IN_RANGE:
+        // filterOperation = 'equals';
+        break;
+      case AgGridFilterType.CONTAINS:
+        filterOperation = 'contains';
+        break;
+      case AgGridFilterType.NOT_CONTAINS:
+        filterOperation = 'ncontains';
+        break;
+      case AgGridFilterType.STARTS_WITH:
+        filterOperation = 'startsWith';
+        break;
+      case AgGridFilterType.ENDS_WITH:
+        filterOperation = 'endsWith';
+        break;
+      case AgGridFilterType.BLANK:
+        filterOperation = 'eq';
+        break;
+      case AgGridFilterType.NOT_BLANK:
+        filterOperation = 'neq';
+        break;
+      default:
+        filterOperation = '';
+    }
+    return filterOperation;
+  }
 
 }
 

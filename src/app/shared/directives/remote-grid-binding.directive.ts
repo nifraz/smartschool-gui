@@ -2,6 +2,7 @@ import { Directive, EventEmitter, HostListener, Input, Output} from '@angular/co
 import { GridReadyEvent, IDatasource, IGetRowsParams } from 'ag-grid-community';
 import { catchError, tap } from 'rxjs/operators';
 import { RemoteGridApi } from '../services/graphql.service';
+import { of } from 'rxjs';
 @Directive({
   selector: '[remoteGridBinding]',
   standalone: true,
@@ -31,9 +32,14 @@ export class RemoteGridBindingDirective<T> {
           tap(({ data, totalRecords }) => 
             params.successCallback(data, totalRecords)
           ),
-          // catchError(err => console.error(err)),
-      )
-      .subscribe();
+          catchError(err => {
+            console.error(err);
+            params.successCallback([], 0);
+            // params.failCallback();
+            return of({});
+          }),
+        )
+        .subscribe();
     }
   };
 }
