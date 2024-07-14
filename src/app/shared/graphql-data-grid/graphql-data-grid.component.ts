@@ -12,7 +12,7 @@ import {
 } from 'ag-grid-community'; // Column Definition Type Interface
 import { Apollo, gql } from 'apollo-angular';
 import { ApolloQueryResult } from '@apollo/client'
-import { Observable, map } from 'rxjs';
+import { Observable, catchError, map, of } from 'rxjs';
 import { AgGridFilterType, RemoteGridApi, convertToEndOfDay } from '../services/graphql.service';
 import { RemoteGridBindingDirective } from '../directives/remote-grid-binding.directive';
 import { ISimpleFilterModelType } from 'ag-grid-community/dist/types/core/filter/provided/simpleFilter';
@@ -41,7 +41,7 @@ export class GraphqlDataGridComponent<T extends object> implements OnInit, Remot
     filter: "agTextColumnFilter",
     floatingFilter: true,
   };
-  
+
   gridOptions: GridOptions<T> = {
     pagination: true,
     paginationPageSize: 20,
@@ -71,12 +71,24 @@ export class GraphqlDataGridComponent<T extends object> implements OnInit, Remot
   }
   
   getData(params: IGetRowsParams): Observable<{ data: T[]; totalRecords: number }> {
+    this.gridApi?.showLoadingOverlay();
     const query = this.constructQuery(params);
     return this.getGqlObservable(query).pipe(
-      map(res => ({
-        data: res.data[this.queryName].items,
-        totalRecords: res.data[this.queryName].totalCount,
-      })),
+      map(res => {
+        this.gridApi?.hideOverlay()
+        return {
+          data: res.data[this.queryName].items,
+          totalRecords: res.data[this.queryName].totalCount,
+        }
+      }),
+      catchError(err => {
+        this.gridApi?.hideOverlay();
+        console.error(err);
+        return of({
+          data: [],
+          totalRecords: 0,
+        });
+      }),
     );
   }
 

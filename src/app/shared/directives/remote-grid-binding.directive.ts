@@ -34,8 +34,7 @@ export class RemoteGridBindingDirective<T> {
           ),
           catchError(err => {
             console.error(err);
-            params.successCallback([], 0);
-            // params.failCallback();
+            params.failCallback();
             return of({});
           }),
         )
