@@ -1,0 +1,51 @@
+<mat-progress-bar *ngIf="loading" mode="query"></mat-progress-bar>
+
+<div class="container p-2">
+    <div class="modal-header p-2">
+        <h2 class="modal-title">{{ (this.data.id ? 'Edit' : 'Create') + ' ' + typeName }}</h2>
+        <button type="button" class="close" aria-label="Close" (click)="closeModal()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body p-2 mt-2">
+        <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+            <div class="form-row">
+                <div *ngFor="let item of controls" class="form-group col-12 {{item.metadata.class}}">
+                    <label [for]="item.key">{{ item.metadata.label }}</label>
+                    <ng-container [ngSwitch]="getControlType(item.metadata)">
+                        <input *ngSwitchCase="'text'" [formControlName]="item.key" [id]="item.key" class="form-control"
+                            [type]="item.metadata.type" />
+                        <select *ngSwitchCase="'select'" [formControlName]="item.key" [id]="item.key"
+                            class="form-control">
+                            <option *ngFor="let option of item.metadata.options" [value]="option.value">
+                                {{ option.label }}
+                            </option>
+                        </select>
+                        <input *ngSwitchCase="'date'" [formControlName]="item.key" [id]="item.key" class="form-control"
+                            type="date" />
+                        <div *ngSwitchCase="'checkbox'" class="form-check">
+                            <input [formControlName]="item.key" [id]="item.key" class="form-check-input"
+                                type="checkbox" />
+                            <label class="form-check-label" [for]="item.key">{{ item.metadata.label }}</label>
+                        </div>
+                        <div *ngSwitchCase="'radio'" class="form-check">
+                            <div *ngFor="let option of item.metadata.options">
+                                <input [formControlName]="item.key" [id]="item.key + option.value"
+                                    class="form-check-input" type="radio" [value]="option.value" />
+                                <label class="form-check-label" [for]="item.key + option.value">{{ option.label
+                                    }}</label>
+                            </div>
+                        </div>
+                        <!-- Add more cases for other input types as needed -->
+                    </ng-container>
+                    <div *ngIf="item.control?.invalid && item.control?.touched" class="text-danger">
+                        {{ item.metadata.label }} is required
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block" [disabled]="formGroup.invalid">
+                {{ this.data.id ? 'Update' : 'Create' }}
+            </button>
+        </form>
+    </div>
+</div>

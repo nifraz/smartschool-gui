@@ -13,7 +13,7 @@ import {
 import { Apollo, gql } from 'apollo-angular';
 import { ApolloQueryResult } from '@apollo/client'
 import { Observable, catchError, map, of } from 'rxjs';
-import { AgGridFilter, AgGridFilterType, AgGridType, ConditionalOperator, RemoteGridApi, convertToEndOfDay } from '../services/graphql.service';
+import { AgGridFilter, AgGridFilterType, AgGridType, ConditionalOperator, GraphqlService, RemoteGridApi, convertToEndOfDay } from '../services/graphql.service';
 import { RemoteGridBindingDirective } from '../directives/remote-grid-binding.directive';
 import { ISimpleFilterModelType } from 'ag-grid-community/dist/types/core/filter/provided/simpleFilter';
 
@@ -31,7 +31,7 @@ import { ISimpleFilterModelType } from 'ag-grid-community/dist/types/core/filter
 })
 export class GraphqlDataGridComponent<T extends object> implements OnInit, RemoteGridApi<T> {
   
-  @Input()queryName: string = '';
+  @Input()collection: string = '';
   @Input()themeClass: string = "ag-theme-quartz-dark";
   @Input()colDefs: ColDef<T>[] = [];
 
@@ -60,7 +60,10 @@ export class GraphqlDataGridComponent<T extends object> implements OnInit, Remot
   gridApi?: GridApi<T>;
   remoteGridBinding = this;
 
-  constructor(private apollo: Apollo) {}
+  constructor(
+    private apollo: Apollo,
+    private graphqlService: GraphqlService,
+  ) {}
   
   ngOnInit(): void {
     console.log('graphql');
@@ -73,12 +76,12 @@ export class GraphqlDataGridComponent<T extends object> implements OnInit, Remot
   getData(params: IGetRowsParams): Observable<{ data: T[]; totalRecords: number }> {
     this.gridApi?.showLoadingOverlay();
     const query = this.constructQuery(params);
-    return this.getGqlObservable(query).pipe(
+    return this.graphqlService.getGqlQueryObservable(query).pipe(
       map(res => {
         this.gridApi?.hideOverlay()
         return {
-          data: res.data[this.queryName].items,
-          totalRecords: res.data[this.queryName].totalCount,
+          data: res.data[this.collection].items,
+          totalRecords: res.data[this.collection].totalCount,
         }
       }),
       catchError(err => {
@@ -99,12 +102,6 @@ export class GraphqlDataGridComponent<T extends object> implements OnInit, Remot
   // onGridChange(event: AgGridEvent<T, any>): void {
   //   this.fetchData(event.api);
   // }
-
-  getGqlObservable(query: string): Observable<ApolloQueryResult<any>> {
-    return this.apollo
-      .watchQuery<any>({ query: gql `${query}`, })
-      .valueChanges;
-  }
 
   constructQuery(params: IGetRowsParams): string {
     const filterModel: {[key: string]: AgGridFilter} = params.filterModel;
@@ -171,7 +168,7 @@ export class GraphqlDataGridComponent<T extends object> implements OnInit, Remot
 
     // Construct the full GraphQL query dynamically
     let query = `query {
-      ${this.queryName}(
+      ${this.collection}(
         skip: ${params.startRow}
         take: ${params.endRow - params.startRow}
         ${filterQuery ? `where: { ${filterQuery} }` : ''}

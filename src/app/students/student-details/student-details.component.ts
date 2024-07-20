@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { StudentsService, Student } from '../students.service';
+import { StudentsService, Student, STUDENT_DETAILS } from '../students.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NotFoundComponent } from "../../shared/not-found/not-found.component";
-import { StudentFormComponent } from '../student-form/student-form.component';
 import { MatDialog } from '@angular/material/dialog';
+import { GraphqlRecordFormComponent } from '../../shared/graphql-record-form/graphql-record-form.component';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { GraphqlCollections, GraphqlService, GraphqlTypes } from '../../shared/services/graphql.service';
 
 @Component({
     selector: 'app-student-details',
@@ -13,16 +15,23 @@ import { MatDialog } from '@angular/material/dialog';
     styleUrl: './student-details.component.scss',
     imports: [
         CommonModule,
-        NotFoundComponent
+        NotFoundComponent,
+        MatProgressBarModule
     ]
 })
 export class StudentDetailsComponent implements OnInit {
+  loading: boolean = false;
 
   openStudentFormModal(): void {
-    const id = this.activatedRoute.snapshot.paramMap.get('id');
-    const dialogRef = this.matDialog.open(StudentFormComponent, {
+    const dialogRef = this.matDialog.open(GraphqlRecordFormComponent, {
       width: '1000px',
-      data: { isEdit: true, id }
+      data: {
+        collection: GraphqlCollections.STUDENTS,
+        type: GraphqlTypes.STUDENT,
+        formGroup: this.studentsService.getStudentFormGroup(),
+        controlMetadata: this.studentsService.getStudentControlMetadata(),
+        id: this.id,
+      }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -42,13 +51,14 @@ export class StudentDetailsComponent implements OnInit {
   }
 
   id?: string | null;
-  student?: Student;
+  record?: Student;
 
   constructor(
     private studentsService: StudentsService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private matDialog: MatDialog,
+    private graphqlService: GraphqlService,
   ) {
     // this.activatedRoute.params.subscribe(params => {
     //   this.id = params['id'];
@@ -57,14 +67,27 @@ export class StudentDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.id = this.activatedRoute.snapshot.paramMap.get('id');
-    // if (this.id) {
-    //   this.student = this.studentsService.getStudentById(this.id);
-    // }
+    if (this.id) {
+      this.loading = true;
+      const variables = {
+        id: +this.id,
+      }
+      this.graphqlService.getGqlQueryObservable(STUDENT_DETAILS, variables).subscribe({
+        next: res => {
+          this.loading = false;
+          this.record = res.data[GraphqlTypes.STUDENT];
+        },
+        error: err => {
+          this.loading = false;
+          console.error(err);
+        }
+      })
+    }
 
-    // this.activatedRoute.data.subscribe(data => {
-    //   if (data['isEdit']) {
-    //     this.openStudentFormModal();
-    //   }
-    // });
+    this.activatedRoute.data.subscribe(data => {
+      if (data['isEdit']) {
+        this.openStudentFormModal();
+      }
+    });
   }
 }

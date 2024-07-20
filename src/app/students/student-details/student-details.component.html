@@ -1,7 +1,8 @@
-<div *ngIf="student; then content else notFound"></div>
+<mat-progress-bar *ngIf="loading" mode="query"></mat-progress-bar>
+<div *ngIf="loading || record; then content else notFound"></div>
 
 <ng-template #content>
-    <div *ngIf="student" class="card">
+    <div *ngIf="record" class="card">
         <div class="card-header">
             <h3>Student Details</h3>
         </div>
@@ -10,25 +11,25 @@
                 <div class="col-md-6">
                     <div class="mb-3">
                         <label class="form-label"><strong>Full Name:</strong></label>
-                        <p class="form-control-static">{{ student.fullName }}</p>
+                        <p class="form-control-static">{{ record.fullName }}</p>
                     </div>
                     <div class="mb-3">
                         <label class="form-label"><strong>Nickname:</strong></label>
-                        <p class="form-control-static">{{ student.nickName }}</p>
+                        <p class="form-control-static">{{ record.nickName }}</p>
                     </div>
                     <div class="mb-3">
                         <label class="form-label"><strong>Date of Birth:</strong></label>
-                        <p class="form-control-static">{{ student.dateOfBirth | date:'longDate' }}</p>
+                        <p class="form-control-static">{{ record.dateOfBirth | date:'longDate' }}</p>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="mb-3">
                         <label class="form-label"><strong>Student ID:</strong></label>
-                        <p class="form-control-static">{{ student.studentId }}</p>
+                        <p class="form-control-static">{{ record.studentId }}</p>
                     </div>
                     <div class="mb-3">
                         <label class="form-label"><strong>Mobile Number:</strong></label>
-                        <p class="form-control-static">{{ student.mobileNo }}</p>
+                        <p class="form-control-static">{{ record.mobileNo }}</p>
                     </div>
                 </div>
             </div>

@@ -2,13 +2,32 @@ import { Injectable } from '@angular/core';
 import { GridApi, IGetRowsParams } from 'ag-grid-community';
 import { ISimpleFilterModelType } from 'ag-grid-community/dist/types/core/filter/provided/simpleFilter';
 import { Observable } from 'rxjs';
+import { ApolloQueryResult } from '@apollo/client'
+import { Apollo, gql, MutationResult } from 'apollo-angular';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GraphqlService {
 
-  constructor() { }
+  constructor(private apollo: Apollo) { }
+
+  getGqlQueryObservable(query: string, variables: any = undefined): Observable<ApolloQueryResult<any>> {
+    return this.apollo
+      .watchQuery<any>({ 
+        query: gql `${query}`,
+        variables: variables,
+      })
+      .valueChanges;
+  }
+
+  getGqlMutationObservable(mutation: string, variables: any, refetchQueries: string[]): Observable<MutationResult<any>> {
+    return this.apollo.mutate<any>({
+      mutation: gql `${mutation}`,
+      variables: variables,
+      refetchQueries: refetchQueries
+    });
+  }
 }
 
 export interface RemoteGridApi<T> {
@@ -37,6 +56,16 @@ export function convertToEndOfDay(dateString: string | undefined): string {
   const seconds = date.getSeconds().toString().padStart(2, '0');
 
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+}
+
+export function capitalizeFirstLetter(string: string): string {
+  if (!string.length) return '';
+  return `${string.charAt(0).toUpperCase()}${string.slice(1)}`;
+}
+
+export function toLowercaseFirstLetter(string: string): string {
+  if (!string.length) return '';
+  return `${string.charAt(0).toLowerCase()}${string.slice(1)}`;
 }
 
 export interface AgGridFilter {
@@ -81,4 +110,14 @@ export enum ConditionalOperator {
   AND = 'AND',
   OR = 'OR',
   // NOT = 'NOT',
+}
+
+export enum GraphqlCollections {
+  STUDENTS = 'students',
+  TEACHERS = 'teachers',
+}
+
+export enum GraphqlTypes {
+  STUDENT = 'student',
+  TEACHER = 'teacher',
 }

@@ -3,7 +3,6 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { StudentsComponent } from './students/students.component';
 import { StudentDetailsComponent } from './students/student-details/student-details.component';
 import { NotFoundComponent } from './shared/not-found/not-found.component';
-import { StudentFormComponent } from './students/student-form/student-form.component';
 
 export const routes: Routes = [
     {

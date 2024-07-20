@@ -4,7 +4,8 @@ import { GraphqlDataGridComponent } from '../shared/graphql-data-grid/graphql-da
 import { StudentsService, Student } from './students.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { StudentFormComponent } from './student-form/student-form.component';
+import { GraphqlRecordFormComponent } from '../shared/graphql-record-form/graphql-record-form.component';
+import { GraphqlCollections, GraphqlTypes } from '../shared/services/graphql.service';
 
 @Component({
   selector: 'app-students',
@@ -16,9 +17,10 @@ import { StudentFormComponent } from './student-form/student-form.component';
   styleUrl: './students.component.scss'
 })
 export class StudentsComponent implements OnInit {
+  collectionKey: string = GraphqlCollections.STUDENTS;
 
   constructor(
-    private StudentsService: StudentsService,
+    private studentsService: StudentsService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private matDialog: MatDialog,
@@ -41,9 +43,14 @@ export class StudentsComponent implements OnInit {
   }
 
   openStudentFormModal(): void {
-    const dialogRef = this.matDialog.open(StudentFormComponent, {
+    const dialogRef = this.matDialog.open(GraphqlRecordFormComponent, {
       width: '1000px',
-      data: { isEdit: false },
+      data: {
+        collection: GraphqlCollections.STUDENTS,
+        type: GraphqlTypes.STUDENT,
+        formGroup: this.studentsService.getStudentFormGroup(),
+        controlMetadata: this.studentsService.getStudentControlMetadata(),
+      },
     });
 
     dialogRef.afterClosed().subscribe(result => {
