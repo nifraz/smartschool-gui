@@ -10,8 +10,6 @@ import {
   IGetRowsParams,
   RowClickedEvent,
 } from 'ag-grid-community'; // Column Definition Type Interface
-import { Apollo, gql } from 'apollo-angular';
-import { ApolloQueryResult } from '@apollo/client'
 import { Observable, catchError, map, of } from 'rxjs';
 import { AgGridFilter, AgGridFilterType, AgGridType, ConditionalOperator, GraphqlService, RemoteGridApi, convertToEndOfDay } from '../services/graphql.service';
 import { RemoteGridBindingDirective } from '../directives/remote-grid-binding.directive';
@@ -51,22 +49,43 @@ export class GraphqlDataGridComponent<T extends object> implements OnInit, Remot
     cacheBlockSize: 100,
     columnDefs: this.colDefs,
     suppressRowClickSelection: true,
-    // onSortChanged: x => this.onGridChange(x),
-    // onFilterChanged: x => this.onGridChange(x),
-    // onColumnVisible: x => this.onGridChange(x),
-    // onPaginationChanged: x => this.onGridChange(x),
+    onSortChanged: () => this.saveGridState(),
+    onFilterChanged: () => this.saveGridState(),
+    onColumnMoved: () => this.saveGridState(),
+    onColumnResized: () => this.saveGridState(),
+    onColumnPinned: () => this.saveGridState(),
   };
 
   gridApi?: GridApi<T>;
   remoteGridBinding = this;
 
   constructor(
-    private apollo: Apollo,
     private graphqlService: GraphqlService,
   ) {}
   
   ngOnInit(): void {
     console.log('graphql');
+  }
+
+  saveGridState(): void {
+    if (this.gridApi) {
+      const gridState = {
+        filterModel: this.gridApi?.getFilterModel(),
+        columnState: this.gridApi?.getColumnState(),
+      };
+      this.graphqlService.saveState(this.collection, gridState);
+    }
+  }
+
+  applyGridState(): void {
+    const gridState = this.graphqlService.getState(this.collection);
+    if (gridState) {
+      this.gridApi?.setFilterModel(gridState.filterModel);
+      this.gridApi?.applyColumnState({
+        state: gridState.columnState,
+        applyOrder: true,
+      });
+    }
   }
     
   onRowClicked($event: RowClickedEvent<T,any>) {
@@ -97,6 +116,7 @@ export class GraphqlDataGridComponent<T extends object> implements OnInit, Remot
 
   onGridReady(event: GridReadyEvent<T, any>): void {
     this.gridApi = event.api;
+    this.applyGridState();
   }
 
   // onGridChange(event: AgGridEvent<T, any>): void {

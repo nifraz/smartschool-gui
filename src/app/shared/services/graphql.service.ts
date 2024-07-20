@@ -12,6 +12,19 @@ export class GraphqlService {
 
   constructor(private apollo: Apollo) { }
 
+  saveState(key: string, state: any): void {
+    localStorage.setItem(key, JSON.stringify(state));
+  }
+
+  getState(key: string): any {
+    const state = localStorage.getItem(key);
+    return state ? JSON.parse(state) : null;
+  }
+
+  clearState(key: string): void {
+    localStorage.removeItem(key);
+  }
+  
   getGqlQueryObservable(query: string, variables: any = undefined): Observable<ApolloQueryResult<any>> {
     return this.apollo
       .watchQuery<any>({ 

@@ -43,7 +43,7 @@
                     </div>
                 </div>
             </div>
-            <button type="submit" class="btn btn-primary btn-block" [disabled]="formGroup.invalid">
+            <button type="submit" class="btn btn-primary btn-block" [disabled]="loading || formGroup.invalid">
                 {{ this.data.id ? 'Update' : 'Create' }}
             </button>
         </form>

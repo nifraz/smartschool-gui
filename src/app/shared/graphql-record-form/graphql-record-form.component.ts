@@ -1,9 +1,9 @@
-import { Component, Inject, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { AbstractControl, FormArray, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Apollo, gql, MutationResult } from 'apollo-angular';
 import { capitalizeFirstLetter, GraphqlService, toLowercaseFirstLetter } from '../services/graphql.service';
-import { Observable } from 'rxjs';
+import { Observable, Subject, takeUntil } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { ToastService } from '../services/toast.service';
@@ -19,7 +19,7 @@ import { ToastService } from '../services/toast.service';
   templateUrl: './graphql-record-form.component.html',
   styleUrl: './graphql-record-form.component.scss'
 })
-export class GraphqlRecordFormComponent<T extends object> implements OnInit, OnChanges {
+export class GraphqlRecordFormComponent<T extends object> implements OnInit, OnChanges, OnDestroy {
   collectionKey: string = '';
   typeKey: string = '';
   typeName: string = '';
@@ -35,6 +35,8 @@ export class GraphqlRecordFormComponent<T extends object> implements OnInit, OnC
   editMode: boolean = false;
   addAnother: boolean = false;
 
+  private destroy$ = new Subject<void>();
+
   constructor(
     private graphqlService: GraphqlService,
     private toast: ToastService,
@@ -42,6 +44,10 @@ export class GraphqlRecordFormComponent<T extends object> implements OnInit, OnC
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     // this.formGroup?.setValue({});
+  }
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   ngOnInit(): void {
@@ -52,7 +58,8 @@ export class GraphqlRecordFormComponent<T extends object> implements OnInit, OnC
     this.controlMetadata = this.data.controlMetadata;
     this.id = this.data.id ? +this.data.id : 0;
     this.editMode = !!this.id;
-
+    this.record = this.formGroup.value;
+    
     this.updateControls();
 
     if (this.editMode) {
@@ -72,6 +79,7 @@ export class GraphqlRecordFormComponent<T extends object> implements OnInit, OnC
             }
           });
           this.formGroup.patchValue(record);
+          this.record = this.formGroup.value;
           this.formGroup.enable();
         },
         error: err => {
@@ -86,6 +94,19 @@ export class GraphqlRecordFormComponent<T extends object> implements OnInit, OnC
       //   this.studentForm.patchValue({ ...student, dateOfBirth: formattedDate });
       // }
     }
+
+    this.dialogRef.beforeClosed().pipe(takeUntil(this.destroy$)).subscribe(() => {
+      const oldValue = JSON.stringify(this.record);
+      const newValue = JSON.stringify(this.formGroup.value);
+      if (oldValue != newValue) {
+        // Prevent the dialog from closing
+        this.toast.warning(`Changes were not saved`)
+        this.dialogRef.disableClose = true; //need fix
+      } else {
+        // Allow the dialog to close
+        this.dialogRef.disableClose = false;
+      }
+    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
