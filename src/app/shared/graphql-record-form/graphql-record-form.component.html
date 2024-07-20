@@ -48,4 +48,11 @@
             </button>
         </form>
     </div>
+    <div *ngIf="!editMode" class="form-group m-2 mb-0">
+        <div class="form-check">
+            <input id="addAnother" class="form-check-input" type="checkbox" 
+                [checked]="addAnother" (change)="addAnother = !addAnother"/>
+            <label for="addAnother" class="text-light">Add Another</label>
+        </div>
+    </div>
 </div>

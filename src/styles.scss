@@ -2,3 +2,31 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.toast-info {
+  background-color: #2196f3 !important; /* Blue */
+  color: #fff !important;
+}
+
+.toast-success {
+  background-color: #4caf50 !important; /* Green */
+  color: #fff !important;
+}
+
+.toast-warning {
+  background-color: #ff9800 !important; /* Orange */
+  color: #fff !important;
+}
+
+.toast-error {
+  background-color: #f44336 !important; /* Red */
+  color: #fff !important;
+}
+
+.mat-snack-bar-container {
+  border-radius: 4px;
+  font-size: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

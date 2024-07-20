@@ -1,11 +1,12 @@
 import { Component, Inject, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { AbstractControl, FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { AbstractControl, FormArray, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Apollo, gql, MutationResult } from 'apollo-angular';
 import { capitalizeFirstLetter, GraphqlService, toLowercaseFirstLetter } from '../services/graphql.service';
 import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { ToastService } from '../services/toast.service';
 
 @Component({
   selector: 'app-graphql-record-form',
@@ -13,7 +14,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    MatProgressBarModule
+    MatProgressBarModule,
   ],
   templateUrl: './graphql-record-form.component.html',
   styleUrl: './graphql-record-form.component.scss'
@@ -36,7 +37,7 @@ export class GraphqlRecordFormComponent<T extends object> implements OnInit, OnC
 
   constructor(
     private graphqlService: GraphqlService,
-    private apollo: Apollo,
+    private toast: ToastService,
     private dialogRef: MatDialogRef<GraphqlRecordFormComponent<T>>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
@@ -50,7 +51,7 @@ export class GraphqlRecordFormComponent<T extends object> implements OnInit, OnC
     this.formGroup = this.data.formGroup;
     this.controlMetadata = this.data.controlMetadata;
     this.id = this.data.id ? +this.data.id : 0;
-    this.editMode = !!this.data.id;
+    this.editMode = !!this.id;
 
     this.updateControls();
 
@@ -72,11 +73,10 @@ export class GraphqlRecordFormComponent<T extends object> implements OnInit, OnC
           });
           this.formGroup.patchValue(record);
           this.formGroup.enable();
-          console.log(res);
         },
         error: err => {
           this.loading = false;
-          console.error(err);
+          this.toast.error(`Could not load ${this.typeName}`);
         }
       })
       // const student = this.studentsService.getStudentById(this.id);
@@ -128,13 +128,12 @@ export class GraphqlRecordFormComponent<T extends object> implements OnInit, OnC
     
     this.graphqlService.getGqlMutationObservable(mutation, variables, refetchQueries).subscribe(({ data, errors, loading }) => {
       if (errors) {
-        console.error(`Error occured while ${this.editMode ? 'updating' : 'creating'} ${this.typeName} record`, errors);
-        // alert(`Error creating account: ${errors[0].message}`);
+        this.toast.error(`Could not ${this.editMode ? 'update' : 'create'} ${this.typeName}`);
       }
       if (data) {
-        console.log(`${this.typeName} record ${this.editMode ? 'updated' : 'created'}`, JSON.stringify(data, null, 2));
+        this.toast.success(`${this.typeName} ${this.editMode ? 'updated' : 'created'}`);
         if (this.addAnother) {
-          //reset the form
+          this.formGroup.reset();
           return;
         }
         this.closeModal();
