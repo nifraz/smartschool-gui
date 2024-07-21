@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { StudentsService, Student, STUDENT_DETAILS } from '../students.service';
+import { StudentsService, STUDENT_DETAILS } from '../students.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NotFoundComponent } from "../../shared/not-found/not-found.component";
@@ -8,6 +8,7 @@ import { GraphqlRecordFormComponent } from '../../shared/graphql-record-form/gra
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { GraphqlCollections, GraphqlService, GraphqlTypes } from '../../shared/services/graphql.service';
 import { ToastService } from '../../shared/services/toast.service';
+import { StudentType } from '../../../../graphql/generated';
 
 @Component({
     selector: 'app-student-details',
@@ -52,7 +53,7 @@ export class StudentDetailsComponent implements OnInit {
   }
 
   id?: string | null;
-  record?: Student;
+  record?: StudentType;
 
   constructor(
     private studentsService: StudentsService,

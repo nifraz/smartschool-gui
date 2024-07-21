@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ColDef } from 'ag-grid-community'; // Column Definition Type Interface
 import { GraphqlDataGridComponent } from '../shared/graphql-data-grid/graphql-data-grid.component';
-import { StudentsService, Student } from './students.service';
+import { StudentsService } from './students.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { GraphqlRecordFormComponent } from '../shared/graphql-record-form/graphql-record-form.component';
 import { GraphqlCollections, GraphqlTypes } from '../shared/services/graphql.service';
+import { StudentType } from '../../../graphql/generated';
 
 @Component({
   selector: 'app-students',
@@ -28,7 +29,7 @@ export class StudentsComponent implements OnInit {
     
   }
 
-  onRecordClicked($event: Student) {
+  onRecordClicked($event: StudentType) {
     this.router.navigate(['/students', $event.id]);
     // this.router.navigateByUrl('/students/1');
   }
@@ -71,7 +72,7 @@ export class StudentsComponent implements OnInit {
   themeClass = "ag-theme-quartz";
 
   // Column Definitions: Defines & controls grid columns.
-  colDefs: ColDef<Student>[] = [
+  colDefs: ColDef<StudentType>[] = [
     { 
       field: "id",
       filter: "agNumberColumnFilter",
