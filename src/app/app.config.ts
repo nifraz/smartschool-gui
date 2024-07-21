@@ -21,7 +21,7 @@ export const appConfig: ApplicationConfig = {
           httpLink: HttpLink,
         ): ApolloClientOptions<unknown> => ({
           link: ApolloLink.from([
-            httpLink.create({ uri: 'https://localhost:44314/graphql' }),
+            httpLink.create({ uri: 'https://localhost:5001/graphql' }),
           ]),
           cache: new InMemoryCache(), //temp
         }),
