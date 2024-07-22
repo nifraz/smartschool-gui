@@ -44,6 +44,7 @@ export class GraphqlRecordFormComponent<T extends object> implements OnInit, OnC
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     // this.formGroup?.setValue({});
+    dialogRef.disableClose = true;
   }
   ngOnDestroy(): void {
     this.destroy$.next();
