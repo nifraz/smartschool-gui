@@ -24,8 +24,7 @@ export class GraphqlRecordFormComponent<T extends object> implements OnInit, OnC
   typeKey: string = '';
   typeName: string = '';
   id: number = 0;
-  record?: T;
-  newRecord?: T;
+  currentRecord?: T;
 
   formGroup: FormGroup<any> = new FormGroup<any>({});
   controlMetadata: { [key: string]: any } = {};
@@ -59,7 +58,7 @@ export class GraphqlRecordFormComponent<T extends object> implements OnInit, OnC
     this.controlMetadata = this.data.controlMetadata;
     this.id = this.data.id ? +this.data.id : 0;
     this.editMode = !!this.id;
-    this.record = this.formGroup.value;
+    this.currentRecord = this.formGroup.value;
     
     this.updateControls();
 
@@ -80,7 +79,7 @@ export class GraphqlRecordFormComponent<T extends object> implements OnInit, OnC
             }
           });
           this.formGroup.patchValue(record);
-          this.record = this.formGroup.value;
+          this.currentRecord = this.formGroup.value;
           this.formGroup.enable();
         },
         error: err => {
@@ -97,16 +96,7 @@ export class GraphqlRecordFormComponent<T extends object> implements OnInit, OnC
     }
 
     this.dialogRef.beforeClosed().pipe(takeUntil(this.destroy$)).subscribe(() => {
-      const oldValue = JSON.stringify(this.record);
-      const newValue = JSON.stringify(this.formGroup.value);
-      if (oldValue != newValue) {
-        // Prevent the dialog from closing
-        this.toast.warning(`Changes were not saved`)
-        this.dialogRef.disableClose = true; //need fix
-      } else {
-        // Allow the dialog to close
-        this.dialogRef.disableClose = false;
-      }
+      
     });
   }
 
@@ -138,12 +128,13 @@ export class GraphqlRecordFormComponent<T extends object> implements OnInit, OnC
       return;
     }
     
+    const input = {
+      ...this.formGroup.value,
+    };
     const mutation = this.editMode ? this.constructUpdateMutation() : this.constructCreateMutation();
     const variables = {
       id: this.id,
-      input: {
-        ...this.formGroup.value,
-      },
+      input,
     };
 
     const refetchQueries = [this.collectionKey, this.typeKey];
@@ -158,6 +149,7 @@ export class GraphqlRecordFormComponent<T extends object> implements OnInit, OnC
           this.formGroup.reset();
           return;
         }
+        this.currentRecord = input;
         this.closeModal();
       }
     });
@@ -207,6 +199,14 @@ export class GraphqlRecordFormComponent<T extends object> implements OnInit, OnC
   }
 
   closeModal(): void {
+    const oldValue = JSON.stringify(this.currentRecord);
+    const newValue = JSON.stringify(this.formGroup.value);
+    if (oldValue != newValue) {
+      if (!confirm("Are you sure you want to close without saving your changes?")) {
+        return;
+      }
+      this.toast.warning(`Changes were not saved`);
+    }
     this.dialogRef.close(this.formGroup.value);
   }
 
