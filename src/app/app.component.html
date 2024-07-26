@@ -50,92 +50,7 @@
 </div> -->
 
 <header>
-  <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark shadow">
-      <div class="container-fluid">
-          <a class="navbar-brand d-flex" routerLink="/dashboard" routerLinkActive="active">
-              <img src="assets/smartschool-icon.svg" width="25" height="25" class="d-inline-block align-top mx-1" alt="SmartSchool Logo">
-              <span class="mx-1"><strong><u>S</u></strong>mart<strong><u>S</u></strong>chool</span>
-              <span class="badge rounded-pill text-bg-warning px-1 py-0 mb-auto">
-                beta
-                <span class="visually-hidden">beta version</span>
-              </span>
-          </a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
-              aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarCollapse">
-              <ul class="navbar-nav me-auto mb-2 mb-md-0">
-                  <!-- <li class="nav-item">
-                      <a class="nav-link active" aria-current="page" href="#">Home</a>
-                  </li> -->
-                  <li class="nav-item">
-                    <div class="btn-group">
-                      <a class="nav-link" href="#">School</a>
-                      <a class="nav-link dropdown-toggle dropdown-toggle-split ps-1 pe-2" href="#" data-bs-toggle="dropdown" aria-expanded="false">
-                        <span class="visually-hidden">Toggle Dropdown</span>
-                      </a>
-                      <ul class="dropdown-menu bg-dark border-0 mt-3 py-0 shadow">
-                        <li><a class="dropdown-item nav-link" href="#">Classes</a></li>
-                        <li><a class="dropdown-item nav-link" href="#">Subjects</a></li>
-                        <li><a class="dropdown-item nav-link disabled" href="#">Books</a></li>
-                        <li><a class="dropdown-item nav-link" href="#">Exams</a></li>
-                        <li><a class="dropdown-item nav-link disabled" href="#">Events</a></li>
-                        <!-- <li><hr class="dropdown-divider"></li> -->
-                      </ul>
-                    </div>
-                  </li>
-                  <li class="nav-item">
-                      <div class="btn-group">
-                        <a class="nav-link btn" routerLink="/students" routerLinkActive="active">Students</a>
-                        <a class="nav-link dropdown-toggle dropdown-toggle-split ps-1 pe-2" href="#" data-bs-toggle="dropdown" aria-expanded="false">
-                          <span class="visually-hidden">Toggle Dropdown</span>
-                        </a>
-                        <ul class="dropdown-menu bg-dark border-0 mt-3 py-0 shadow">
-                          <li><a class="dropdown-item nav-link btn" [routerLink]="['/students', 'create']" routerLinkActive="active">Registration</a></li>
-                          <li><a class="dropdown-item nav-link" href="#">Enrollment</a></li>
-                          <li><a class="dropdown-item nav-link" href="#">Attendance</a></li>
-                          <li><a class="dropdown-item nav-link" href="#">Performance</a></li>
-                          <li><a class="dropdown-item nav-link" href="#">Guardians</a></li>
-                          <!-- <li><hr class="dropdown-divider"></li> -->
-                        </ul>
-                      </div>
-                  </li>
-                  <li class="nav-item">
-                    <div class="btn-group">
-                      <a class="nav-link" href="#">Teachers</a>
-                      <a class="nav-link dropdown-toggle dropdown-toggle-split ps-1 pe-2" href="#" data-bs-toggle="dropdown" aria-expanded="false">
-                        <span class="visually-hidden">Toggle Dropdown</span>
-                      </a>
-                      <ul class="dropdown-menu bg-dark border-0 mt-3 py-0 shadow">
-                        <li><a class="dropdown-item nav-link disabled" aria-disabled="true" href="#">Registration</a></li>
-                        <li><a class="dropdown-item nav-link" href="#">Enrollment</a></li>
-                        <li><a class="dropdown-item nav-link" href="#">Attendance</a></li>
-                        <li><a class="dropdown-item nav-link" href="#">Paysheet</a></li>
-                        <!-- <li><hr class="dropdown-divider"></li> -->
-                      </ul>
-                    </div>
-                  </li>
-              </ul>
-
-              <!-- <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
-                <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
-              </form> -->
-
-              <div class="dropdown text-end">
-                <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                  <img src="https://github.com/nifraz.png" alt="mdo" width="32" height="32" class="rounded-circle">
-                </a>
-                <ul class="dropdown-menu dropdown-menu-end text-small shadow">
-                  <li><a class="dropdown-item" href="#">Settings</a></li>
-                  <li><a class="dropdown-item" href="#">Profile</a></li>
-                  <li><hr class="dropdown-divider"></li>
-                  <li><a class="dropdown-item" href="#">Sign out</a></li>
-                </ul>
-              </div>
-          </div>
-      </div>
-  </nav>
+  <app-navbar></app-navbar>
 </header>
 
 <main class="flex-shrink-0 p-2">
@@ -143,41 +58,5 @@
 </main>
 
 <footer class="footer mt-auto py-3 bg-body-tertiary">
-  <div class="container">
-      <div class="row">
-        <div class="col-md-4">
-          <h5>About SmartSchool</h5>
-          <p>SmartSchool is a comprehensive web-based management system designed to modernize record-keeping and enhance the efficiency of schools in Sri Lanka.</p>
-        </div>
-        <div class="col-md-4">
-          <h5>Contact Us</h5>
-          <ul class="list-unstyled">
-            <li><strong>Email:</strong> support&#64;smartschool.lk</li>
-            <li><strong>Phone:</strong> +94 123 456 789</li>
-            <li><strong>Address:</strong> 123 Main Street, Kandy, Sri Lanka</li>
-          </ul>
-        </div>
-        <div class="col-md-4">
-          <h5>Quick Links</h5>
-          <ul class="list-unstyled">
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Contact</a></li>
-          </ul>
-        </div>
-      </div>
-      <div class="row mt-3">
-        <div class="col-md-12 text-center">
-          <a href="#" class="text-muted mx-2"><i class="fab fa-facebook-f"></i></a>
-          <a href="#" class="text-muted mx-2"><i class="fab fa-twitter"></i></a>
-          <a href="#" class="text-muted mx-2"><i class="fab fa-linkedin-in"></i></a>
-          <a href="#" class="text-muted mx-2"><i class="fab fa-instagram"></i></a>
-        </div>
-      </div>
-      
-      <div class="row mt-3">
-        <div class="col-md-12 text-center">
-          <span class="text-muted">&copy; {{currentYear}} SmartSchool. All rights reserved.</span>
-        </div>
-      </div>
-  </div>
+  <app-footer></app-footer>
 </footer>
