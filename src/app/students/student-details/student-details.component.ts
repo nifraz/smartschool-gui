@@ -8,7 +8,7 @@ import { GraphqlRecordFormComponent } from '../../shared/graphql-record-form/gra
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { GraphqlCollections, GraphqlService, GraphqlTypes } from '../../shared/services/graphql.service';
 import { ToastService } from '../../shared/services/toast.service';
-import { StudentType } from '../../../../graphql/generated';
+import { StudentInput, StudentType } from '../../../../graphql/generated';
 
 @Component({
     selector: 'app-student-details',
@@ -26,11 +26,11 @@ export class StudentDetailsComponent implements OnInit {
 
   openStudentFormModal(): void {
     const dialogRef = this.matDialog.open(GraphqlRecordFormComponent, {
-      width: '1000px',
+      width: '1200px',
       data: {
         collection: GraphqlCollections.STUDENTS,
         type: GraphqlTypes.STUDENT,
-        formGroup: this.studentsService.getStudentFormGroup(),
+        formGroup: this.studentsService.getStudentInputFormGroup(),
         controlMetadata: this.studentsService.getStudentControlMetadata(),
         id: this.id,
       }

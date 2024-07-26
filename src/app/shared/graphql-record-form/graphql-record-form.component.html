@@ -1,6 +1,6 @@
 <mat-progress-bar *ngIf="loading" mode="query"></mat-progress-bar>
 
-<div class="container p-2">
+<div class="p-2">
     <div class="modal-header p-2">
         <h2 class="modal-title">{{ (this.data.id ? 'Edit' : 'Create') + ' ' + typeName }}</h2>
         <button type="button" class="close" aria-label="Close" (click)="closeModal()">
@@ -10,7 +10,7 @@
     <div class="modal-body p-2 mt-2">
         <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
             <div class="form-row">
-                <div *ngFor="let item of controls" class="form-group col-12 {{item.metadata.class}}">
+                <div *ngFor="let item of controls" class="form-group col-12 col-md-6 col-xl-4 {{item.metadata.class}}">
                     <label [for]="item.key">{{ item.metadata.label }}</label>
                     <ng-container [ngSwitch]="getControlType(item.metadata)">
                         <input *ngSwitchCase="'text'" [formControlName]="item.key" [id]="item.key" class="form-control"

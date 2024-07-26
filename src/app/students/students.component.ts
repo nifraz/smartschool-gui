@@ -38,18 +38,18 @@ export class StudentsComponent implements OnInit {
     console.log('students');
     this.activatedRoute.data.subscribe(data => {
       if (data['isCreate']) {
-        this.openStudentFormModal();
+        this.openCreateModal();
       }
     });
   }
 
-  openStudentFormModal(): void {
+  openCreateModal(): void {
     const dialogRef = this.matDialog.open(GraphqlRecordFormComponent, {
-      width: '1000px',
+      width: '1200px',
       data: {
         collection: GraphqlCollections.STUDENTS,
         type: GraphqlTypes.STUDENT,
-        formGroup: this.studentsService.getStudentFormGroup(),
+        formGroup: this.studentsService.getStudentInputFormGroup(),
         controlMetadata: this.studentsService.getStudentControlMetadata(),
       },
     });

@@ -1,16 +1,20 @@
 import { Injectable } from '@angular/core';
-import { GridApi, IGetRowsParams } from 'ag-grid-community';
+import { ColDef, GridApi, IGetRowsParams } from 'ag-grid-community';
 import { ISimpleFilterModelType } from 'ag-grid-community/dist/types/core/filter/provided/simpleFilter';
 import { Observable } from 'rxjs';
 import { ApolloQueryResult } from '@apollo/client'
 import { Apollo, gql, MutationResult } from 'apollo-angular';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GraphqlService {
 
-  constructor(private apollo: Apollo) { }
+  constructor(
+    private formBuilder: FormBuilder,
+    private apollo: Apollo,
+  ) { }
 
   saveState(key: string, state: any): void {
     localStorage.setItem(key, JSON.stringify(state));
@@ -40,6 +44,40 @@ export class GraphqlService {
       variables: variables,
       refetchQueries: refetchQueries
     });
+  }
+
+  createColDefs<T extends object>(model: T): ColDef[] {
+    const colDefs: ColDef[] = [];
+  
+    Object.keys(model).forEach(key => {
+      colDefs.push({
+        headerName: key.charAt(0).toUpperCase() + key.slice(1),
+        field: key,
+        sortable: true,
+        filter: true,
+      });
+    });
+  
+    return colDefs;
+  }
+
+  createInputFormGroup(model: any): FormGroup<any> {
+    const group: any = {};
+  
+    Object.keys(model).forEach(key => {
+      // if (typeof model[key] === 'string') {
+      //   group[key] = [model[key]];
+      // } else if (typeof model[key] === 'number') {
+      //   group[key] = [model[key]];
+      // } else if (model[key] instanceof Date) {
+      //   group[key] = [model[key]];
+      // } else {
+      //   group[key] = [model[key]];
+      // }
+      group[key] = [model[key], ];
+    });
+  
+    return this.formBuilder.group(group);
   }
 }
 

@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { gql } from 'apollo-angular';
-import { SortEnumType } from '../../../graphql/generated';
+import { SortEnumType, StudentInput } from '../../../graphql/generated';
+import { GraphqlService } from '../shared/services/graphql.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,23 +10,27 @@ import { SortEnumType } from '../../../graphql/generated';
 export class StudentsService {
  
   constructor(
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private graphqlService: GraphqlService,
   ) { }
 
-  getStudentFormGroup(): FormGroup<any> {
-    return this.formBuilder.group({
-      // firstName: ['', Validators.required],
-      // lastName: ['', Validators.required],
-      // email: ['', [Validators.required, Validators.email]],
-      // age: ['', [Validators.required, Validators.min(18)]],
-      // gender: ['', Validators.required],
-      // acceptTerms: [false, Validators.requiredTrue],
-      studentId: ['', Validators.required],
-      fullName: ['', Validators.required],
-      nickName: [''],
-      dateOfBirth: ['', Validators.required],
-      mobileNo: ['', [Validators.required, Validators.pattern('^\\+?[0-9]{10,12}$')]]
-    });
+  getStudentInputFormGroup(): FormGroup<any> {
+    const studentInput: StudentInput = {
+      studentId: '',
+      fullName: '',
+      nickName: '',
+      mobileNo: '',
+      dateOfBirth: '',
+    };
+    
+    const formGroup = this.graphqlService.createInputFormGroup(studentInput);
+    formGroup.controls['studentId'].addValidators([Validators.required, ]);
+    formGroup.controls['fullName'].addValidators([Validators.required, ]);
+    formGroup.controls['nickName'].addValidators([]);
+    formGroup.controls['dateOfBirth'].addValidators([Validators.required, ]);
+    formGroup.controls['mobileNo'].addValidators([Validators.required, Validators.pattern('^\\+?[0-9]{10,12}$')]);
+
+    return formGroup;
   }
 
   getStudentControlMetadata(lang: string = 'en-US'): { [key: string]: any } {
