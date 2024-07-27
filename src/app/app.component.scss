@@ -80,8 +80,3 @@ main {
     margin: 56px 0 0;
     height: calc(100vh - 56px);
 }
-
-.dropdown-item:hover, .dropdown-item:focus {
-    color: var(--bs-nav-link-hover-color);
-    background-color: var(--bs-nav-link-hover-bg);
-}
