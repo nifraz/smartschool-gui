@@ -5,7 +5,7 @@ import { StudentsService } from './students.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { GraphqlRecordFormComponent } from '../shared/graphql-record-form/graphql-record-form.component';
-import { GraphqlCollections, GraphqlTypes } from '../shared/services/graphql.service';
+import { GraphqlCollections, GraphqlService, GraphqlTypes } from '../shared/services/graphql.service';
 import { StudentType } from '../../../graphql/generated';
 
 @Component({
@@ -22,6 +22,7 @@ export class StudentsComponent implements OnInit {
 
   constructor(
     private studentsService: StudentsService,
+    private graphqlService: GraphqlService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private matDialog: MatDialog,
@@ -44,13 +45,13 @@ export class StudentsComponent implements OnInit {
   }
 
   openCreateModal(): void {
+    const inputDefs = this.studentsService.getStudentInputDefs();
     const dialogRef = this.matDialog.open(GraphqlRecordFormComponent, {
       width: '1200px',
       data: {
         collection: GraphqlCollections.STUDENTS,
         type: GraphqlTypes.STUDENT,
-        formGroup: this.studentsService.getStudentInputFormGroup(),
-        controlMetadata: this.studentsService.getStudentControlMetadata(),
+        inputDefs,
       },
     });
 
@@ -75,33 +76,32 @@ export class StudentsComponent implements OnInit {
   colDefs: ColDef<StudentType>[] = [
     { 
       field: "id",
+      headerName: "ID",
       filter: "agNumberColumnFilter",
       hide: false,
       floatingFilter: true,
      },
     { 
-      field: "studentId",
-      filter: 'agTextColumnFilter',
-      pinned: true,
-      floatingFilter: true,
-    },
-    { 
       field: "fullName",
+      headerName: "Full Name",
       filter: 'agTextColumnFilter',
       floatingFilter: true,
     },
     { 
-      field: "nickName",
+      field: "nickname",
+      headerName: "Nickname",
       filter: 'agTextColumnFilter',
       floatingFilter: true,
     },
     { 
       field: "dateOfBirth",
+      headerName: "Date of Birth",
       filter: "agDateColumnFilter",
       floatingFilter: true,
     },
     { 
-      field: "mobileNo",
+      field: "contactNo",
+      headerName: "Contact No",
       filter: 'agTextColumnFilter',
       floatingFilter: true,
     },

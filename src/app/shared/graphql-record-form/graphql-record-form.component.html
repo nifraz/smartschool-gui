@@ -10,36 +10,36 @@
     <div class="modal-body p-2 mt-2">
         <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
             <div class="form-row">
-                <div *ngFor="let item of controls" class="form-group col-12 col-md-6 col-xl-4 {{item.metadata.class}}">
-                    <label [for]="item.key">{{ item.metadata.label }}</label>
-                    <ng-container [ngSwitch]="getControlType(item.metadata)">
-                        <input *ngSwitchCase="'text'" [formControlName]="item.key" [id]="item.key" class="form-control"
-                            [type]="item.metadata.type" />
-                        <select *ngSwitchCase="'select'" [formControlName]="item.key" [id]="item.key"
+                <div *ngFor="let item of inputDefs" class="form-group col-12 col-md-6 col-xl-4 {{item.class}}">
+                    <label [for]="item.field">{{ item.caption }}</label>
+                    <ng-container [ngSwitch]="item.type">
+                        <input *ngSwitchCase="'text'" [formControlName]="item.field.toString()" [id]="item.field" class="form-control"
+                            [type]="item.type" />
+                        <select *ngSwitchCase="'select'" [formControlName]="item.field.toString()" [id]="item.field"
                             class="form-control">
-                            <option *ngFor="let option of item.metadata.options" [value]="option.value">
-                                {{ option.label }}
+                            <option *ngFor="let option of item.options" [value]="option.value">
+                                {{ option.caption }}
                             </option>
                         </select>
-                        <input *ngSwitchCase="'date'" [formControlName]="item.key" [id]="item.key" class="form-control"
+                        <input *ngSwitchCase="'date'" [formControlName]="item.field.toString()" [id]="item.field" class="form-control"
                             type="date" />
                         <div *ngSwitchCase="'checkbox'" class="form-check">
-                            <input [formControlName]="item.key" [id]="item.key" class="form-check-input"
+                            <input [formControlName]="item.field.toString()" [id]="item.field" class="form-check-input"
                                 type="checkbox" />
-                            <label class="form-check-label" [for]="item.key">{{ item.metadata.label }}</label>
+                            <label class="form-check-label" [for]="item.field">{{ item.caption }}</label>
                         </div>
                         <div *ngSwitchCase="'radio'" class="form-check">
-                            <div *ngFor="let option of item.metadata.options">
-                                <input [formControlName]="item.key" [id]="item.key + option.value"
+                            <div *ngFor="let option of item.options">
+                                <input [formControlName]="item.field.toString()" [id]="item.field.toString() + option.value"
                                     class="form-check-input" type="radio" [value]="option.value" />
-                                <label class="form-check-label" [for]="item.key + option.value">{{ option.label
+                                <label class="form-check-label" [for]="item.field.toString() + option.value">{{ option.caption
                                     }}</label>
                             </div>
                         </div>
                         <!-- Add more cases for other input types as needed -->
                     </ng-container>
-                    <div *ngIf="item.control?.invalid && item.control?.touched" class="text-danger">
-                        {{ item.metadata.label }} is required
+                    <div *ngIf="formGroup.controls[item.field.toString()]?.invalid && formGroup.controls[item.field.toString()]?.touched" class="text-danger">
+                        {{ item.caption }} is required
                     </div>
                 </div>
             </div>

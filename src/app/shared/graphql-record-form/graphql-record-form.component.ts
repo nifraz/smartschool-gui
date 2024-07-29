@@ -2,7 +2,7 @@ import { Component, Inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges }
 import { AbstractControl, FormArray, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Apollo, gql, MutationResult } from 'apollo-angular';
-import { capitalizeFirstLetter, GraphqlService, toLowercaseFirstLetter } from '../services/graphql.service';
+import { capitalizeFirstLetter, GraphqlService, InputDef, toLowercaseFirstLetter } from '../services/graphql.service';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
@@ -24,11 +24,10 @@ export class GraphqlRecordFormComponent<T extends object> implements OnInit, OnC
   typeKey: string = '';
   typeName: string = '';
   id: number = 0;
-  currentRecord?: T;
+  oldRecord?: T;
 
+  inputDefs: InputDef<T>[] = [];
   formGroup: FormGroup<any> = new FormGroup<any>({});
-  controlMetadata: { [key: string]: any } = {};
-  controls: { key: string, control: AbstractControl | null, metadata: any }[] = [];
 
   loading: boolean = false;
   editMode: boolean = false;
@@ -54,13 +53,13 @@ export class GraphqlRecordFormComponent<T extends object> implements OnInit, OnC
     this.collectionKey = toLowercaseFirstLetter(this.data.collection);
     this.typeName = capitalizeFirstLetter(this.data.type);
     this.typeKey = toLowercaseFirstLetter(this.data.type);
-    this.formGroup = this.data.formGroup;
-    this.controlMetadata = this.data.controlMetadata;
+    this.inputDefs = this.data.inputDefs;
+    this.formGroup = this.graphqlService.createInputFormGroup(this.inputDefs);
     this.id = this.data.id ? +this.data.id : 0;
     this.editMode = !!this.id;
-    this.currentRecord = this.formGroup.value;
+    this.oldRecord = this.getFormattedInput(this.formGroup.value);
     
-    this.updateControls();
+    // this.updateControls();
 
     if (this.editMode) {
       this.loading = true;
@@ -72,14 +71,9 @@ export class GraphqlRecordFormComponent<T extends object> implements OnInit, OnC
       this.graphqlService.getGqlQueryObservable(recordQuery, variables).subscribe({
         next: res => {
           this.loading = false;
-          const record = {...res.data[this.typeKey]};
-          Object.keys(record).forEach(key => { //review
-            if (this.controlMetadata[key] && this.controlMetadata[key].type == 'date') {
-              record[key] = record[key].split('T')[0];
-            }
-          });
-          this.formGroup.patchValue(record);
-          this.currentRecord = this.formGroup.value;
+          const input = this.getFormattedInput(res.data[this.typeKey]);
+          this.formGroup.patchValue(input);
+          this.oldRecord = this.getFormattedInput(this.formGroup.value);
           this.formGroup.enable();
         },
         error: err => {
@@ -100,23 +94,30 @@ export class GraphqlRecordFormComponent<T extends object> implements OnInit, OnC
     });
   }
 
+  getFormattedInput(input: any): any {
+    const formattedInput = {...input, };
+    Object.keys(input).forEach(key => {
+      if (!input[key]) {
+        formattedInput[key] = null;
+        return;
+      }
+      const inputDef = this.inputDefs.find(x => x.field.toString() == key);
+      if (inputDef && inputDef.type == 'date') {
+        formattedInput[key] = input[key].split('T')[0];
+      }
+    });
+    return formattedInput;
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['formGroup'] || changes['controlMetadata']) {
-      this.updateControls();
-    }
+    // if (changes['formGroup'] || changes['controlMetadata']) {
+    //   this.updateControls();
+    // }
   }
 
-  updateControls(): void {
-    this.controls = Object.keys(this.formGroup.controls).map(key => ({
-      key,
-      control: this.formGroup.get(key),
-      metadata: this.controlMetadata[key]
-    }));
-  }
-
-  getControlType(metadata: any): string {
-    return metadata?.type || 'text';
-  }
+  // getControlType(metadata: any): string {
+  //   return metadata?.type || 'text';
+  // }
 
   isFormArray(control: AbstractControl): boolean {
     return control instanceof FormArray;
@@ -128,9 +129,7 @@ export class GraphqlRecordFormComponent<T extends object> implements OnInit, OnC
       return;
     }
     
-    const input = {
-      ...this.formGroup.value,
-    };
+    const input = this.getFormattedInput(this.formGroup.value);
     const mutation = this.editMode ? this.constructUpdateMutation() : this.constructCreateMutation();
     const variables = {
       id: this.id,
@@ -149,15 +148,15 @@ export class GraphqlRecordFormComponent<T extends object> implements OnInit, OnC
           this.formGroup.reset();
           return;
         }
-        this.currentRecord = input;
+        this.oldRecord = input;
         this.closeModal();
       }
     });
   }
 
   constructRecordQuery(): string {
-    const fields = Object.entries(this.controlMetadata)
-      .map(([field, metaData]) => field)
+    const fields = this.inputDefs
+      .map(x => x.field)
       .join(', ');
 
     const query: string = `
@@ -199,8 +198,9 @@ export class GraphqlRecordFormComponent<T extends object> implements OnInit, OnC
   }
 
   closeModal(): void {
-    const oldValue = JSON.stringify(this.currentRecord);
-    const newValue = JSON.stringify(this.formGroup.value);
+    const oldValue = JSON.stringify(this.oldRecord);
+    const newRecord = this.getFormattedInput(this.formGroup.value);
+    const newValue = JSON.stringify(newRecord);
     if (oldValue != newValue) {
       if (!confirm("Are you sure you want to close without saving your changes?")) {
         return;

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { StudentsService, STUDENT_DETAILS } from '../students.service';
+import { StudentsService, STUDENT } from '../students.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NotFoundComponent } from "../../shared/not-found/not-found.component";
@@ -25,13 +25,13 @@ export class StudentDetailsComponent implements OnInit {
   loading: boolean = false;
 
   openStudentFormModal(): void {
+    const inputDefs = this.studentsService.getStudentInputDefs();
     const dialogRef = this.matDialog.open(GraphqlRecordFormComponent, {
       width: '1200px',
       data: {
         collection: GraphqlCollections.STUDENTS,
         type: GraphqlTypes.STUDENT,
-        formGroup: this.studentsService.getStudentInputFormGroup(),
-        controlMetadata: this.studentsService.getStudentControlMetadata(),
+        inputDefs,
         id: this.id,
       }
     });
@@ -75,7 +75,7 @@ export class StudentDetailsComponent implements OnInit {
       const variables = {
         id: +this.id,
       }
-      this.graphqlService.getGqlQueryObservable(STUDENT_DETAILS, variables).subscribe({
+      this.graphqlService.getGqlQueryObservable(STUDENT, variables).subscribe({
         next: res => {
           this.loading = false;
           this.record = res.data[GraphqlTypes.STUDENT];

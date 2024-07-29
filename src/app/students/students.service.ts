@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { gql } from 'apollo-angular';
-import { SortEnumType, StudentInput } from '../../../graphql/generated';
-import { GraphqlService } from '../shared/services/graphql.service';
+import { SexType, SortEnumType, StudentInput } from '../../../graphql/generated';
+import { GraphqlService, InputDef } from '../shared/services/graphql.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,90 +14,143 @@ export class StudentsService {
     private graphqlService: GraphqlService,
   ) { }
 
-  getStudentInputFormGroup(): FormGroup<any> {
-    const studentInput: StudentInput = {
-      studentId: '',
-      fullName: '',
-      nickName: '',
-      mobileNo: '',
-      dateOfBirth: '',
-    };
+  // getStudentInputFormGroup(): FormGroup<any> {
+  //   const studentInput: StudentInput = {
+  //     studentId: '',
+  //   };
     
-    const formGroup = this.graphqlService.createInputFormGroup(studentInput);
-    formGroup.controls['studentId'].addValidators([Validators.required, ]);
-    formGroup.controls['fullName'].addValidators([Validators.required, ]);
-    formGroup.controls['nickName'].addValidators([]);
-    formGroup.controls['dateOfBirth'].addValidators([Validators.required, ]);
-    formGroup.controls['mobileNo'].addValidators([Validators.required, Validators.pattern('^\\+?[0-9]{10,12}$')]);
+  //   const formGroup = this.graphqlService.createInputFormGroup(studentInput);
+  //   formGroup.controls['studentId'].addValidators([Validators.required, ]);
+  //   formGroup.controls['fullName'].addValidators([Validators.required, ]);
+  //   formGroup.controls['nickName'].addValidators([]);
+  //   formGroup.controls['dateOfBirth'].addValidators([Validators.required, ]);
+  //   formGroup.controls['mobileNo'].addValidators([Validators.required, Validators.pattern('^\\+?[0-9]{10,12}$')]);
 
-    return formGroup;
-  }
+  //   return formGroup;
+  // }
 
-  getStudentControlMetadata(lang: string = 'en-US'): { [key: string]: any } {
-    return {
-      studentId: {
-        label: 'Student ID',
+  getStudentInputDefs(lang: string = 'en-US'): InputDef<StudentInput>[] {
+    return [
+      {
+        field: 'fullName',
         type: 'text',
-        class: 'col-md-6',
-        // maxlength: 100,
+        caption: 'Full Name',
+        required: true,
+        class: '',
       },
-      fullName: {
-        label: 'Full Name',
+      {
+        field: 'shortName',
         type: 'text',
-        class: 'col-md-6',
+        caption: 'Short Name',
+        required: true,
+        class: '',
       },
-      nickName: {
-        label: 'Nick Name',
-        type: 'text',
-        class: 'col-md-6',
-      },
-      // email: {
-      //   label: 'Email',
-      //   type: 'email',
-      //   class: 'col-md-6',
-      // },
-      dateOfBirth: {
-        label: 'Date of Birth',
+      {
+        field: 'dateOfBirth',
         type: 'date',
-        class: 'col-md-6',
+        caption: 'Date of Birth',
+        required: false,
+        class: '',
       },
-      mobileNo: {
-        label: 'Mobile No',
+      {
+        field: 'sex',
+        type: 'select',
+        caption: 'Sex',
+        required: true,
+        options: [
+          {
+            caption: 'Male',
+            value: SexType.Male,
+          },
+          {
+            caption: 'Female',
+            value: SexType.Female,
+          },
+        ],
+        class: '',
+      },
+      {
+        field: 'contactNo',
         type: 'text',
-        class: 'col-md-6',
+        caption: 'Contact No',
+        required: false,
+        // pattern: '^\\+?[0-9]{10,12}$',
+        class: '',
       },
-      // sex: {
-      //   label: 'Sex',
-      //   type: 'select',
-      //   class: 'col-md-6',
-      //   options: [
-      //     { value: 0, label: 'Not known' },
-      //     { value: 1, label: 'Male' },
-      //     { value: 2, label: 'Female' },
-      //     { value: 9, label: 'Not applicable' },
-      //   ]
-      // },
-      // acceptTerms: {
-      //   label: 'I accept the terms and conditions',
-      //   type: 'checkbox',
-      //   class: 'col-md-6',
-      // }
-    };
+    ];
+    // return {
+    //   id: {
+    //     label: 'Student ID',
+    //     type: 'text',
+    //     class: 'col-md-6',
+    //     // maxlength: 100,
+    //   },
+    //   fullName: {
+    //     label: 'Full Name',
+    //     type: 'text',
+    //     class: 'col-md-6',
+    //   },
+    //   nickName: {
+    //     label: 'Nick Name',
+    //     type: 'text',
+    //     class: 'col-md-6',
+    //   },
+    //   // email: {
+    //   //   label: 'Email',
+    //   //   type: 'email',
+    //   //   class: 'col-md-6',
+    //   // },
+    //   dateOfBirth: {
+    //     label: 'Date of Birth',
+    //     type: 'date',
+    //     class: 'col-md-6',
+    //   },
+    //   mobileNo: {
+    //     label: 'Mobile No',
+    //     type: 'text',
+    //     class: 'col-md-6',
+    //   },
+    //   // sex: {
+    //   //   label: 'Sex',
+    //   //   type: 'select',
+    //   //   class: 'col-md-6',
+    //   //   options: [
+    //   //     { value: 0, label: 'Not known' },
+    //   //     { value: 1, label: 'Male' },
+    //   //     { value: 2, label: 'Female' },
+    //   //     { value: 9, label: 'Not applicable' },
+    //   //   ]
+    //   // },
+    //   // acceptTerms: {
+    //   //   label: 'I accept the terms and conditions',
+    //   //   type: 'checkbox',
+    //   //   class: 'col-md-6',
+    //   // }
+    // };
   }
 
 }
 
-
-
-export const STUDENT_DETAILS = `
+export const STUDENT = `
   query student($id: Long!) {
     student(id: $id) {
       id
-      studentId
-      fullName
-      nickName
+      address
+      bcNo
+      contactNo
+      createdBy
+      createdOn
       dateOfBirth
-      mobileNo
+      email
+      fullName
+      guid
+      lastModifiedBy
+      lastModifiedOn
+      nickname
+      nicNo
+      passportNo
+      sex
+      shortName
     }
   }
 `;

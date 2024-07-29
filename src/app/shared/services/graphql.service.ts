@@ -61,20 +61,18 @@ export class GraphqlService {
     return colDefs;
   }
 
-  createInputFormGroup(model: any): FormGroup<any> {
+  createInputFormGroup<T>(inputDefs: InputDef<T>[]): FormGroup<any> {
     const group: any = {};
   
-    Object.keys(model).forEach(key => {
-      // if (typeof model[key] === 'string') {
-      //   group[key] = [model[key]];
-      // } else if (typeof model[key] === 'number') {
-      //   group[key] = [model[key]];
-      // } else if (model[key] instanceof Date) {
-      //   group[key] = [model[key]];
-      // } else {
-      //   group[key] = [model[key]];
-      // }
-      group[key] = [model[key], ];
+    inputDefs.forEach(x => {
+      const validators = [];
+      if (x.required) {
+        validators.push(Validators.required);
+      }
+      if (x.pattern) {
+        validators.push(Validators.pattern(x.pattern));
+      }
+      group[x.field] = ['', validators];
     });
   
     return this.formBuilder.group(group);
@@ -171,4 +169,19 @@ export enum GraphqlCollections {
 export enum GraphqlTypes {
   STUDENT = 'student',
   TEACHER = 'teacher',
+}
+
+export interface InputDef<T> {
+  field: keyof T,
+  type: 'text' | 'date' | 'email' | 'select', // add more
+  caption: string,
+  required: boolean,
+  pattern?: string,
+  options?: Option[],
+  class: string,
+}
+
+export interface Option {
+  caption: string,
+  value: any,
 }
