@@ -120,39 +120,22 @@ export function toLowercaseFirstLetter(string: string): string {
 export interface AgGridFilter {
   filterType: AgGridFilterType,
   type?: ISimpleFilterModelType,
+
   filter?: number | string,
   filterTo?: number | string,
   dateFrom?: string,
   dateTo?: string,
+
   operator?: ConditionalOperator,
+  conditions?: AgGridFilter[],
   condition1?: AgGridFilter,
   condition2?: AgGridFilter,
-  conditions?: AgGridFilter[],
-
-  field?: string,
 }
 
 export enum AgGridFilterType {
   NUMBER = 'number',
   TEXT = 'text',
   DATE = 'date',
-}
-
-export enum AgGridType {
-  EMPTY = 'empty',
-  EQUALS = 'equals',
-  NOT_EQUAL = 'notEqual',
-  LESS_THAN = 'lessThan',
-  LESS_THAN_OR_EQUAL = 'lessThanOrEqual',
-  GREATER_THAN = 'greaterThan',
-  GREATER_THAN_OR_EQUAL = 'greaterThanOrEqual',
-  IN_RANGE = 'inRange',
-  CONTAINS = 'contains',
-  NOT_CONTAINS = 'notContains',
-  STARTS_WITH = 'startsWith',
-  ENDS_WITH = 'endsWith',
-  BLANK = 'blank',
-  NOT_BLANK = 'notBlank'
 }
 
 export enum ConditionalOperator {
