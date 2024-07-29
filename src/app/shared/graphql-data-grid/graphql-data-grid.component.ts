@@ -91,7 +91,55 @@ export class GraphqlDataGridComponent<T extends object> implements OnInit, Remot
   onRowClicked($event: RowClickedEvent<T,any>) {
     this.recordClicked.emit($event.data);
   }
+
+  onRefresh(): void {
+    this.gridApi?.refreshInfiniteCache();
+  }
+
+  onResetFilters(): void {
+    this.gridApi?.setFilterModel({});
+  }
+
+  onResetSort(): void {
+    // this.gridOptions.api?.setSortModel(null);
+  }
   
+  onExport(): void {
+    this.gridApi?.exportDataAsCsv();
+  }
+
+  onToggleColumns(): void {
+    // const allColumns = this.gridOptions.columnApi?.getAllColumns();
+    // if (allColumns) {
+    //   allColumns.forEach(column => {
+    //     const isVisible = this.gridOptions.columnApi?.getColumnState().find(col => col.colId === column.getColId())?.hide;
+    //     this.gridOptions.columnApi?.setColumnVisible(column, !isVisible);
+    //   });
+    // }
+  }
+
+  onAutosizeColumns(): void {
+    // const allColumnIds = this.gridOptions.columnApi?.getAllColumns().map(column => column.getColId());
+    // if (allColumnIds) {
+    //   this.gridOptions.columnApi?.autoSizeColumns(allColumnIds);
+    // }
+  }
+
+  // onSaveState(): void {
+  //   const gridState = this.gridOptions.api?.getColumnState();
+  //   localStorage.setItem('gridState', JSON.stringify(gridState));
+  // }
+
+  // onLoadState(): void {
+  //   const gridState = localStorage.getItem('gridState');
+  //   if (gridState) {
+  //     this.gridOptions.api?.applyColumnState({
+  //       state: JSON.parse(gridState),
+  //       applyOrder: true
+  //     });
+  //   }
+  // }
+
   getData(params: IGetRowsParams): Observable<{ data: T[]; totalRecords: number }> {
     this.gridApi?.showLoadingOverlay();
     const query = this.constructQuery(params);
