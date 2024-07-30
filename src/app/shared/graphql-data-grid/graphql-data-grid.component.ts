@@ -12,7 +12,7 @@ import {
   SortModelItem,
 } from 'ag-grid-community'; // Column Definition Type Interface
 import { Observable, catchError, map, of } from 'rxjs';
-import { AgGridFilter, AgGridFilterType, ConditionalOperator, GraphqlService, RemoteGridApi, convertToEndOfDay } from '../services/graphql.service';
+import { AgGridFilter, AgGridFilterType, ConditionalOperator, GraphqlService, RemoteGridApi, capitalizeFirstLetter, formatCamelCaseText } from '../services/graphql.service';
 import { RemoteGridBindingDirective } from '../directives/remote-grid-binding.directive';
 import { ISimpleFilterModelType } from 'ag-grid-community/dist/types/core/filter/provided/simpleFilter';
 
@@ -29,6 +29,7 @@ import { ISimpleFilterModelType } from 'ag-grid-community/dist/types/core/filter
   styleUrl: './graphql-data-grid.component.scss'
 })
 export class GraphqlDataGridComponent<T extends object> implements OnInit, RemoteGridApi<T> {
+  @Input()title?: string;
   
   @Input()collection: string = '';
   @Input()themeClass: string = "ag-theme-quartz-dark";
@@ -65,7 +66,7 @@ export class GraphqlDataGridComponent<T extends object> implements OnInit, Remot
   ) {}
   
   ngOnInit(): void {
-    console.log('graphql');
+    this.title = this.title ?? `${formatCamelCaseText(this.collection)} Data`;
   }
 
   saveGridState(): void {

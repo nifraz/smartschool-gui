@@ -1,13 +1,17 @@
-<div class="d-flex justify-content-end mb-2">
-    <button class="btn btn-sm btn-secondary ms-2" (click)="onExport()">Export to CSV</button>
-    <button class="btn btn-sm btn-secondary ms-2" (click)="onToggleColumns()">Toggle Columns</button>
-    <button class="btn btn-sm btn-secondary ms-2" (click)="onAutosizeColumns()">Autosize Columns</button>
-    <!-- <button class="btn btn-secondary me-2" (click)="onSaveState()">Save State</button>
-    <button class="btn btn-secondary me-2" (click)="onLoadState()">Load State</button> -->
-    <button class="btn btn-sm btn-secondary ms-2" (click)="onResetFilters()">Reset Filters</button>
-    <button class="btn btn-sm btn-secondary ms-2" (click)="onResetSort()">Reset Sort</button>
-    <button class="btn btn-sm btn-secondary ms-2" (click)="onRefresh()">Refresh</button>
+<div class="d-flex justify-content-between mb-2">
+    <h2 class="mat-h2 m-0 ms-2">{{title}}</h2>
+    <div class="justify-content-end">
+        <button class="btn btn-sm btn-secondary ms-2" (click)="onExport()" title="Export to CSV">Export</button>
+        <!-- <button class="btn btn-sm btn-secondary ms-2" (click)="onToggleColumns()" title="">Toggle Columns</button> -->
+        <!-- <button class="btn btn-sm btn-secondary ms-2" (click)="onAutosizeColumns()" title="Autosize Columns">Autosize</button> -->
+        <!-- <button class="btn btn-secondary me-2" (click)="onSaveState()" title="">Save State</button>
+        <button class="btn btn-secondary me-2" (click)="onLoadState()" title="">Load State</button> -->
+        <button class="btn btn-sm btn-secondary ms-2" (click)="onResetFilters()" title="Reset Filters">Reset Filters</button>
+        <!-- <button class="btn btn-sm btn-secondary ms-2" (click)="onResetSort()" title="Reset Sort">Reset Sort</button> -->
+        <button class="btn btn-sm btn-secondary ms-2" (click)="onRefresh()" title="Refresh Data">Refresh</button>
+    </div>
 </div>
+
 
 <ag-grid-angular style="height: calc(100vh - 7rem);"
     [class]="themeClass"

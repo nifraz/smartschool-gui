@@ -107,6 +107,16 @@ export function convertToEndOfDay(dateString: string | undefined): string {
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
 
+export function formatCamelCaseText(input: string): string {
+  // 1. Add space before each uppercase letter that follows a lowercase letter.
+  const spaced = input.replace(/([a-z])([A-Z])/g, '$1 $2');
+
+  // 2. Capitalize the first letter of each word.
+  const capitalized = spaced.replace(/\b\w/g, char => char.toUpperCase());
+
+  return capitalized;
+}
+
 export function capitalizeFirstLetter(string: string): string {
   if (!string.length) return '';
   return `${string.charAt(0).toUpperCase()}${string.slice(1)}`;
