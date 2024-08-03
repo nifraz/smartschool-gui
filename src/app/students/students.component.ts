@@ -8,6 +8,7 @@ import { GraphqlRecordFormComponent } from '../shared/graphql-record-form/graphq
 import { GraphqlCollections, GraphqlService, GraphqlTypes } from '../shared/services/graphql.service';
 import { SexType, StudentType } from '../../../graphql/generated';
 import { MultiSelectFilterComponent } from '../shared/components/multi-select-filter/multi-select-filter.component';
+import { CustomFloatingFilterComponent } from '../shared/components/custom-floating-filter/custom-floating-filter.component';
 
 @Component({
   selector: 'app-students',
@@ -108,6 +109,7 @@ export class StudentsComponent implements OnInit {
       filterParams: { 
         values: Object.values(SexType) 
       },
+      floatingFilterComponent: CustomFloatingFilterComponent,
     },
     { 
       field: "bcNo",
