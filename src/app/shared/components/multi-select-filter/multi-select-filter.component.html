@@ -1,5 +1,5 @@
-<mat-form-field>
-    <mat-select [formControl]="filterControl" multiple>
-        <mat-option *ngFor="let option of filterOptions" [value]="option">{{ option }}</mat-option>
-    </mat-select>
-</mat-form-field>
+<div [formGroup]="formGroup">
+    <div *ngFor="let option of filterOptions">
+        <mat-checkbox [formControlName]="option">{{ option }}</mat-checkbox>
+    </div>
+</div>
