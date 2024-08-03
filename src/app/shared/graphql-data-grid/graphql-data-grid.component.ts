@@ -38,8 +38,12 @@ export class GraphqlDataGridComponent<T extends object> implements OnInit, Remot
   @Output()recordClicked: EventEmitter<T> = new EventEmitter<T>();
 
   defaultColDef: ColDef = {
+    flex: 1,
+    minWidth: 150,
     filter: "agTextColumnFilter",
     floatingFilter: true,
+    suppressHeaderMenuButton: true,
+    suppressHeaderContextMenu: true,
   };
 
   gridOptions: GridOptions<T> = {

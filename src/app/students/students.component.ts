@@ -80,36 +80,30 @@ export class StudentsComponent implements OnInit {
       headerName: "ID",
       filter: "agNumberColumnFilter",
       hide: false,
-      floatingFilter: true,
      },
     { 
       field: "fullName",
       headerName: "Full Name",
       filter: 'agTextColumnFilter',
-      floatingFilter: true,
     },
     { 
       field: "shortName",
       headerName: "Short Name",
       filter: 'agTextColumnFilter',
-      floatingFilter: true,
     },
     { 
       field: "nickname",
       headerName: "Nickname",
       filter: 'agTextColumnFilter',
-      floatingFilter: true,
     },
     { 
       field: "dateOfBirth",
       headerName: "Date of Birth",
       filter: "agDateColumnFilter",
-      floatingFilter: true,
     },
     { 
       field: "sex",
       headerName: "Sex",
-      floatingFilter: true,
       filter: MultiSelectFilterComponent, 
       filterParams: { 
         values: Object.values(SexType) 
@@ -119,61 +113,51 @@ export class StudentsComponent implements OnInit {
       field: "bcNo",
       headerName: "BC No",
       filter: 'agTextColumnFilter',
-      floatingFilter: true,
     },
     { 
       field: "nicNo",
       headerName: "NIC No",
       filter: 'agTextColumnFilter',
-      floatingFilter: true,
     },
     { 
       field: "contactNo",
       headerName: "Contact No",
       filter: 'agTextColumnFilter',
-      floatingFilter: true,
     },
     { 
       field: "email",
       headerName: "Email",
       filter: 'agTextColumnFilter',
-      floatingFilter: true,
     },
     { 
       field: "address",
       headerName: "Address",
       filter: 'agTextColumnFilter',
-      floatingFilter: true,
     },
     { 
       field: "passportNo",
       headerName: "Passport No",
       filter: 'agTextColumnFilter',
-      floatingFilter: true,
     },
     { 
       field: "createdOn",
       headerName: "Created On",
       filter: 'agTextColumnFilter',
-      floatingFilter: true,
     },
     { 
       field: "createdBy",
       headerName: "Created By",
       filter: 'agTextColumnFilter',
-      floatingFilter: true,
     },
     { 
       field: "lastModifiedOn",
       headerName: "Last Modified On",
       filter: 'agTextColumnFilter',
-      floatingFilter: true,
     },
     { 
       field: "lastModifiedBy",
       headerName: "Last Modified By",
       filter: 'agTextColumnFilter',
-      floatingFilter: true,
     },
   ];
 

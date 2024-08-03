@@ -1,14 +1,23 @@
 <div class="d-flex justify-content-between mb-2">
     <h2 class="mat-h2 m-0 ms-2">{{title}}</h2>
     <div class="justify-content-end">
-        <button class="btn btn-sm btn-secondary ms-2" (click)="onExport()" title="Export to CSV">Export</button>
+        <button class="btn btn-sm btn-success ms-2" (click)="onExport()" title="Export to CSV">
+            <i class="bi bi-download"></i>
+            Export
+        </button>
         <!-- <button class="btn btn-sm btn-secondary ms-2" (click)="onToggleColumns()" title="">Toggle Columns</button> -->
         <!-- <button class="btn btn-sm btn-secondary ms-2" (click)="onAutosizeColumns()" title="Autosize Columns">Autosize</button> -->
         <!-- <button class="btn btn-secondary me-2" (click)="onSaveState()" title="">Save State</button>
         <button class="btn btn-secondary me-2" (click)="onLoadState()" title="">Load State</button> -->
-        <button class="btn btn-sm btn-secondary ms-2" (click)="onResetFilters()" title="Reset Filters">Reset Filters</button>
+        <button class="btn btn-sm btn-secondary ms-2" (click)="onResetFilters()" title="Reset Filters">
+            <i class="bi bi-filter"></i>
+            Reset Filters
+        </button>
         <!-- <button class="btn btn-sm btn-secondary ms-2" (click)="onResetSort()" title="Reset Sort">Reset Sort</button> -->
-        <button class="btn btn-sm btn-secondary ms-2" (click)="onRefresh()" title="Refresh Data">Refresh</button>
+        <button class="btn btn-sm btn-primary ms-2" (click)="onRefresh()" title="Refresh Data">
+            <i class="bi bi-arrow-counterclockwise"></i>
+            Refresh
+        </button>
     </div>
 </div>
 
@@ -17,6 +26,7 @@
     [class]="themeClass"
     [gridOptions]="gridOptions"
     [columnDefs]="colDefs"
+    [defaultColDef]="defaultColDef"
     [remoteGridBinding]="remoteGridBinding"
     (remoteGridReady)="onGridReady($event)"
     (rowClicked)="onRowClicked($event)"
