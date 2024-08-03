@@ -177,6 +177,10 @@ export class GraphqlDataGridComponent<T extends object> implements OnInit, Remot
     return `{${field}: {${this.convertToGqlFilterInput(type)}: ${value}}}`;
   }
 
+  private getMultiSelectFilterKeyValuePair(field: string, values: string[]): string {
+    return `{${field}: {in: [${values.join(', ')}]}}`;
+  }
+
   private getFilterConditionalOperation(keyValuePairs: string[], operator: ConditionalOperator): string {
     if (!keyValuePairs.length) return '';
     return `${operator.toLowerCase()}: [${keyValuePairs.join(', ')}]`;
@@ -232,6 +236,9 @@ export class GraphqlDataGridComponent<T extends object> implements OnInit, Remot
       const fieldFilter1 = this.getFilterField(field, agGridFilter.condition1);
       const fieldFilter2 = this.getFilterField(field, agGridFilter.condition2);
       return `{${this.getFilterConditionalOperation([fieldFilter1, fieldFilter2], agGridFilter.operator)}}`;
+    }
+    else if (agGridFilter.value?.length) {
+      return this.getMultiSelectFilterKeyValuePair(field, agGridFilter.value);
     }
     throw new Error(`Invalid AgGridFilter: ${JSON.stringify(agGridFilter)}`);
   }

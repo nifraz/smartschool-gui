@@ -6,7 +6,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { GraphqlRecordFormComponent } from '../shared/graphql-record-form/graphql-record-form.component';
 import { GraphqlCollections, GraphqlService, GraphqlTypes } from '../shared/services/graphql.service';
-import { StudentType } from '../../../graphql/generated';
+import { SexType, StudentType } from '../../../graphql/generated';
+import { MultiSelectFilterComponent } from '../shared/components/multi-select-filter/multi-select-filter.component';
 
 @Component({
   selector: 'app-students',
@@ -88,6 +89,12 @@ export class StudentsComponent implements OnInit {
       floatingFilter: true,
     },
     { 
+      field: "shortName",
+      headerName: "Short Name",
+      filter: 'agTextColumnFilter',
+      floatingFilter: true,
+    },
+    { 
       field: "nickname",
       headerName: "Nickname",
       filter: 'agTextColumnFilter',
@@ -100,8 +107,71 @@ export class StudentsComponent implements OnInit {
       floatingFilter: true,
     },
     { 
+      field: "sex",
+      headerName: "Sex",
+      floatingFilter: true,
+      filter: MultiSelectFilterComponent, 
+      filterParams: { 
+        values: Object.values(SexType) 
+      },
+    },
+    { 
+      field: "bcNo",
+      headerName: "BC No",
+      filter: 'agTextColumnFilter',
+      floatingFilter: true,
+    },
+    { 
+      field: "nicNo",
+      headerName: "NIC No",
+      filter: 'agTextColumnFilter',
+      floatingFilter: true,
+    },
+    { 
       field: "contactNo",
       headerName: "Contact No",
+      filter: 'agTextColumnFilter',
+      floatingFilter: true,
+    },
+    { 
+      field: "email",
+      headerName: "Email",
+      filter: 'agTextColumnFilter',
+      floatingFilter: true,
+    },
+    { 
+      field: "address",
+      headerName: "Address",
+      filter: 'agTextColumnFilter',
+      floatingFilter: true,
+    },
+    { 
+      field: "passportNo",
+      headerName: "Passport No",
+      filter: 'agTextColumnFilter',
+      floatingFilter: true,
+    },
+    { 
+      field: "createdOn",
+      headerName: "Created On",
+      filter: 'agTextColumnFilter',
+      floatingFilter: true,
+    },
+    { 
+      field: "createdBy",
+      headerName: "Created By",
+      filter: 'agTextColumnFilter',
+      floatingFilter: true,
+    },
+    { 
+      field: "lastModifiedOn",
+      headerName: "Last Modified On",
+      filter: 'agTextColumnFilter',
+      floatingFilter: true,
+    },
+    { 
+      field: "lastModifiedBy",
+      headerName: "Last Modified By",
       filter: 'agTextColumnFilter',
       floatingFilter: true,
     },

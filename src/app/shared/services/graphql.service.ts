@@ -127,6 +127,15 @@ export function toLowercaseFirstLetter(string: string): string {
   return `${string.charAt(0).toLowerCase()}${string.slice(1)}`;
 }
 
+export function enumToArray(enumObj: any): { caption: string; value: string }[] {
+  return Object.keys(enumObj)
+    .filter(key => isNaN(Number(key))) // Filter out reverse mappings
+    .map(key => ({
+      caption: key.replace(/([A-Z])/g, ' $1').trim(), // Add space before each uppercase letter and trim the result
+      value: enumObj[key]
+    }));
+}
+
 export interface AgGridFilter {
   filterType: AgGridFilterType,
   type?: ISimpleFilterModelType,
@@ -140,6 +149,8 @@ export interface AgGridFilter {
   conditions?: AgGridFilter[],
   condition1?: AgGridFilter,
   condition2?: AgGridFilter,
+
+  value?: string[],
 }
 
 export enum AgGridFilterType {

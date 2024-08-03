@@ -3,8 +3,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #dee2e6;
-  color: #ffffff; /* Light text color */
+  border-bottom: 1px solid #000000;
+  color: #000000;
 
   .modal-title {
     margin: 0;
@@ -15,12 +15,12 @@
     border: 0;
     font-size: 1.5rem;
     line-height: 1;
-    color: #ffffff; /* Light color for close button */
+    color: #000000;
   }
 }
 
 .modal-body {
-  color: #ffffff; /* Light text color */
+  color: #000000;
 
   .form-row {
     display: flex;
@@ -34,22 +34,22 @@
       margin-bottom: 1rem;
 
       label {
-        color: #ffffff; /* Light text color for labels */
+        color: #000000;
       }
 
       .form-control {
-        background-color: #495057; /* Darker input background */
-        color: #ffffff; /* Light text color for inputs */
-        border: 1px solid #ced4da;
+        background-color: #ffffff;
+        color: #000000;
+        border: 1px solid #000000;
 
         &:focus {
-          background-color: #495057; /* Darker input background on focus */
-          color: #ffffff; /* Light text color for inputs on focus */
+          background-color: #dfecff;
+          color: #000000;
         }
       }
 
       .text-danger {
-        color: #ff6b6b; /* Light text color for error messages */
+        color: #ff4a4a;
       }
     }
   }
