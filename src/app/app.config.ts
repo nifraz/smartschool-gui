@@ -33,7 +33,17 @@ export const appConfig: ApplicationConfig = {
         link: ApolloLink.from([
           httpLink.create({ uri: 'https://localhost:5001/graphql' }),
         ]),
-        cache: new InMemoryCache(), //temp
+        cache: new InMemoryCache(),
+        defaultOptions: {
+          watchQuery: {
+            fetchPolicy: 'no-cache',
+            errorPolicy: 'all',
+          },
+          query: {
+            fetchPolicy: 'no-cache',
+            errorPolicy: 'all',
+          },
+        },
       }),
       deps: [HttpLink],
     },
