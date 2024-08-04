@@ -2,41 +2,80 @@
 <div *ngIf="loading || record; then content else notFound"></div>
 
 <ng-template #content>
-    <div *ngIf="record" class="card">
-        <div class="card-header">
-            <h3>Student Details</h3>
-        </div>
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="mb-3">
-                        <label class="form-label"><strong>Full Name:</strong></label>
-                        <p class="form-control-static">{{ record.fullName }}</p>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label"><strong>Short Name:</strong></label>
-                        <p class="form-control-static">{{ record.shortName }}</p>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label"><strong>Date of Birth:</strong></label>
-                        <p class="form-control-static">{{ record.dateOfBirth | date:'longDate' }}</p>
-                    </div>
+    <div *ngIf="record" class="container mt-4">
+        <div class="row">
+            <!-- Main Info Section -->
+            <div class="col-12 col-md-12 mb-4 text-center mb-4">
+                <img src="assets/images/student-placeholder.png" alt="{{ record.fullName }}" class="rounded-circle" width="150" height="150">
+                <h1 class="mt-3">{{ record.fullName }}</h1>
+                <p class="text-muted">
+                    <span *ngIf="record.dateOfBirth">
+                        {{ age.years }} years, {{ age.months }} months, {{ age.days }} days old | 
+                    </span>
+                    {{ record.sex | titlecase }}
+                </p>
+                <div class="">
+                    <button class="btn btn-sm btn-primary me-2" (click)="editStudent()">
+                        <i class="bi bi-pencil"></i>
+                        Edit
+                    </button>
+                    <button class="btn btn-sm btn-danger me-2" (click)="deleteStudent()">
+                        <i class="bi bi-trash"></i>
+                        Delete
+                    </button>
                 </div>
-                <div class="col-md-6">
-                    <div class="mb-3">
-                        <label class="form-label"><strong>Sex:</strong></label>
-                        <p class="form-control-static">{{ record.sex }}</p>
+            </div>
+            
+            <!-- Personal Details Section -->
+            <div class="col-12 col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="bi bi-person"></i> Personal Details
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label"><strong>Contact No:</strong></label>
-                        <p class="form-control-static">{{ record.contactNo }}</p>
+                    <div class="card-body">
+                        <p *ngIf="record.nickname"><i class="bi bi-person-circle"></i> Nickname: {{ record.nickname }}</p>
+                        <p *ngIf="record.dateOfBirth"><i class="bi bi-calendar"></i> Date of Birth: {{ record.dateOfBirth | date }}</p>
+                        <p *ngIf="record.bcNo"><i class="bi bi-card-checklist"></i> Birth Certificate No: {{ record.bcNo }}</p>
+                        <p *ngIf="record.nicNo"><i class="bi bi-card-list"></i> NIC No: {{ record.nicNo }}</p>
+                        <p *ngIf="record.passportNo"><i class="bi bi-card-heading"></i> Passport No: {{ record.passportNo }}</p>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="card-footer">
-            <button class="btn btn-primary" (click)="editStudent()">Edit</button>
-            <button class="btn btn-danger" (click)="deleteStudent()">Delete</button>
+
+            <!-- Contact Info Section -->
+            <div class="col-12 col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="bi bi-telephone"></i> Contact Info
+                    </div>
+                    <div class="card-body">
+                        <p *ngIf="record.contactNo">
+                            <i class="bi bi-phone"></i>
+                            <a href="tel:{{ record.contactNo }}">
+                                {{ record.contactNo }}
+                            </a>
+                        </p>
+                        <p *ngIf="record.email">
+                            <i class="bi bi-envelope"></i>
+                            <a href="mailto:{{ record.email }}">
+                                {{ record.email }}
+                            </a>
+                        </p>
+                        <p *ngIf=""><i class="bi bi-house"></i> {{ record.address }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Academic Info Section -->
+            <div class="col-12 col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="bi bi-book"></i> Academic Info
+                    </div>
+                    <div class="card-body">
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </ng-template>

@@ -6,7 +6,7 @@ import { NotFoundComponent } from "../../shared/not-found/not-found.component";
 import { MatDialog } from '@angular/material/dialog';
 import { GraphqlRecordFormComponent } from '../../shared/graphql-record-form/graphql-record-form.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { GraphqlCollections, GraphqlService, GraphqlTypes } from '../../shared/services/graphql.service';
+import { Age, calculateAge, GraphqlCollections, GraphqlService, GraphqlTypes } from '../../shared/services/graphql.service';
 import { StudentInput, StudentType } from '../../../../graphql/generated';
 import { ToastrService } from 'ngx-toastr';
 
@@ -23,6 +23,8 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class StudentDetailsComponent implements OnInit {
   loading: boolean = false;
+
+  age: Age = {years: 0, months: 0, days: 0};
 
   openStudentFormModal(): void {
     const inputDefs = this.studentsService.getStudentInputDefs();
@@ -79,6 +81,7 @@ export class StudentDetailsComponent implements OnInit {
         next: res => {
           this.loading = false;
           this.record = res.data[GraphqlTypes.STUDENT];
+          this.age = calculateAge(this.record?.dateOfBirth);
         },
         error: err => {
           this.loading = false;

@@ -129,6 +129,32 @@ export function enumToArray(enumObj: any): { caption: string; value: string }[] 
     }));
 }
 
+export function calculateAge(dateOfBirth: string | null | undefined): Age {
+  if (!dateOfBirth) {
+    return {years: 0, months: 0, days: 0};
+  }
+
+  const dob = new Date(dateOfBirth);
+  const today = new Date();
+  
+  let years = today.getFullYear() - dob.getFullYear();
+  let months = today.getMonth() - dob.getMonth();
+  let days = today.getDate() - dob.getDate();
+
+  if (days < 0) {
+    months--;
+    days += new Date(today.getFullYear(), today.getMonth(), 0).getDate();
+  }
+
+  if (months < 0) {
+    years--;
+    months += 12;
+  }
+
+  return { years, months, days };
+}
+
+
 export interface AgGridFilter {
   filterType: AgGridFilterType,
   type?: ISimpleFilterModelType,
@@ -184,4 +210,10 @@ export interface InputDef<T> {
 export interface Option {
   caption: string,
   value: any,
+}
+
+export interface Age {
+  years: number,
+  months: number,
+  days: number,
 }
