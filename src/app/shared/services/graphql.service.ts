@@ -4,7 +4,7 @@ import { ISimpleFilterModelType } from 'ag-grid-community/dist/types/core/filter
 import { Observable } from 'rxjs';
 import { ApolloQueryResult } from '@apollo/client'
 import { Apollo, gql, MutationResult } from 'apollo-angular';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
@@ -65,14 +65,7 @@ export class GraphqlService {
     const group: any = {};
   
     inputDefs.forEach(x => {
-      const validators = [];
-      if (x.required) {
-        validators.push(Validators.required);
-      }
-      if (x.pattern) {
-        validators.push(Validators.pattern(x.pattern));
-      }
-      group[x.field] = ['', validators];
+      group[x.field] = [x.value, x.validators, x.asyncValidators];
     });
   
     return this.formBuilder.group(group);
@@ -177,12 +170,15 @@ export enum GraphqlTypes {
 
 export interface InputDef<T> {
   field: keyof T,
-  type: 'text' | 'date' | 'email' | 'select', // add more
+  type: 'text' | 'date' | 'email' | 'select' | 'textarea', // add more
   caption: string,
-  required: boolean,
-  pattern?: string,
+
+  value?: any,
   options?: Option[],
-  class: string,
+  class?: string,
+
+  validators?: ValidatorFn[],
+  asyncValidators?: ValidatorFn[],
 }
 
 export interface Option {

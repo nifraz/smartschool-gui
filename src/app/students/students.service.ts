@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, AsyncValidatorFn, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { gql } from 'apollo-angular';
 import { SexType, SortEnumType, StudentInput } from '../../../graphql/generated';
 import { enumToArray, GraphqlService, InputDef } from '../shared/services/graphql.service';
+import { map, Observable, switchMap, timer } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -29,94 +30,104 @@ export class StudentsService {
   //   return formGroup;
   // }
 
+  // validators.push(Validators.required);
+  // validators.push(Validators.pattern(x.pattern));
+
   getStudentInputDefs(lang: string = 'en-US'): InputDef<StudentInput>[] {
     return [
       {
         field: 'fullName',
         type: 'text',
         caption: 'Full Name',
-        required: true,
-        class: '',
+        validators: [Validators.required],
       },
       {
         field: 'shortName',
         type: 'text',
         caption: 'Short Name',
-        required: true,
-        class: '',
-      },
-      {
-        field: 'dateOfBirth',
-        type: 'date',
-        caption: 'Date of Birth',
-        required: false,
-        class: '',
-      },
-      {
-        field: 'sex',
-        type: 'select',
-        caption: 'Sex',
-        required: true,
-        options: enumToArray(SexType),
-        class: '',
-      },
-      {
-        field: 'contactNo',
-        type: 'text',
-        caption: 'Contact No',
-        required: false,
-        // pattern: '^\\+?[0-9]{10,12}$',
-        class: '',
-      },
-      {
-        field: 'email',
-        type: 'text',
-        caption: 'Email',
-        required: false,
-        class: '',
-      },
-      {
-        field: 'nicNo',
-        type: 'text',
-        caption: 'NIC No',
-        required: false,
-        class: '',
+        validators: [Validators.required],
       },
       {
         field: 'nickname',
         type: 'text',
         caption: 'Nickname',
-        required: false,
-        class: '',
       },
       {
-        field: 'passportNo',
-        type: 'text',
-        caption: 'Passport No',
-        required: false,
-        class: '',
+        field: 'dateOfBirth',
+        type: 'date',
+        caption: 'Date of Birth',
       },
       {
-        field: 'address',
+        field: 'sex',
+        type: 'select',
+        caption: 'Sex',
+        options: enumToArray(SexType),
+        validators: [Validators.required],
+      },
+      {
+        field: 'contactNo',
         type: 'text',
-        caption: 'Address',
-        required: false,
-        class: '',
+        caption: 'Contact No',
+        // validators: [Validators.pattern('^\\+?[0-9]{10,12}$')],
+      },
+      {
+        field: 'email',
+        type: 'text',
+        caption: 'Email',
+        // asyncValidators: [this.studentEmailValidator()],
       },
       {
         field: 'bcNo',
         type: 'text',
         caption: 'BC No',
-        required: false,
-        class: '',
+      },
+      {
+        field: 'nicNo',
+        type: 'text',
+        caption: 'NIC No',
+      },
+      {
+        field: 'passportNo',
+        type: 'text',
+        caption: 'Passport No',
+      },
+      {
+        field: 'address',
+        type: 'textarea',
+        caption: 'Address',
       },
     ];
   }
 
+  checkIfStudentEmailExists(email: string): Observable<boolean> {
+    return this.graphqlService.getGqlQueryObservable(GET_STUDENT_EMAILS_COUNT, {email}).pipe(
+      map((res: any) => !!res.data['students']?.totalCount)
+    );
+  }
+
+  studentEmailValidator(): AsyncValidatorFn {
+    return (control: AbstractControl) => {
+        return this.checkIfStudentEmailExists(control.value).pipe(
+          map((result: boolean) => result ? { invalid: true } : null)
+        )
+    };
+  }
 }
 
-export const STUDENT = `
-  query student($id: Long!) {
+export const GET_STUDENT_EMAILS_COUNT = `
+  query getStudentEmailsCount($email: String!) {
+    students(
+      skip: 0
+      take: 1
+      where: { and: [{email: {eq: $email}}] } 
+    ) {
+      totalCount
+    }
+  }
+`;
+
+export const GET_STUDENT = `
+  query getStudent($id: Long!) {
     student(id: $id) {
       id
       address

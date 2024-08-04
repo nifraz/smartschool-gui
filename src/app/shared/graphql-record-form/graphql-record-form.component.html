@@ -10,7 +10,7 @@
     <div class="modal-body p-2 mt-2">
         <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
             <div class="form-row">
-                <div *ngFor="let item of inputDefs" class="form-group col-12 col-md-6 col-xl-4 {{item.class}}">
+                <div *ngFor="let item of inputDefs" class="form-group col-12 col-md-6 col-xl-4">
                     <label [for]="item.field">{{ item.caption }}</label>
                     <ng-container [ngSwitch]="item.type">
                         <input *ngSwitchCase="'text'" [formControlName]="item.field.toString()" [id]="item.field" class="form-control"
@@ -36,11 +36,15 @@
                                     }}</label>
                             </div>
                         </div>
+                        <textarea *ngSwitchCase="'textarea'" [formControlName]="item.field.toString()" [id]="item.field" class="form-control" rows="3"></textarea>
                         <!-- Add more cases for other input types as needed -->
                     </ng-container>
-                    <div *ngIf="formGroup.controls[item.field.toString()]?.invalid && formGroup.controls[item.field.toString()]?.touched" class="text-danger">
+                    <mat-error *ngIf="formGroup.controls[item.field.toString()]?.invalid && formGroup.controls[item.field.toString()]?.touched" class="text-danger">
                         {{ item.caption }} is required
-                    </div>
+                    </mat-error>
+                    <!-- <mat-error *ngIf="formGroup.get(item.field.toString())?.hasError('invalid')">
+                        Invalid {{ item. caption }}
+                    </mat-error> -->
                 </div>
             </div>
             <button type="submit" class="btn btn-primary btn-block" [disabled]="loading || formGroup.invalid">

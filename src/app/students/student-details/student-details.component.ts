@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { StudentsService, STUDENT } from '../students.service';
+import { StudentsService, GET_STUDENT } from '../students.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NotFoundComponent } from "../../shared/not-found/not-found.component";
@@ -75,7 +75,7 @@ export class StudentDetailsComponent implements OnInit {
       const variables = {
         id: +this.id,
       }
-      this.graphqlService.getGqlQueryObservable(STUDENT, variables).subscribe({
+      this.graphqlService.getGqlQueryObservable(GET_STUDENT, variables).subscribe({
         next: res => {
           this.loading = false;
           this.record = res.data[GraphqlTypes.STUDENT];

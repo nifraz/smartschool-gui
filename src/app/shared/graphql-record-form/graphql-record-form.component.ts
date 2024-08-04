@@ -7,6 +7,7 @@ import { Observable, Subject, takeUntil } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { ToastrService } from 'ngx-toastr';
+import { MatError } from '@angular/material/form-field'
 
 @Component({
   selector: 'app-graphql-record-form',
@@ -15,6 +16,7 @@ import { ToastrService } from 'ngx-toastr';
     CommonModule,
     ReactiveFormsModule,
     MatProgressBarModule,
+    MatError,
   ],
   templateUrl: './graphql-record-form.component.html',
   styleUrl: './graphql-record-form.component.scss'
@@ -78,7 +80,7 @@ export class GraphqlRecordFormComponent<T extends object> implements OnInit, OnC
         },
         error: err => {
           this.loading = false;
-          this.toastr.error(`Could not load ${this.typeName}`);
+          this.toastr.error(`Could not load details`, this.typeName);
         }
       })
       // const student = this.studentsService.getStudentById(this.id);
@@ -141,10 +143,10 @@ export class GraphqlRecordFormComponent<T extends object> implements OnInit, OnC
     this.graphqlService.getGqlMutationObservable(mutation, variables, refetchQueries).subscribe({
       next: ({ data, errors, loading }) => {
         if (errors) {
-          this.toastr.error(`Could not ${this.editMode ? 'update' : 'create'} ${this.typeName}`);
+          this.toastr.error(`Could not ${this.editMode ? 'update' : 'create'} record`, this.typeName);
         }
         if (data) {
-          this.toastr.success(`${this.typeName} ${this.editMode ? 'updated' : 'created'}`);
+          this.toastr.success(`Record ${this.editMode ? 'updated' : 'created'}`, this.typeName);
           if (this.addAnother) {
             this.formGroup.reset();
             return;
@@ -154,7 +156,7 @@ export class GraphqlRecordFormComponent<T extends object> implements OnInit, OnC
         }
       },
       error: err => {
-        this.toastr.error(`Error occured`);
+        this.toastr.error(`Error occured`, this.typeName);
         console.log(err);
       }
     });
@@ -211,7 +213,7 @@ export class GraphqlRecordFormComponent<T extends object> implements OnInit, OnC
       if (!confirm("Are you sure you want to close without saving your changes?")) {
         return;
       }
-      this.toastr.warning(`Changes were not saved`);
+      this.toastr.warning(`Changes were not saved`, this.typeName);
     }
     this.dialogRef.close(this.formGroup.value);
   }
