@@ -7,8 +7,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { GraphqlRecordFormComponent } from '../../shared/graphql-record-form/graphql-record-form.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { GraphqlCollections, GraphqlService, GraphqlTypes } from '../../shared/services/graphql.service';
-import { ToastService } from '../../shared/services/toast.service';
 import { StudentInput, StudentType } from '../../../../graphql/generated';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
     selector: 'app-student-details',
@@ -44,7 +44,7 @@ export class StudentDetailsComponent implements OnInit {
   }
 
   deleteStudent() {
-    this.toast.error(`Could not delete`, 'x', 1000000);
+    this.toastr.error(`Could not delete`, 'Students');
   }
 
   editStudent() {
@@ -61,7 +61,7 @@ export class StudentDetailsComponent implements OnInit {
     private router: Router,
     private matDialog: MatDialog,
     private graphqlService: GraphqlService,
-    private toast: ToastService,
+    private toastr: ToastrService,
   ) {
     // this.activatedRoute.params.subscribe(params => {
     //   this.id = params['id'];

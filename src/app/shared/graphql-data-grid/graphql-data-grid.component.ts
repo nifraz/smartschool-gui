@@ -102,14 +102,11 @@ export class GraphqlDataGridComponent<T extends object> implements OnInit, Remot
     this.gridApi?.refreshInfiniteCache();
   }
 
-  onResetFilters(): void {
+  onReset(): void {
     this.gridApi?.setFilterModel({});
+    this.gridApi?.resetColumnState();
   }
 
-  onResetSort(): void {
-    // this.gridOptions.api?.setSortModel(null);
-  }
-  
   onExport(): void {
     this.gridApi?.exportDataAsCsv();
   }
