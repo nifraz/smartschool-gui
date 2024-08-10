@@ -30,3 +30,36 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   justify-content: space-between;
   align-items: center;
 }
+
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.card {
+  border: none !important;
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  height: 100% !important;
+}
+
+.card-header {
+  background-color: #f8f9fa;
+  font-weight: bold;
+  padding: 0 !important;
+}
+
+.card-title {
+  margin: 0.5rem 0 0.5rem 1rem;
+}
+
+.card-body {
+  padding: 1.25rem;
+}
+
+.bg-light {
+  background-color: #f8f9fa;
+  border-radius: 0.25rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}

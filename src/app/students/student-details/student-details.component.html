@@ -30,7 +30,12 @@
             <div class="col-12 col-md-6 mb-4">
                 <div class="card">
                     <div class="card-header">
-                        <i class="bi bi-person"></i> Personal Details
+                        <div class="d-flex justify-content-between">
+                            <div class="card-title">
+                                <i class="bi bi-person"></i> Personal Details
+                            </div>
+
+                        </div>
                     </div>
                     <div class="card-body">
                         <p *ngIf="record.nickname"><i class="bi bi-person-circle"></i> Nickname: {{ record.nickname }}</p>
@@ -46,7 +51,11 @@
             <div class="col-12 col-md-6 mb-4">
                 <div class="card">
                     <div class="card-header">
-                        <i class="bi bi-telephone"></i> Contact Info
+                        <div class="d-flex justify-content-between">
+                            <div class="card-title">
+                                <i class="bi bi-telephone"></i> Contact Info
+                            </div>
+                        </div>
                     </div>
                     <div class="card-body">
                         <p *ngIf="record.contactNo">
@@ -70,12 +79,46 @@
             <div class="col-12 col-md-6 mb-4">
                 <div class="card">
                     <div class="card-header">
-                        <i class="bi bi-book"></i> Academic Info
+                        <div class="d-flex justify-content-between">
+                            <div class="card-title">
+                                <i class="bi bi-book"></i> Academic Info
+                            </div>
+                        </div>
                     </div>
                     <div class="card-body">
                     </div>
                 </div>
             </div>
+
+            <!-- Admission Details Section -->
+            <div class="col-12 col-md-6 mb-4">
+                <div class="card">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between">
+                        <div class="card-title">
+                            <i class="bi bi-journal"></i> Admission Details
+                        </div>
+                        <div>
+                            <button class="btn btn-sm btn-primary" (click)="addAdmission()">
+                                <i class="bi bi-plus"></i>
+                                New
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div *ngFor="let admission of [{ school: 'MADINA N S', isCurrent: true, admissionNo: '123456', joinDate: '2024-01-01', leaveDate: null}]" [ngClass]="{'bg-light': admission.isCurrent}">
+                    <p>
+                        <i class="bi bi-card-text"></i>&nbsp;
+                        <a [routerLink]="['/schools', admission.school]">{{ admission.school }}</a>&nbsp;
+                        <a [routerLink]="['/schools', admission.school, 'admissions', admission.admissionNo]">(#{{ admission.admissionNo }})</a>&nbsp;
+                        | {{ admission.joinDate | date }}
+                    </p>
+                    </div>
+                </div>
+                </div>
+            </div>
+  
         </div>
     </div>
 </ng-template>

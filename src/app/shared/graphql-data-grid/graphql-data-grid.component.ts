@@ -36,6 +36,7 @@ export class GraphqlDataGridComponent<T extends object> implements OnInit, Remot
   @Input()colDefs: ColDef<T>[] = [];
 
   @Output()recordClicked: EventEmitter<T> = new EventEmitter<T>();
+  @Output()newClicked: EventEmitter<any> = new EventEmitter<any>();
 
   defaultColDef: ColDef = {
     flex: 1,
@@ -105,6 +106,10 @@ export class GraphqlDataGridComponent<T extends object> implements OnInit, Remot
   onReset(): void {
     this.gridApi?.setFilterModel({});
     this.gridApi?.resetColumnState();
+  }
+
+  onNew(): void {
+    this.newClicked.emit();
   }
 
   onExport(): void {

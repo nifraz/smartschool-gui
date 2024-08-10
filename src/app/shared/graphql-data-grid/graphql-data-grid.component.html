@@ -1,22 +1,22 @@
 <div class="d-flex justify-content-between mb-2">
     <h2 class="mat-h2 m-0 ms-2">{{title}}</h2>
     <div class="justify-content-end">
+        <button class="btn btn-sm btn-primary" (click)="onNew()">
+            <i class="bi bi-plus"></i><span class="d-none d-sm-inline"> New</span>
+        </button>
         <button class="btn btn-sm btn-success ms-2" (click)="onExport()" title="Export to CSV">
-            <i class="bi bi-download"></i>
-            Export
+            <i class="bi bi-download"></i><span class="d-none d-sm-inline"> Export</span>
         </button>
         <!-- <button class="btn btn-sm btn-secondary ms-2" (click)="onToggleColumns()" title="">Toggle Columns</button> -->
         <!-- <button class="btn btn-sm btn-secondary ms-2" (click)="onAutosizeColumns()" title="Autosize Columns">Autosize</button> -->
         <!-- <button class="btn btn-secondary me-2" (click)="onSaveState()" title="">Save State</button>
         <button class="btn btn-secondary me-2" (click)="onLoadState()" title="">Load State</button> -->
         <button class="btn btn-sm btn-secondary ms-2" (click)="onReset()" title="Reset Grid">
-            <i class="bi bi-filter"></i>
-            Reset
+            <i class="bi bi-filter"></i><span class="d-none d-sm-inline"> Reset</span>
         </button>
         <!-- <button class="btn btn-sm btn-secondary ms-2" (click)="onResetSort()" title="Reset Sort">Reset Sort</button> -->
         <button class="btn btn-sm btn-primary ms-2" (click)="onRefresh()" title="Refresh Data">
-            <i class="bi bi-arrow-counterclockwise"></i>
-            Refresh
+            <i class="bi bi-arrow-counterclockwise"></i><span class="d-none d-sm-inline"> Refresh</span>
         </button>
     </div>
 </div>

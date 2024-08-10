@@ -37,6 +37,10 @@ export class StudentsComponent implements OnInit {
     // this.router.navigateByUrl('/students/1');
   }
 
+  onNewClicked($event: any) {
+    this.navigateToCreateStudent();
+  }
+
   ngOnInit(): void {
     console.log('students');
     this.activatedRoute.data.subscribe(data => {

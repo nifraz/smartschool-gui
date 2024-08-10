@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { StudentsService, GET_STUDENT } from '../students.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NotFoundComponent } from "../../shared/not-found/not-found.component";
 import { MatDialog } from '@angular/material/dialog';
@@ -18,7 +18,8 @@ import { ToastrService } from 'ngx-toastr';
     imports: [
         CommonModule,
         NotFoundComponent,
-        MatProgressBarModule
+        MatProgressBarModule,
+        RouterLink,
     ]
 })
 export class StudentDetailsComponent implements OnInit {
@@ -52,6 +53,10 @@ export class StudentDetailsComponent implements OnInit {
   editStudent() {
     this.router.navigate(['/students', this.id, 'edit']);
     // this.openStudentFormModal();
+  }
+
+  addAdmission() {
+
   }
 
   id?: string | null;
