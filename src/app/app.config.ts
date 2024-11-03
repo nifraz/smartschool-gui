@@ -9,6 +9,8 @@ import { HttpLink } from 'apollo-angular/http';
 import { Apollo } from "apollo-angular";
 import { ApolloClientOptions, ApolloLink, InMemoryCache } from '@apollo/client/core';
 import { ToastrModule } from 'ngx-toastr';
+import { FormlyModule } from '@ngx-formly/core';
+import { FormlyMaterialModule } from '@ngx-formly/material';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -24,6 +26,8 @@ export const appConfig: ApplicationConfig = {
           // preventDuplicates: true,
         }
       ),
+      FormlyModule.forRoot(),
+      FormlyMaterialModule,
     ),
     {
       provide: APOLLO_OPTIONS,

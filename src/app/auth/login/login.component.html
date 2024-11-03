@@ -1,0 +1,7 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <formly-form [form]="form" [fields]="fields" [model]="model"></formly-form>
+    <div class="d-grid">
+        <button type="submit" [disabled]="loading" class="btn btn-primary">Login</button>
+    </div>
+    <app-error-alert [error]="error"></app-error-alert>
+</form>

@@ -3,12 +3,23 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { StudentsComponent } from './students/students.component';
 import { StudentDetailsComponent } from './students/student-details/student-details.component';
 import { NotFoundComponent } from './shared/not-found/not-found.component';
+import { AuthComponent } from './auth/auth.component';
+import { LoginComponent } from './auth/login/login.component';
+import { RegisterComponent } from './auth/register/register.component';
 
 export const routes: Routes = [
     {
         path: '',
         redirectTo: '/dashboard',
         pathMatch: 'full',
+    },
+    {
+        path: 'auth',
+        component: AuthComponent,
+        children: [
+            { path: 'login', title: 'Login | SmartSchool', component: LoginComponent },
+            { path: 'register', title: 'Register | SmartSchool', component: RegisterComponent },
+        ],
     },
     {
         path: 'dashboard',
