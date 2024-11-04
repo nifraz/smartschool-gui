@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { FormGroup, FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { CommonModule } from '@angular/common';
 import { FormlyFieldConfig, FormlyModule } from '@ngx-formly/core';
 import { UserLoginRequest } from '../../shared/models';
 import { ErrorAlertComponent } from "../../shared/components/error-alert/error-alert.component";
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @Component({
   selector: 'app-login',
@@ -14,44 +15,59 @@ import { ErrorAlertComponent } from "../../shared/components/error-alert/error-a
     CommonModule,
     ReactiveFormsModule,
     FormlyModule,
-    ErrorAlertComponent
+    ErrorAlertComponent,
+    RouterLink,
+    RouterLinkActive,
+    MatProgressBarModule,
 ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
 export class LoginComponent {
   form = new FormGroup({});
-  model: UserLoginRequest = { email: '', mobileNo: '', password: '' };
+  model: UserLoginRequest = {
+    email: '',
+    mobileNo: '',
+    password: '',
+  };
   fields: FormlyFieldConfig[] = [
     {
-      key: 'email',
-      type: 'input',
-      templateOptions: {
-        label: 'Email',
-        type: 'email',
-        placeholder: 'Enter Email',
-        required: true,
-      }
-    },
-    // {
-    //   key: 'mobileNo',
-    //   type: 'input',
-    //   templateOptions: {
-    //     label: 'Mobile No',
-    //     type: 'phone',
-    //     placeholder: 'Enter Mobile No',
-    //     required: true,
-    //   }
-    // },
-    {
-      key: 'password',
-      type: 'input',
-      templateOptions: {
-        label: 'Password',
-        type: 'password',
-        placeholder: 'Enter Password',
-        required: true,
-      }
+      fieldGroupClassName: 'row',
+      fieldGroup: [
+        {
+          className: 'col-12 col-md-12',
+          key: 'email',
+          type: 'input',
+          props: {
+            label: 'Email',
+            type: 'email',
+            placeholder: 'Enter Email',
+            required: true,
+          }
+        },
+        // {
+          // className: 'col-12 col-md-12',
+        //   key: 'mobileNo',
+        //   type: 'input',
+        //   props: {
+        //     label: 'Mobile No',
+        //     type: 'phone',
+        //     placeholder: 'Enter Mobile No',
+        //     required: true,
+        //   }
+        // },
+        {
+          className: 'col-12 col-md-12',
+          key: 'password',
+          type: 'input',
+          props: {
+            label: 'Password',
+            type: 'password',
+            placeholder: 'Enter Password',
+            required: true,
+          }
+        },
+      ]
     },
   ];
   
@@ -59,7 +75,6 @@ export class LoginComponent {
   error: any | null;
 
   constructor(
-    private formBuilder: FormBuilder,
     private authService: AuthService,
     private router: Router
   ) {
@@ -79,6 +94,7 @@ export class LoginComponent {
     }
 
     this.loading = true;
+    this.error = null;
     this.authService.login(this.model)
       .subscribe({
         next: () => {

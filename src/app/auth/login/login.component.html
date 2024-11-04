@@ -1,7 +1,12 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <formly-form [form]="form" [fields]="fields" [model]="model"></formly-form>
-    <div class="d-grid">
-        <button type="submit" [disabled]="loading" class="btn btn-primary">Login</button>
-    </div>
-    <app-error-alert [error]="error"></app-error-alert>
-</form>
+<div class="m-3">
+    <h2 class="card-title text-center mb-3">Login</h2>
+    <form class="mb-3" [formGroup]="form" (ngSubmit)="onSubmit()">
+        <formly-form [form]="form" [fields]="fields" [model]="model"></formly-form>
+        <div class="d-grid mb-3">
+            <button type="submit" [disabled]="loading" class="btn btn-primary ">Login</button>
+        </div>
+        <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+        <app-error-alert [error]="error"></app-error-alert>
+        <a class="" [routerLink]="['/auth', 'register']" routerLinkActive="active">&gt;&gt;&gt; Register</a>
+    </form>
+</div>

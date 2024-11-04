@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, map, Observable } from 'rxjs';
-import { UserLoginRequest } from '../shared/models';
+import { BehaviorSubject, iif, map, Observable, throwError } from 'rxjs';
+import { AuthenticateResponse, UserLoginRequest, UserRegisterRequest } from '../shared/models';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +20,7 @@ export class AuthService {
     return this.currentUserSubject.value;
   }
 
-  login(model: UserLoginRequest) {
+  login(model: UserLoginRequest): Observable<AuthenticateResponse> {
     return this.http.post<any>('https://localhost:5001/api/auth/login', model).pipe(
       map(user => {
         if (user && user.token) {
@@ -32,8 +32,15 @@ export class AuthService {
     );
   }
 
-  register(username: string, password: string) {
-    return this.http.post<any>('https://localhost:5001/api/auth/register', { username, password });
+  register(model: UserRegisterRequest): Observable<AuthenticateResponse> {
+    return iif(() => !!(model.password == model.password2),
+      this.http.post<any>('https://localhost:5001/api/auth/register', model),
+      throwError(() => ({
+        error: {
+          message: "Passwords do not match",
+        }
+      }))
+    )
   }
 
   logout() {
