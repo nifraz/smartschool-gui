@@ -6,6 +6,8 @@ import { NotFoundComponent } from './shared/not-found/not-found.component';
 import { AuthComponent } from './auth/auth.component';
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
+import { accountGuard } from './auth/guards/account.guard';
+import { authGuard } from './auth/guards/auth.guard';
 
 export const routes: Routes = [
     {
@@ -17,8 +19,8 @@ export const routes: Routes = [
         path: 'auth',
         component: AuthComponent,
         children: [
-            { path: 'login', title: 'Login | SmartSchool', component: LoginComponent },
-            { path: 'register', title: 'Register | SmartSchool', component: RegisterComponent },
+            { path: 'login', title: 'Login | SmartSchool', component: LoginComponent, canActivate: [accountGuard] },
+            { path: 'register', title: 'Register | SmartSchool', component: RegisterComponent, canActivate: [accountGuard] },
         ],
     },
     {
@@ -30,6 +32,7 @@ export const routes: Routes = [
         path: 'students',
         title: 'Students | SmartSchool',
         component: StudentsComponent,
+        canActivate: [authGuard]
     },
     { path: 'students/create', title: 'New Student | SmartSchool', component: StudentsComponent, data: { isCreate: true } },
     { path: 'students/:id/edit', title: 'Edit Student | SmartSchool', component: StudentDetailsComponent, data: { isEdit: true } },

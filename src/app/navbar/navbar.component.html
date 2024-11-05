@@ -17,53 +17,62 @@
                 <!-- <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="#">Home</a>
                 </li> -->
-                <li class="nav-item">
-                  <div class="btn-group">
-                    <a class="nav-link" href="#">School</a>
-                    <a class="nav-link dropdown-toggle dropdown-toggle-split ps-1 pe-2" href="#" data-bs-toggle="dropdown" aria-expanded="false">
-                      <span class="visually-hidden">Toggle Dropdown</span>
-                    </a>
-                    <ul class="dropdown-menu bg-dark border-0 mt-3 py-0 shadow">
-                      <li><a class="dropdown-item nav-link" href="#">Classes</a></li>
-                      <li><a class="dropdown-item nav-link" href="#">Subjects</a></li>
-                      <li><a class="dropdown-item nav-link disabled" href="#">Books</a></li>
-                      <li><a class="dropdown-item nav-link" href="#">Exams</a></li>
-                      <li><a class="dropdown-item nav-link disabled" href="#">Events</a></li>
-                      <!-- <li><hr class="dropdown-divider"></li> -->
-                    </ul>
-                  </div>
-                </li>
-                <li class="nav-item">
+                
+                @if (user && (user.isStudent || user.isGuardian || user.isStaff || user.isTeacher || user.isPrincipal)) {
+                  <li class="nav-item">
                     <div class="btn-group">
-                      <a class="nav-link btn" routerLink="/students" routerLinkActive="active">Students</a>
+                      <a class="nav-link" href="#">School</a>
                       <a class="nav-link dropdown-toggle dropdown-toggle-split ps-1 pe-2" href="#" data-bs-toggle="dropdown" aria-expanded="false">
                         <span class="visually-hidden">Toggle Dropdown</span>
                       </a>
                       <ul class="dropdown-menu bg-dark border-0 mt-3 py-0 shadow">
-                        <li><a class="dropdown-item nav-link btn" [routerLink]="['/students', 'create']" routerLinkActive="active">Registration</a></li>
-                        <li><a class="dropdown-item nav-link" href="#">Enrollment</a></li>
-                        <li><a class="dropdown-item nav-link" href="#">Attendance</a></li>
-                        <li><a class="dropdown-item nav-link" href="#">Performance</a></li>
-                        <li><a class="dropdown-item nav-link" href="#">Guardians</a></li>
+                        <li><a class="dropdown-item nav-link" href="#">Classes</a></li>
+                        <li><a class="dropdown-item nav-link" href="#">Subjects</a></li>
+                        <li><a class="dropdown-item nav-link disabled" href="#">Books</a></li>
+                        <li><a class="dropdown-item nav-link" href="#">Exams</a></li>
+                        <li><a class="dropdown-item nav-link disabled" href="#">Events</a></li>
                         <!-- <li><hr class="dropdown-divider"></li> -->
                       </ul>
                     </div>
-                </li>
-                <li class="nav-item">
-                  <div class="btn-group">
-                    <a class="nav-link" href="#">Teachers</a>
-                    <a class="nav-link dropdown-toggle dropdown-toggle-split ps-1 pe-2" href="#" data-bs-toggle="dropdown" aria-expanded="false">
-                      <span class="visually-hidden">Toggle Dropdown</span>
-                    </a>
-                    <ul class="dropdown-menu bg-dark border-0 mt-3 py-0 shadow">
-                      <li><a class="dropdown-item nav-link disabled" aria-disabled="true" href="#">Registration</a></li>
-                      <li><a class="dropdown-item nav-link" href="#">Enrollment</a></li>
-                      <li><a class="dropdown-item nav-link" href="#">Attendance</a></li>
-                      <li><a class="dropdown-item nav-link" href="#">Paysheet</a></li>
-                      <!-- <li><hr class="dropdown-divider"></li> -->
-                    </ul>
-                  </div>
-                </li>
+                  </li>
+                }
+
+                @if (user && (user.isStudent || user.isStaff || user.isTeacher || user.isPrincipal)) {
+                  <li class="nav-item">
+                      <div class="btn-group">
+                        <a class="nav-link btn" routerLink="/students" routerLinkActive="active">Students</a>
+                        <a class="nav-link dropdown-toggle dropdown-toggle-split ps-1 pe-2" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                          <span class="visually-hidden">Toggle Dropdown</span>
+                        </a>
+                        <ul class="dropdown-menu bg-dark border-0 mt-3 py-0 shadow">
+                          <li><a class="dropdown-item nav-link btn" [routerLink]="['/students', 'create']" routerLinkActive="active">Admissions</a></li>
+                          <li><a class="dropdown-item nav-link" href="#">Enrollment</a></li>
+                          <li><a class="dropdown-item nav-link" href="#">Attendance</a></li>
+                          <li><a class="dropdown-item nav-link" href="#">Performance</a></li>
+                          <li><a class="dropdown-item nav-link" href="#">Guardians</a></li>
+                          <!-- <li><hr class="dropdown-divider"></li> -->
+                        </ul>
+                      </div>
+                  </li>
+                }
+
+                @if (user && (user.isStaff || user.isTeacher || user.isPrincipal)) {
+                  <li class="nav-item">
+                    <div class="btn-group">
+                      <a class="nav-link" href="#">Teachers</a>
+                      <a class="nav-link dropdown-toggle dropdown-toggle-split ps-1 pe-2" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span class="visually-hidden">Toggle Dropdown</span>
+                      </a>
+                      <ul class="dropdown-menu bg-dark border-0 mt-3 py-0 shadow">
+                        <li><a class="dropdown-item nav-link disabled" aria-disabled="true" href="#">Registration</a></li>
+                        <li><a class="dropdown-item nav-link" href="#">Enrollments</a></li>
+                        <li><a class="dropdown-item nav-link" href="#">Attendance</a></li>
+                        <li><a class="dropdown-item nav-link" href="#">Paysheet</a></li>
+                        <!-- <li><hr class="dropdown-divider"></li> -->
+                      </ul>
+                    </div>
+                  </li>
+                }
             </ul>
 
             <!-- <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">

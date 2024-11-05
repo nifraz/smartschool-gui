@@ -53,10 +53,11 @@ export class AuthService {
   }
 
   private setSession(model: AuthenticateResponse) {
-    const expiresAt = moment().add(model.expires,'second');
+    // model.expires is in UTC format
+    const expiresAt = moment(model.expires);
     localStorage.setItem('userId', model.userId.toString());
     localStorage.setItem('token', model.token);
-    localStorage.setItem("expires", JSON.stringify(expiresAt.valueOf()) );
+    localStorage.setItem('expires', JSON.stringify(expiresAt.valueOf()));
   }
 
   getUserId(): number {
@@ -67,20 +68,21 @@ export class AuthService {
     return localStorage.getItem('token');
   }
 
-  getExpiration(): Moment | undefined {
-      const expiration = localStorage.getItem("expires");
+  getExpiration(): Moment | null {
+      const expiration = localStorage.getItem('expires');
       if (!expiration) {
-        return undefined;
+        return null;
       }
       const expiresAt = JSON.parse(expiration);
       return moment(expiresAt);
   }    
 
-  public isLoggedIn() {
-      return moment().isBefore(this.getExpiration());
+  public isLoggedIn(): boolean {
+      const expiration = this.getExpiration();
+      return !!expiration && moment().isBefore(expiration);
   }
 
-  isLoggedOut() {
+  isLoggedOut(): boolean {
       return !this.isLoggedIn();
   }
 }

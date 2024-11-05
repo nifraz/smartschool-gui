@@ -38,6 +38,12 @@ export interface UserResponse {
     email?: string | null;
     address?: string | null;
     image?: string | null;
+
+    isGuardian: boolean;
+    isStudent: boolean;
+    isStaff: boolean;
+    isTeacher: boolean;
+    isPrincipal: boolean;
 }
 
 export enum Sex {
