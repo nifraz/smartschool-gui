@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AbstractControl, AsyncValidatorFn, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { gql } from 'apollo-angular';
-import { SexType, SortEnumType, StudentInput } from '../../../graphql/generated';
+import { Sex, StudentInput } from '../../../graphql/generated';
 import { enumToArray, GraphqlService, InputDef } from '../shared/services/graphql.service';
 import { map, Observable, switchMap, timer } from 'rxjs';
 
@@ -61,7 +61,7 @@ export class StudentsService {
         field: 'sex',
         type: 'select',
         caption: 'Sex',
-        options: enumToArray(SexType),
+        options: enumToArray(Sex),
         validators: [Validators.required],
       },
       {

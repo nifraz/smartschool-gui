@@ -13,6 +13,8 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+  /** The `Date` scalar represents an ISO-8601 compliant date type. */
+  Date: { input: any; output: any; }
   /** The `DateTime` scalar represents an ISO-8601 compliant date time type. */
   DateTime: { input: any; output: any; }
   /** The `Long` scalar type represents non-fractional signed whole 64-bit numeric values. Long can represent values between -(2^63) and 2^63 - 1. */
@@ -27,6 +29,21 @@ export type CollectionSegmentInfo = {
   hasNextPage: Scalars['Boolean']['output'];
   /** Indicates whether more items exist prior the set defined by the clients arguments. */
   hasPreviousPage: Scalars['Boolean']['output'];
+};
+
+export type DateOperationFilterInput = {
+  eq?: InputMaybe<Scalars['Date']['input']>;
+  gt?: InputMaybe<Scalars['Date']['input']>;
+  gte?: InputMaybe<Scalars['Date']['input']>;
+  in?: InputMaybe<Array<InputMaybe<Scalars['Date']['input']>>>;
+  lt?: InputMaybe<Scalars['Date']['input']>;
+  lte?: InputMaybe<Scalars['Date']['input']>;
+  neq?: InputMaybe<Scalars['Date']['input']>;
+  ngt?: InputMaybe<Scalars['Date']['input']>;
+  ngte?: InputMaybe<Scalars['Date']['input']>;
+  nin?: InputMaybe<Array<InputMaybe<Scalars['Date']['input']>>>;
+  nlt?: InputMaybe<Scalars['Date']['input']>;
+  nlte?: InputMaybe<Scalars['Date']['input']>;
 };
 
 export type DateTimeOperationFilterInput = {
@@ -76,6 +93,13 @@ export type MutationUpdateStudentArgs = {
   input: StudentInput;
 };
 
+export type NullableOfSexOperationFilterInput = {
+  eq?: InputMaybe<Sex>;
+  in?: InputMaybe<Array<InputMaybe<Sex>>>;
+  neq?: InputMaybe<Sex>;
+  nin?: InputMaybe<Array<InputMaybe<Sex>>>;
+};
+
 export type Query = {
   __typename?: 'Query';
   student?: Maybe<StudentType>;
@@ -95,19 +119,12 @@ export type QueryStudentsArgs = {
   where?: InputMaybe<StudentTypeFilterInput>;
 };
 
-export enum SexType {
+export enum Sex {
   Female = 'FEMALE',
   Male = 'MALE',
   NotApplicable = 'NOT_APPLICABLE',
   NotKnown = 'NOT_KNOWN'
 }
-
-export type SexTypeOperationFilterInput = {
-  eq?: InputMaybe<SexType>;
-  in?: InputMaybe<Array<SexType>>;
-  neq?: InputMaybe<SexType>;
-  nin?: InputMaybe<Array<SexType>>;
-};
 
 export enum SortEnumType {
   Asc = 'ASC',
@@ -133,13 +150,13 @@ export type StudentInput = {
   address?: InputMaybe<Scalars['String']['input']>;
   bcNo?: InputMaybe<Scalars['String']['input']>;
   contactNo?: InputMaybe<Scalars['String']['input']>;
-  dateOfBirth?: InputMaybe<Scalars['DateTime']['input']>;
+  dateOfBirth?: InputMaybe<Scalars['Date']['input']>;
   email?: InputMaybe<Scalars['String']['input']>;
   fullName: Scalars['String']['input'];
   nicNo?: InputMaybe<Scalars['String']['input']>;
   nickname?: InputMaybe<Scalars['String']['input']>;
   passportNo?: InputMaybe<Scalars['String']['input']>;
-  sex: SexType;
+  sex: Sex;
   shortName: Scalars['String']['input'];
 };
 
@@ -147,58 +164,58 @@ export type StudentType = {
   __typename?: 'StudentType';
   address?: Maybe<Scalars['String']['output']>;
   bcNo?: Maybe<Scalars['String']['output']>;
-  contactNo?: Maybe<Scalars['String']['output']>;
-  createdBy: Scalars['Long']['output'];
-  createdOn: Scalars['DateTime']['output'];
-  dateOfBirth?: Maybe<Scalars['DateTime']['output']>;
+  createdTime?: Maybe<Scalars['DateTime']['output']>;
+  createdUserId?: Maybe<Scalars['Long']['output']>;
+  dateOfBirth?: Maybe<Scalars['Date']['output']>;
   email?: Maybe<Scalars['String']['output']>;
-  fullName: Scalars['String']['output'];
-  guid: Scalars['UUID']['output'];
-  id: Scalars['Long']['output'];
-  lastModifiedBy?: Maybe<Scalars['Long']['output']>;
-  lastModifiedOn?: Maybe<Scalars['DateTime']['output']>;
+  fullName?: Maybe<Scalars['String']['output']>;
+  guid?: Maybe<Scalars['UUID']['output']>;
+  id?: Maybe<Scalars['Long']['output']>;
+  lastModifiedTime?: Maybe<Scalars['DateTime']['output']>;
+  lastModifiedUserId?: Maybe<Scalars['Long']['output']>;
+  mobileNo?: Maybe<Scalars['String']['output']>;
   nicNo?: Maybe<Scalars['String']['output']>;
   nickname?: Maybe<Scalars['String']['output']>;
   passportNo?: Maybe<Scalars['String']['output']>;
-  sex: SexType;
-  shortName: Scalars['String']['output'];
+  sex?: Maybe<Sex>;
+  shortName?: Maybe<Scalars['String']['output']>;
 };
 
 export type StudentTypeFilterInput = {
   address?: InputMaybe<StringOperationFilterInput>;
   and?: InputMaybe<Array<StudentTypeFilterInput>>;
   bcNo?: InputMaybe<StringOperationFilterInput>;
-  contactNo?: InputMaybe<StringOperationFilterInput>;
-  createdBy?: InputMaybe<LongOperationFilterInput>;
-  createdOn?: InputMaybe<DateTimeOperationFilterInput>;
-  dateOfBirth?: InputMaybe<DateTimeOperationFilterInput>;
+  createdTime?: InputMaybe<DateTimeOperationFilterInput>;
+  createdUserId?: InputMaybe<LongOperationFilterInput>;
+  dateOfBirth?: InputMaybe<DateOperationFilterInput>;
   email?: InputMaybe<StringOperationFilterInput>;
   fullName?: InputMaybe<StringOperationFilterInput>;
   guid?: InputMaybe<UuidOperationFilterInput>;
   id?: InputMaybe<LongOperationFilterInput>;
-  lastModifiedBy?: InputMaybe<LongOperationFilterInput>;
-  lastModifiedOn?: InputMaybe<DateTimeOperationFilterInput>;
+  lastModifiedTime?: InputMaybe<DateTimeOperationFilterInput>;
+  lastModifiedUserId?: InputMaybe<LongOperationFilterInput>;
+  mobileNo?: InputMaybe<StringOperationFilterInput>;
   nicNo?: InputMaybe<StringOperationFilterInput>;
   nickname?: InputMaybe<StringOperationFilterInput>;
   or?: InputMaybe<Array<StudentTypeFilterInput>>;
   passportNo?: InputMaybe<StringOperationFilterInput>;
-  sex?: InputMaybe<SexTypeOperationFilterInput>;
+  sex?: InputMaybe<NullableOfSexOperationFilterInput>;
   shortName?: InputMaybe<StringOperationFilterInput>;
 };
 
 export type StudentTypeSortInput = {
   address?: InputMaybe<SortEnumType>;
   bcNo?: InputMaybe<SortEnumType>;
-  contactNo?: InputMaybe<SortEnumType>;
-  createdBy?: InputMaybe<SortEnumType>;
-  createdOn?: InputMaybe<SortEnumType>;
+  createdTime?: InputMaybe<SortEnumType>;
+  createdUserId?: InputMaybe<SortEnumType>;
   dateOfBirth?: InputMaybe<SortEnumType>;
   email?: InputMaybe<SortEnumType>;
   fullName?: InputMaybe<SortEnumType>;
   guid?: InputMaybe<SortEnumType>;
   id?: InputMaybe<SortEnumType>;
-  lastModifiedBy?: InputMaybe<SortEnumType>;
-  lastModifiedOn?: InputMaybe<SortEnumType>;
+  lastModifiedTime?: InputMaybe<SortEnumType>;
+  lastModifiedUserId?: InputMaybe<SortEnumType>;
+  mobileNo?: InputMaybe<SortEnumType>;
   nicNo?: InputMaybe<SortEnumType>;
   nickname?: InputMaybe<SortEnumType>;
   passportNo?: InputMaybe<SortEnumType>;

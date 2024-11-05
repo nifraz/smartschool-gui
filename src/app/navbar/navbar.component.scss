@@ -3,3 +3,7 @@
     color: var(--bs-nav-link-hover-color);
     background-color: var(--bs-nav-link-hover-bg);
 }
+
+.dropdown-item {
+    cursor: pointer;
+}

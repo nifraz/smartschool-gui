@@ -11,6 +11,7 @@ import { enumToArray, toDateOnlyString } from '../../shared/services/graphql.ser
 import { FormlyMatDatepickerModule } from '@ngx-formly/material/datepicker';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-register',
@@ -153,7 +154,8 @@ export class RegisterComponent {
   constructor(
     private formBuilder: FormBuilder,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private toastr: ToastrService,
   ) {
     // if (this.authService.currentUserValue) {
     //   this.router.navigate(['/']);
@@ -181,7 +183,8 @@ export class RegisterComponent {
         next: () => {
           this.loading = false;
           this.error = null;
-          this.router.navigate(['/']);
+          this.toastr.success(`Registration Successful. Please Login.`, 'Register');
+          this.router.navigate(['/auth', 'login']);
         },
         error: error => {
           this.loading = false;

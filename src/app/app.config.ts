@@ -3,7 +3,7 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { APOLLO_OPTIONS } from 'apollo-angular';
 import { HttpLink } from 'apollo-angular/http';
 import { Apollo } from "apollo-angular";
@@ -11,9 +11,11 @@ import { ApolloClientOptions, ApolloLink, InMemoryCache } from '@apollo/client/c
 import { ToastrModule } from 'ngx-toastr';
 import { FormlyModule } from '@ngx-formly/core';
 import { FormlyMaterialModule } from '@ngx-formly/material';
+import { JwtInterceptor } from './auth/jwt.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     provideRouter(routes), 
     provideClientHydration(), 
     provideAnimationsAsync(),

@@ -6,7 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { GraphqlRecordFormComponent } from '../shared/graphql-record-form/graphql-record-form.component';
 import { GraphqlCollections, GraphqlService, GraphqlTypes } from '../shared/services/graphql.service';
-import { SexType, StudentType } from '../../../graphql/generated';
+import { Sex, StudentType } from '../../../graphql/generated';
 import { MultiSelectFilterComponent } from '../shared/components/multi-select-filter/multi-select-filter.component';
 import { CustomFloatingFilterComponent } from '../shared/components/custom-floating-filter/custom-floating-filter.component';
 
@@ -111,7 +111,7 @@ export class StudentsComponent implements OnInit {
       headerName: "Sex",
       filter: MultiSelectFilterComponent, 
       filterParams: { 
-        values: Object.values(SexType) 
+        values: Object.values(Sex) 
       },
       floatingFilterComponent: CustomFloatingFilterComponent,
     },
@@ -126,8 +126,8 @@ export class StudentsComponent implements OnInit {
       filter: 'agTextColumnFilter',
     },
     { 
-      field: "contactNo",
-      headerName: "Contact No",
+      field: "mobileNo",
+      headerName: "Mobile No",
       filter: 'agTextColumnFilter',
     },
     { 
@@ -143,26 +143,6 @@ export class StudentsComponent implements OnInit {
     { 
       field: "passportNo",
       headerName: "Passport No",
-      filter: 'agTextColumnFilter',
-    },
-    { 
-      field: "createdOn",
-      headerName: "Created On",
-      filter: 'agTextColumnFilter',
-    },
-    { 
-      field: "createdBy",
-      headerName: "Created By",
-      filter: 'agTextColumnFilter',
-    },
-    { 
-      field: "lastModifiedOn",
-      headerName: "Last Modified On",
-      filter: 'agTextColumnFilter',
-    },
-    { 
-      field: "lastModifiedBy",
-      headerName: "Last Modified By",
       filter: 'agTextColumnFilter',
     },
   ];

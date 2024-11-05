@@ -16,13 +16,29 @@ export interface UserRegisterRequest {
 }
 
 export interface AuthenticateResponse {
-    id: number;
+    userId: number;
     fullName: string;
     email: string;
     mobileNo: string;
     token: string;
+    expires: string;
 }
 
+export interface UserResponse {
+    id: number;
+    fullName: string;
+    shortName: string;
+    nickname?: string | null;
+    dateOfBirth?: string | null;
+    bcNo?: string | null;
+    sex: Sex;
+    nicNo?: string | null;
+    passportNo?: string | null;
+    mobileNo?: string | null;
+    email?: string | null;
+    address?: string | null;
+    image?: string | null;
+}
 
 export enum Sex {
     NotKnown = 0,
