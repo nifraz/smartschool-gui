@@ -38,12 +38,19 @@ export interface UserResponse {
     email?: string | null;
     address?: string | null;
     image?: string | null;
+    schoolId?: number | null;
 
     isGuardian: boolean;
     isStudent: boolean;
     isStaff: boolean;
     isTeacher: boolean;
     isPrincipal: boolean;
+
+    guardianId: number | null;
+    studentId: number | null;
+    staffId: number | null;
+    teacherId: number | null;
+    principalId: number | null;
 }
 
 export enum Sex {

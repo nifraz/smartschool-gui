@@ -5,6 +5,7 @@ import { UserResponse } from '../shared/models';
 import { AuthService } from '../auth/auth.service';
 import { iif, of, Subject, switchMap, takeUntil } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
+import { BaseComponent } from '../shared/components/base/base.component';
 
 @Component({
   selector: 'app-navbar',
@@ -18,36 +19,35 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss'
 })
-export class NavbarComponent implements OnInit, OnDestroy {
+export class NavbarComponent extends BaseComponent implements OnInit, OnDestroy {
   destroy$: Subject<boolean> = new Subject<boolean>();
   user?: UserResponse | null;
-  loading: boolean = false;
   
   constructor(
     private authService: AuthService,
     private toastr: ToastrService,
     private router: Router,
   ) {
-    
+    super();
   }
   
   ngOnInit(): void {
     this.authService.userLogged.pipe(
       takeUntil(this.destroy$),
       switchMap(res => {
-        this.loading = true;
-        if (res) {
+        this.isLoading = true;
+        if (res && this.authService.isLoggedIn()) {
           return this.authService.getUser(res);
         }
         return of(null);
       }),
     ).subscribe({
       next: res => {
-        this.loading = false;
+        this.isLoading = false;
         this.user = res;
       },
       error: err => {
-        this.loading = false;
+        this.isLoading = false;
         this.toastr.error(`Could not load user`, 'User');
       }
     });

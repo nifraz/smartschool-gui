@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, iif, map, Observable, of, switchMap, tap, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, iif, map, Observable, of, switchMap, tap, throwError } from 'rxjs';
 import { AuthenticateResponse, UserLoginRequest, UserRegisterRequest, UserResponse } from '../shared/models';
 import moment, { Moment } from 'moment';
 
@@ -11,6 +11,7 @@ import moment, { Moment } from 'moment';
 export class AuthService {
   private userLoggedSubject: BehaviorSubject<number>;
   public userLogged: Observable<number>;
+  public loggedInUser?: UserResponse | null;
 
   constructor(
     private http: HttpClient
@@ -49,7 +50,15 @@ export class AuthService {
   }
   
   getUser(id: number): Observable<UserResponse> {
-    return this.http.get<any>(`https://localhost:5001/api/auth/user/${id}`);
+    return this.http.get<any>(`https://localhost:5001/api/auth/user/${id}`).pipe(
+      tap(res => {
+        this.loggedInUser = res;
+      }),
+      catchError(err => {
+        this.loggedInUser = null;
+        return throwError(() => err);
+      })
+    );
   }
 
   private setSession(model: AuthenticateResponse) {
@@ -75,7 +84,11 @@ export class AuthService {
       }
       const expiresAt = JSON.parse(expiration);
       return moment(expiresAt);
-  }    
+  }
+  
+  getLoggedInUser(): UserResponse | null {
+    return this.isLoggedIn() ? JSON.parse(localStorage.getItem('userId') ?? "null") : null;
+  }
 
   public isLoggedIn(): boolean {
       const expiration = this.getExpiration();

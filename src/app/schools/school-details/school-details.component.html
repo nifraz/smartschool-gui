@@ -6,13 +6,10 @@
         <div class="row">
             <!-- Main Info Section -->
             <div class="col-12 col-md-12 mb-4 text-center mb-4">
-                <img src="assets/images/icons8_student_male_200px.png" alt="{{ record.fullName }}" class="rounded-circle" width="150" height="150">
-                <h1 class="mt-3">{{ record.fullName }}</h1>
+                <img src="assets/images/icons8_school_200px.png" alt="{{ record.name }}" class="rounded-circle" width="150" height="150">
+                <h1 class="mt-3">{{ record.name }}</h1>
                 <p class="text-muted">
-                    <span *ngIf="record.age">
-                        {{ record.age.years }} years, {{ record.age.months }} months, {{ record.age.days }} days old | 
-                    </span>
-                    {{ record.sex | titlecase }}
+                    {{ record.censusNo }} | {{ record.type | titleCaseWithSpace }}
                 </p>
                 <div class="">
                     @if (authService.loggedInUser?.isPrincipal || authService.loggedInUser?.isTeacher) {
@@ -27,27 +24,6 @@
                     }
                 </div>
             </div>
-            
-            <!-- Personal Details Section -->
-            <div class="col-12 col-md-6 mb-4">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="d-flex justify-content-between">
-                            <div class="card-title">
-                                <i class="bi bi-person"></i> Personal Details
-                            </div>
-
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <p *ngIf="record.nickname"><i class="bi bi-person-circle"></i> Nickname: {{ record.nickname }}</p>
-                        <p *ngIf="record.dateOfBirth"><i class="bi bi-calendar"></i> Date of Birth: {{ record.dateOfBirth | date }}</p>
-                        <p *ngIf="record.bcNo"><i class="bi bi-card-checklist"></i> Birth Certificate No: {{ record.bcNo }}</p>
-                        <p *ngIf="record.nicNo"><i class="bi bi-card-list"></i> NIC No: {{ record.nicNo }}</p>
-                        <p *ngIf="record.passportNo"><i class="bi bi-card-heading"></i> Passport No: {{ record.passportNo }}</p>
-                    </div>
-                </div>
-            </div>
 
             <!-- Contact Info Section -->
             <div class="col-12 col-md-6 mb-4">
@@ -60,10 +36,10 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <p *ngIf="record.mobileNo">
+                        <p *ngIf="record.phoneNo">
                             <i class="bi bi-phone"></i>
-                            <a href="tel:{{ record.mobileNo }}">
-                                {{ record.mobileNo }}
+                            <a href="tel:{{ record.phoneNo }}">
+                                {{ record.phoneNo }}
                             </a>
                         </p>
                         <p *ngIf="record.email">
@@ -78,7 +54,7 @@
             </div>
 
             <!-- Academic Info Section -->
-            <div class="col-12 col-md-6 mb-4">
+            <!-- <div class="col-12 col-md-6 mb-4">
                 <div class="card">
                     <div class="card-header">
                         <div class="d-flex justify-content-between">
@@ -90,19 +66,19 @@
                     <div class="card-body">
                     </div>
                 </div>
-            </div>
+            </div> -->
 
-            <!-- Admission Details Section -->
+            <!-- Classes Section -->
             <div class="col-12 col-md-6 mb-4">
                 <div class="card">
                 <div class="card-header">
                     <div class="d-flex justify-content-between">
                         <div class="card-title">
-                            <i class="bi bi-journal"></i> Enrollment Details
+                            <i class="bi bi-journal"></i> Classes
                         </div>
                         <div>
                             @if (authService.loggedInUser?.isPrincipal || authService.loggedInUser?.studentId == record.id) {
-                                <button class="btn btn-sm btn-primary" (click)="addEnrollment()">
+                                <button class="btn btn-sm btn-primary" (click)="addClass()">
                                     <i class="bi bi-plus"></i>
                                     New
                                 </button>
@@ -111,12 +87,10 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <div *ngFor="let enrollment of record.schoolStudentEnrollments" [ngClass]="{'bg-light': enrollment.status == EnrollmentStatus.Active}">
+                    <div *ngFor="let class of record.classes">
                     <p>
                         <i class="bi bi-card-text"></i>&nbsp;
-                        <a [routerLink]="['/schools', enrollment.schoolId]">{{ enrollment.schoolName }}</a>&nbsp;
-                        <a [routerLink]="['/schools', enrollment.schoolId, 'studentenrollments', enrollment.no]">(#{{ enrollment.no }})</a>&nbsp;
-                        | {{ enrollment.time | date }}
+                        <a [routerLink]="['/schools', class.schoolId, 'classes', class.grade, class.section]">{{ class.grade | titleCaseWithSpace }}&nbsp;{{ class.section }}</a>&nbsp;({{ class.languageName }})
                     </p>
                     </div>
                 </div>

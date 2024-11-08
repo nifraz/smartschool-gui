@@ -6,7 +6,7 @@
         <div class="row">
             <!-- Main Info Section -->
             <div class="col-12 col-md-12 mb-4 text-center mb-4">
-                <img src="assets/images/icons8_student_male_200px.png" alt="{{ record.fullName }}" class="rounded-circle" width="150" height="150">
+                <img src="assets/images/icons8_training_200px.png" alt="{{ record.fullName }}" class="rounded-circle" width="150" height="150">
                 <h1 class="mt-3">{{ record.fullName }}</h1>
                 <p class="text-muted">
                     <span *ngIf="record.age">
@@ -101,7 +101,7 @@
                             <i class="bi bi-journal"></i> Enrollment Details
                         </div>
                         <div>
-                            @if (authService.loggedInUser?.isPrincipal || authService.loggedInUser?.studentId == record.id) {
+                            @if (authService.loggedInUser?.isPrincipal || authService.loggedInUser?.teacherId == record.id) {
                                 <button class="btn btn-sm btn-primary" (click)="addEnrollment()">
                                     <i class="bi bi-plus"></i>
                                     New
@@ -111,11 +111,11 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <div *ngFor="let enrollment of record.schoolStudentEnrollments" [ngClass]="{'bg-light': enrollment.status == EnrollmentStatus.Active}">
+                    <div *ngFor="let enrollment of record.schoolTeacherEnrollments" [ngClass]="{'bg-light': enrollment.status == EnrollmentStatus.Active}">
                     <p>
                         <i class="bi bi-card-text"></i>&nbsp;
                         <a [routerLink]="['/schools', enrollment.schoolId]">{{ enrollment.schoolName }}</a>&nbsp;
-                        <a [routerLink]="['/schools', enrollment.schoolId, 'studentenrollments', enrollment.no]">(#{{ enrollment.no }})</a>&nbsp;
+                        <a [routerLink]="['/schools', enrollment.schoolId, 'teacherenrollments', enrollment.no]">(#{{ enrollment.no }})</a>&nbsp;
                         | {{ enrollment.time | date }}
                     </p>
                     </div>

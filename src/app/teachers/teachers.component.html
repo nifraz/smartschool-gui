@@ -1,1 +1,9 @@
-<p>teachers works!</p>
+<div class="data-grid">
+    <app-graphql-data-grid
+        [themeClass]="themeClass"
+        [collection]="collectionKey"
+        [colDefs]="colDefs"
+        (recordClicked)="onRecordClicked($event)"
+        (newClicked)="onNewClicked($event)"
+    ></app-graphql-data-grid>
+</div>

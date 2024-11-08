@@ -6,9 +6,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { GraphqlRecordFormComponent } from '../shared/graphql-record-form/graphql-record-form.component';
 import { GraphqlCollections, GraphqlService, GraphqlTypes } from '../shared/services/graphql.service';
-import { Sex, StudentType } from '../../../graphql/generated';
+import { Sex, StudentModel } from '../../../graphql/generated';
 import { MultiSelectFilterComponent } from '../shared/components/multi-select-filter/multi-select-filter.component';
 import { CustomFloatingFilterComponent } from '../shared/components/custom-floating-filter/custom-floating-filter.component';
+import { BaseComponent } from '../shared/components/base/base.component';
 
 @Component({
   selector: 'app-students',
@@ -19,7 +20,7 @@ import { CustomFloatingFilterComponent } from '../shared/components/custom-float
   templateUrl: './students.component.html',
   styleUrl: './students.component.scss'
 })
-export class StudentsComponent implements OnInit {
+export class StudentsComponent extends BaseComponent implements OnInit {
   collectionKey: string = GraphqlCollections.STUDENTS;
 
   constructor(
@@ -29,10 +30,10 @@ export class StudentsComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private matDialog: MatDialog,
   ) {
-    
+    super();
   }
 
-  onRecordClicked($event: StudentType) {
+  onRecordClicked($event: StudentModel) {
     this.router.navigate(['/students', $event.id]);
     // this.router.navigateByUrl('/students/1');
   }
@@ -75,11 +76,9 @@ export class StudentsComponent implements OnInit {
   navigateToEditStudent(id: string): void {
     this.router.navigate([id, 'edit'], { relativeTo: this.activatedRoute });
   }
-  
-  themeClass = "ag-theme-quartz";
 
   // Column Definitions: Defines & controls grid columns.
-  colDefs: ColDef<StudentType>[] = [
+  colDefs: ColDef<StudentModel>[] = [
     { 
       field: "id",
       headerName: "ID",

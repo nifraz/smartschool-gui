@@ -4,6 +4,7 @@ import { gql } from 'apollo-angular';
 import { Sex, StudentInput } from '../../../graphql/generated';
 import { enumToArray, GraphqlService, InputDef } from '../shared/services/graphql.service';
 import { map, Observable, switchMap, timer } from 'rxjs';
+import { GET_STUDENT_EMAILS_COUNT } from '../shared/queries';
 
 @Injectable({
   providedIn: 'root'
@@ -65,9 +66,9 @@ export class StudentsService {
         validators: [Validators.required],
       },
       {
-        field: 'contactNo',
+        field: 'mobileNo',
         type: 'text',
-        caption: 'Contact No',
+        caption: 'Mobile No',
         // validators: [Validators.pattern('^\\+?[0-9]{10,12}$')],
       },
       {
@@ -113,40 +114,3 @@ export class StudentsService {
     };
   }
 }
-
-export const GET_STUDENT_EMAILS_COUNT = `
-  query getStudentEmailsCount($email: String!) {
-    students(
-      skip: 0
-      take: 1
-      where: { and: [{email: {eq: $email}}] } 
-    ) {
-      totalCount
-    }
-  }
-`;
-
-export const GET_STUDENT = `
-  query getStudent($id: Long!) {
-    student(id: $id) {
-      id
-      address
-      bcNo
-      contactNo
-      createdBy
-      createdOn
-      dateOfBirth
-      email
-      fullName
-      guid
-      lastModifiedBy
-      lastModifiedOn
-      nickname
-      nicNo
-      passportNo
-      sex
-      shortName
-    }
-  }
-`;
-

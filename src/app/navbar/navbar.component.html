@@ -17,11 +17,11 @@
                 <!-- <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="#">Home</a>
                 </li> -->
-                
+
                 @if (user && (user.isStudent || user.isGuardian || user.isStaff || user.isTeacher || user.isPrincipal)) {
                   <li class="nav-item">
                     <div class="btn-group">
-                      <a class="nav-link" href="#">School</a>
+                      <a class="nav-link" routerLink="/schools" routerLinkActive="active">Schools</a>
                       <a class="nav-link dropdown-toggle dropdown-toggle-split ps-1 pe-2" href="#" data-bs-toggle="dropdown" aria-expanded="false">
                         <span class="visually-hidden">Toggle Dropdown</span>
                       </a>
@@ -45,7 +45,7 @@
                           <span class="visually-hidden">Toggle Dropdown</span>
                         </a>
                         <ul class="dropdown-menu bg-dark border-0 mt-3 py-0 shadow">
-                          <li><a class="dropdown-item nav-link btn" [routerLink]="['/students', 'create']" routerLinkActive="active">Admissions</a></li>
+                          <li><a class="dropdown-item nav-link btn" [routerLink]="['/students', 'create']" routerLinkActive="active">Enrollments</a></li>
                           <li><a class="dropdown-item nav-link" href="#">Enrollment</a></li>
                           <li><a class="dropdown-item nav-link" href="#">Attendance</a></li>
                           <li><a class="dropdown-item nav-link" href="#">Performance</a></li>
@@ -59,7 +59,7 @@
                 @if (user && (user.isStaff || user.isTeacher || user.isPrincipal)) {
                   <li class="nav-item">
                     <div class="btn-group">
-                      <a class="nav-link" href="#">Teachers</a>
+                      <a class="nav-link" routerLink="/teachers" routerLinkActive="active">Teachers</a>
                       <a class="nav-link dropdown-toggle dropdown-toggle-split ps-1 pe-2" href="#" data-bs-toggle="dropdown" aria-expanded="false">
                         <span class="visually-hidden">Toggle Dropdown</span>
                       </a>
@@ -85,15 +85,27 @@
                   <img src="https://github.com/nifraz.png" alt="mdo" width="32" height="32" class="rounded-circle">
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end text-small shadow">
-                  <li><a class="dropdown-item" href="#">Settings</a></li>
-                  <li><a class="dropdown-item" href="#">Profile</a></li>
+                  <li><a class="dropdown-item" [routerLink]="['/users', user.id]">User Profile</a></li>
+                  @if (user.studentId) {
+                    <li><a class="dropdown-item" [routerLink]="['/students', user.studentId]">Student Profile</a></li>
+                  }
+                  @if (user.teacherId) {
+                    <li><a class="dropdown-item" [routerLink]="['/teachers', user.teacherId]">Teacher Profile</a></li>
+                  }
+                  @if (user.principalId) {
+                    <li><a class="dropdown-item" [routerLink]="['/principals', user.principalId]">Principal Profile</a></li>
+                  }
+                  @if (user.schoolId) {
+                    <li><a class="dropdown-item" [routerLink]="['/schools', user.schoolId]">My School</a></li>
+                  }
+                  <li><a class="dropdown-item" [routerLink]="['/settings']">Settings</a></li>
                   <li><hr class="dropdown-divider"></li>
                   <li><a class="dropdown-item" (click)="onLogout()">Logout</a></li>
                 </ul>
               </div>
             } 
             @else {
-              @if (!loading) {
+              @if (!isLoading) {
                 <button class="btn btn-sm btn-outline-success" [routerLink]="['/auth', 'login']">
                   Login
                 </button>
