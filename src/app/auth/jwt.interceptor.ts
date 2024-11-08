@@ -17,10 +17,13 @@ export class JwtInterceptor implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     const token = this.authService.getToken();
+    const userId = this.authService.getUserId();
 
-    if (token) {
+    if (token && userId) {
       const cloned = req.clone({
-        headers: req.headers.set('Authorization', `bearer ${token}`),
+        headers: req.headers
+          .set('Authorization', `bearer ${token}`)
+          .set('User-Id', `${userId}`),
       });
       return next.handle(cloned);
     } else {

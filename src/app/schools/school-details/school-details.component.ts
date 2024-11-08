@@ -15,6 +15,7 @@ import { RecordComponent } from '../../shared/components/record/record.component
 import { SchoolsService } from '../schools.service';
 import { AddSpacesPipe } from "../../shared/pipes/add-spaces.pipe";
 import { TitleCaseWithSpacePipe } from "../../shared/pipes/title-case-with-space.pipe";
+import { groupBy, groupByToArrays } from '../../shared/functions';
 
 @Component({
   selector: 'app-school-details',
@@ -32,6 +33,7 @@ import { TitleCaseWithSpacePipe } from "../../shared/pipes/title-case-with-space
 })
 export class SchoolDetailsComponent extends RecordComponent<SchoolModel> implements OnInit {
   EnrollmentStatus = EnrollmentStatus;
+  groupByToArrays = groupByToArrays;
 
   constructor(
     private schoolsService: SchoolsService,
@@ -99,7 +101,7 @@ export class SchoolDetailsComponent extends RecordComponent<SchoolModel> impleme
   }
 
   deleteRecord() {
-    this.toastr.error(`Could not delete`, 'Schools');
+    this.toastr.error(`Could not delete`, 'Record');
   }
 
   addClass() {

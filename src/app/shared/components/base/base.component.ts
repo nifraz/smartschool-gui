@@ -7,7 +7,7 @@ import { Component, Input, OnInit } from '@angular/core';
   templateUrl: './base.component.html',
   styleUrl: './base.component.scss'
 })
-export class BaseComponent {
+export abstract class BaseComponent {
 
   @Input() languageCode: string = 'en';
   @Input() themeClass: string = "ag-theme-quartz";

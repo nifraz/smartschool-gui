@@ -95,7 +95,7 @@ export class TeacherDetailsComponent extends RecordComponent<TeacherModel> imple
   }
 
   deleteRecord() {
-    this.toastr.error(`Could not delete`, 'Teachers');
+    this.toastr.error(`Could not delete`, 'Record');
   }
 
   addEnrollment() {

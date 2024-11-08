@@ -193,13 +193,21 @@ export enum ConditionalOperator {
 }
 
 export enum GraphqlCollections {
+  USERS = 'users',
   SCHOOLS = 'schools',
+  SCHOOL_STUDENT_ENROLLMENT_REQUESTS = 'schoolStudentEnrollmentRequests',
+  SCHOOL_STUDENT_ENROLLMENTS = 'schoolStudentEnrollments',
+  CLASSES = 'classes',
   STUDENTS = 'students',
   TEACHERS = 'teachers',
 }
 
 export enum GraphqlTypes {
+  USER = 'user',
   SCHOOL = 'school',
+  SCHOOL_STUDENT_ENROLLMENT_REQUEST = 'schoolStudentEnrollmentRequest',
+  SCHOOL_STUDENT_ENROLLMENT = 'schoolStudentEnrollment',
+  CLASS = 'class',
   STUDENT = 'student',
   TEACHER = 'teacher',
 }
