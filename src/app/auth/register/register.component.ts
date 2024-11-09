@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../auth.service';
@@ -12,6 +12,7 @@ import { FormlyMatDatepickerModule } from '@ngx-formly/material/datepicker';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { ToastrService } from 'ngx-toastr';
+import { BaseComponent } from '../../shared/components/base/base.component';
 
 @Component({
   selector: 'app-register',
@@ -31,7 +32,7 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss'
 })
-export class RegisterComponent {
+export class RegisterComponent extends BaseComponent implements OnInit {
   form = new FormGroup({});
   model: UserRegisterRequest = {
     email: '',
@@ -130,10 +131,10 @@ export class RegisterComponent {
         {
           className: 'col-12 col-md-6',
           key: 'sex',
-          type: 'radio',
+          type: 'select',
           props: {
             label: 'Sex',
-            type: 'password',
+            type: 'select',
             placeholder: 'Enter Sex',
             options: enumToArray(Sex).map(x => ({ label: x.caption, value: x.value })),
             required: true,
@@ -147,9 +148,6 @@ export class RegisterComponent {
     // },
 
   ];
-  
-  loading: boolean = false;
-  error: any | null;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -160,6 +158,7 @@ export class RegisterComponent {
     // if (this.authService.currentUserValue) {
     //   this.router.navigate(['/']);
     // }
+    super();
   }
 
   ngOnInit() {
@@ -171,7 +170,7 @@ export class RegisterComponent {
       return;
     }
 
-    this.loading = true;
+    this.isLoading = true;
     this.error = null;
 
     if (typeof this.model.dateOfBirth !== "string") {
@@ -181,13 +180,13 @@ export class RegisterComponent {
     this.authService.register(this.model)
       .subscribe({
         next: () => {
-          this.loading = false;
+          this.isLoading = false;
           this.error = null;
           this.toastr.success(`Registration Successful. Please Login.`, 'Register');
           this.router.navigate(['/auth', 'login']);
         },
         error: error => {
-          this.loading = false;
+          this.isLoading = false;
           this.error = error;
         }
       });

@@ -29,7 +29,7 @@ import { TitleCaseWithSpacePipe } from "../../../shared/pipes/title-case-with-sp
 })
 export class SchoolStudentEnrollmentDetailsComponent extends RecordComponent<SchoolStudentEnrollmentModel> implements OnInit {
   EnrollmentStatus = EnrollmentStatus;
-
+  
   constructor(
     private studentsService: StudentsService,
     private activatedRoute: ActivatedRoute,
@@ -69,6 +69,10 @@ export class SchoolStudentEnrollmentDetailsComponent extends RecordComponent<Sch
         this.openRecordFormModal();
       }
     });
+  }
+
+  override loadRecord(): void {
+    throw new Error('Method not implemented.');
   }
 
   openRecordFormModal(): void {

@@ -7,7 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { GraphqlRecordFormComponent } from '../../shared/graphql-record-form/graphql-record-form.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { Age, calculateAge, GraphqlCollections, GraphqlService, GraphqlTypes } from '../../shared/services/graphql.service';
-import { EnrollmentStatus, StudentInput, StudentModel } from '../../../../graphql/generated';
+import { EnrollmentStatus, RequestStatus, StudentInput, StudentModel } from '../../../../graphql/generated';
 import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from '../../shared/components/base/base.component';
 import { GET_STUDENT } from '../../shared/queries';
@@ -28,7 +28,7 @@ import { RecordComponent } from '../../shared/components/record/record.component
 })
 export class StudentDetailsComponent extends RecordComponent<StudentModel> implements OnInit {
   EnrollmentStatus = EnrollmentStatus;
-
+  
   constructor(
     private studentsService: StudentsService,
     private activatedRoute: ActivatedRoute,
@@ -46,6 +46,16 @@ export class StudentDetailsComponent extends RecordComponent<StudentModel> imple
 
   ngOnInit(): void {
     this.id = this.activatedRoute.snapshot.paramMap.get('id');
+    this.loadRecord();
+
+    this.activatedRoute.data.subscribe(data => {
+      if (data['isEdit']) {
+        this.openRecordFormModal();
+      }
+    });
+  }
+
+  loadRecord(): void {
     if (this.id) {
       this.isLoading = true;
       const variables = {
@@ -60,14 +70,8 @@ export class StudentDetailsComponent extends RecordComponent<StudentModel> imple
           this.isLoading = false;
           console.error(err);
         }
-      })
+      });
     }
-
-    this.activatedRoute.data.subscribe(data => {
-      if (data['isEdit']) {
-        this.openRecordFormModal();
-      }
-    });
   }
 
   openRecordFormModal(): void {
@@ -98,7 +102,7 @@ export class StudentDetailsComponent extends RecordComponent<StudentModel> imple
     this.toastr.error(`Could not delete`, 'Students');
   }
 
-  addEnrollment() {
+  addSchoolStudentEnrollment() {
 
   }
 

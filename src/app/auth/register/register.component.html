@@ -3,9 +3,9 @@
     <form class="mb-3" [formGroup]="form" (ngSubmit)="onSubmit()">
         <formly-form [form]="form" [fields]="fields" [model]="model"></formly-form>
         <div class="d-grid mb-3">
-            <button type="submit" [disabled]="loading" class="btn btn-primary ">Register</button>
+            <button type="submit" [disabled]="isLoading" class="btn btn-primary ">Register</button>
         </div>
-        <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+        <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
         <app-error-alert [error]="error"></app-error-alert>
         <a class="" [routerLink]="['/auth', 'login']" routerLinkActive="active">&gt;&gt;&gt; Login</a>
     </form>

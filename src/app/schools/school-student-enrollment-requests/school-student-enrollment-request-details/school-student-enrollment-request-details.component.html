@@ -15,17 +15,39 @@
                     </span>
                     {{ record.person?.sex | titlecase }}
                 </p>
-                <p class="text-muted">Status: {{ record.status | titleCaseWithSpace }}</p>
+                <p class="text-muted">{{ record.grade | titleCaseWithSpace }} | Academic Year: {{ record.academicYearYear }} | Status: {{ record.status | titleCaseWithSpace }}</p>
                 <div class="">
-                    @if (authService.loggedInUser?.isPrincipal || authService.loggedInUser?.isTeacher) {
-                        <button class="btn btn-sm btn-primary me-2" (click)="editRecord()">
-                            <i class="bi bi-pencil"></i>
-                            Edit
-                        </button>
-                        <button class="btn btn-sm btn-danger me-2" (click)="deleteRecord()">
-                            <i class="bi bi-trash"></i>
-                            Delete
-                        </button>
+                    @if (![RequestStatus.Approved, RequestStatus.Rejected, RequestStatus.Cancelled ].includes(record.status!)) {
+                        @if ((authService.loggedInUser?.isPrincipal || authService.loggedInUser?.isTeacher || authService.loggedInUser?.id == record.createdUserId)) {
+                            <button class="btn btn-sm btn-primary me-2" [ladda]="isSaving" (click)="editRecord()">
+                                <i class="bi bi-pencil"></i>
+                                Edit
+                            </button>
+                        }
+                        <!-- @if (authService.loggedInUser?.isPrincipal) {
+                            <button class="btn btn-sm btn-danger me-2" [ladda]="isSaving" (click)="deleteRecord()">
+                                <i class="bi bi-trash"></i>
+                                Delete
+                            </button>
+                        } -->
+                        @if (authService.loggedInUser?.isPrincipal) {
+                            <button class="btn btn-sm btn-success me-2" [ladda]="isSaving" (click)="updateSchoolStudentEnrollmentRequestStatus(RequestStatus.Approved)">
+                                <i class="bi bi-check"></i>
+                                Approve
+                            </button>
+                        }
+                        @if (authService.loggedInUser?.isPrincipal) {
+                            <button class="btn btn-sm btn-danger me-2" [ladda]="isSaving" (click)="updateSchoolStudentEnrollmentRequestStatus(RequestStatus.Rejected)">
+                                <i class=""></i>X
+                                Reject
+                            </button>
+                        }
+                        @if (authService.loggedInUser?.id == record.createdUserId) {
+                            <button class="btn btn-sm btn-secondary me-2" [ladda]="isSaving" (click)="updateSchoolStudentEnrollmentRequestStatus(RequestStatus.Cancelled)">
+                                <i class="bi bi-trash"></i>
+                                Cancel
+                            </button>
+                        }
                     }
                 </div>
             </div>

@@ -1,3 +1,5 @@
+import { PersonModel } from "../../../graphql/generated";
+
 export interface UserLoginRequest {
     email: string,
     mobileNo: string,
@@ -51,6 +53,8 @@ export interface UserResponse {
     staffId: number | null;
     teacherId: number | null;
     principalId: number | null;
+
+    person: PersonModel;
 }
 
 export enum Sex {

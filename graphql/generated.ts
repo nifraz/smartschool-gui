@@ -21,6 +21,31 @@ export type Scalars = {
   Long: { input: any; output: any; }
 };
 
+export type AcademicYearModel = {
+  __typename?: 'AcademicYearModel';
+  classStudentEnrollments: Array<ClassStudentEnrollmentModel>;
+  classTeacherEnrollments: Array<ClassTeacherEnrollmentModel>;
+  endDate?: Maybe<Scalars['Date']['output']>;
+  startDate?: Maybe<Scalars['Date']['output']>;
+  year?: Maybe<Scalars['Int']['output']>;
+};
+
+export type AcademicYearModelFilterInput = {
+  and?: InputMaybe<Array<AcademicYearModelFilterInput>>;
+  classStudentEnrollments?: InputMaybe<ListFilterInputTypeOfClassStudentEnrollmentModelFilterInput>;
+  classTeacherEnrollments?: InputMaybe<ListFilterInputTypeOfClassTeacherEnrollmentModelFilterInput>;
+  endDate?: InputMaybe<DateOperationFilterInput>;
+  or?: InputMaybe<Array<AcademicYearModelFilterInput>>;
+  startDate?: InputMaybe<DateOperationFilterInput>;
+  year?: InputMaybe<IntOperationFilterInput>;
+};
+
+export type AcademicYearModelSortInput = {
+  endDate?: InputMaybe<SortEnumType>;
+  startDate?: InputMaybe<SortEnumType>;
+  year?: InputMaybe<SortEnumType>;
+};
+
 export type AgeModel = {
   __typename?: 'AgeModel';
   days: Scalars['Int']['output'];
@@ -373,13 +398,39 @@ export type LongOperationFilterInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  createSchoolStudentEnrollment: SchoolStudentEnrollmentModel;
+  createSchoolStudentEnrollmentRequest: SchoolStudentEnrollmentRequestModel;
   createStudent: StudentModel;
+  updateSchoolStudentEnrollmentRequest: SchoolStudentEnrollmentRequestModel;
+  updateSchoolStudentEnrollmentRequestStatus: SchoolStudentEnrollmentRequestModel;
   updateStudent: StudentModel;
+};
+
+
+export type MutationCreateSchoolStudentEnrollmentArgs = {
+  input: SchoolStudentEnrollmentInput;
+};
+
+
+export type MutationCreateSchoolStudentEnrollmentRequestArgs = {
+  input: SchoolStudentEnrollmentRequestInput;
 };
 
 
 export type MutationCreateStudentArgs = {
   input: StudentInput;
+};
+
+
+export type MutationUpdateSchoolStudentEnrollmentRequestArgs = {
+  id: Scalars['Long']['input'];
+  input: SchoolStudentEnrollmentRequestInput;
+};
+
+
+export type MutationUpdateSchoolStudentEnrollmentRequestStatusArgs = {
+  id: Scalars['Long']['input'];
+  input: RequestStatus;
 };
 
 
@@ -506,6 +557,7 @@ export type PersonModelSortInput = {
 
 export type Query = {
   __typename?: 'Query';
+  academicYears: Array<AcademicYearModel>;
   class?: Maybe<ClassModel>;
   classes?: Maybe<ClassesCollectionSegment>;
   school?: Maybe<SchoolModel>;
@@ -617,6 +669,7 @@ export type QueryUsersArgs = {
 
 export enum RequestStatus {
   Approved = 'APPROVED',
+  Cancelled = 'CANCELLED',
   OnHold = 'ON_HOLD',
   Pending = 'PENDING',
   Processing = 'PROCESSING',
@@ -743,6 +796,14 @@ export type SchoolPrincipalEnrollmentModelFilterInput = {
   time?: InputMaybe<DateTimeOperationFilterInput>;
 };
 
+export type SchoolStudentEnrollmentInput = {
+  academicYear: Scalars['Int']['input'];
+  classId: Scalars['Long']['input'];
+  no: Scalars['Int']['input'];
+  personId: Scalars['Long']['input'];
+  schoolId: Scalars['Long']['input'];
+};
+
 export type SchoolStudentEnrollmentModel = {
   __typename?: 'SchoolStudentEnrollmentModel';
   classStudentEnrollments: Array<ClassStudentEnrollmentModel>;
@@ -814,8 +875,17 @@ export type SchoolStudentEnrollmentModelSortInput = {
   time?: InputMaybe<SortEnumType>;
 };
 
+export type SchoolStudentEnrollmentRequestInput = {
+  academicYearYear: Scalars['Int']['input'];
+  grade: Grade;
+  personId: Scalars['Long']['input'];
+  schoolId: Scalars['Long']['input'];
+};
+
 export type SchoolStudentEnrollmentRequestModel = {
   __typename?: 'SchoolStudentEnrollmentRequestModel';
+  academicYear?: Maybe<AcademicYearModel>;
+  academicYearYear?: Maybe<Scalars['Int']['output']>;
   createdTime?: Maybe<Scalars['DateTime']['output']>;
   createdUser?: Maybe<UserModel>;
   createdUserId?: Maybe<Scalars['Long']['output']>;
@@ -837,6 +907,8 @@ export type SchoolStudentEnrollmentRequestModel = {
 };
 
 export type SchoolStudentEnrollmentRequestModelFilterInput = {
+  academicYear?: InputMaybe<AcademicYearModelFilterInput>;
+  academicYearYear?: InputMaybe<IntOperationFilterInput>;
   and?: InputMaybe<Array<SchoolStudentEnrollmentRequestModelFilterInput>>;
   createdTime?: InputMaybe<DateTimeOperationFilterInput>;
   createdUser?: InputMaybe<UserModelFilterInput>;
@@ -860,6 +932,8 @@ export type SchoolStudentEnrollmentRequestModelFilterInput = {
 };
 
 export type SchoolStudentEnrollmentRequestModelSortInput = {
+  academicYear?: InputMaybe<AcademicYearModelSortInput>;
+  academicYearYear?: InputMaybe<SortEnumType>;
   createdTime?: InputMaybe<SortEnumType>;
   createdUser?: InputMaybe<UserModelSortInput>;
   createdUserId?: InputMaybe<SortEnumType>;

@@ -26,6 +26,7 @@
     "@ngx-formly/material": "^6.3.10",
     "ag-grid-angular": "^31.3.2",
     "ag-grid-community": "^31.3.2",
+    "angular2-ladda": "^5.0.0",
     "apollo-angular": "^7.0.2",
     "bootstrap": "^5.3.3",
     "graphql": "^15.9.0",

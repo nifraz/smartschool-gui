@@ -84,6 +84,10 @@ export class ClassDetailsComponent extends RecordComponent<ClassModel> implement
     });
   }
 
+  override loadRecord(): void {
+    throw new Error('Method not implemented.');
+  }
+
   openRecordFormModal(): void {
     const inputDefs = {};
     const dialogRef = this.matDialog.open(GraphqlRecordFormComponent, {

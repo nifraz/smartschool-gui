@@ -11,7 +11,9 @@ import { BaseComponent } from '../base/base.component';
 export abstract class RecordComponent<T> extends BaseComponent {
   id?: string | null;
   record?: T | null;
+  isEditMode?: boolean;
 
+  abstract loadRecord(): void;
   abstract openRecordFormModal(): void;
   abstract editRecord(): void;
   abstract deleteRecord(): void;

@@ -8,6 +8,7 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrl: './base.component.scss'
 })
 export abstract class BaseComponent {
+  title: string = '';
 
   @Input() languageCode: string = 'en';
   @Input() themeClass: string = "ag-theme-quartz";
@@ -15,6 +16,8 @@ export abstract class BaseComponent {
   isLoading: boolean = false;
   isError: boolean = false;
   isSaving: boolean = false;
+
+  error: any | null;
 
   constructor() { }
 

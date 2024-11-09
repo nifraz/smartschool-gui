@@ -12,6 +12,7 @@ import { BaseComponent } from '../../shared/components/base/base.component';
 import { GET_STUDENT, GET_USER } from '../../shared/queries';
 import { AuthService } from '../../auth/auth.service';
 import { RecordComponent } from '../../shared/components/record/record.component';
+import { TitleCaseWithSpacePipe } from "../../shared/pipes/title-case-with-space.pipe";
 
 @Component({
   selector: 'app-user-details',
@@ -21,7 +22,8 @@ import { RecordComponent } from '../../shared/components/record/record.component
     NotFoundComponent,
     MatProgressBarModule,
     RouterLink,
-  ],
+    TitleCaseWithSpacePipe
+],
   templateUrl: './user-details.component.html',
   styleUrl: './user-details.component.scss'
 })
@@ -68,6 +70,10 @@ export class UserDetailsComponent extends RecordComponent<UserModel> implements 
     });
   }
 
+  override loadRecord(): void {
+    throw new Error('Method not implemented.');
+  }
+  
   openRecordFormModal(): void {
     const inputDefs = {};
     const dialogRef = this.matDialog.open(GraphqlRecordFormComponent, {

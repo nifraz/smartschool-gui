@@ -2,30 +2,123 @@
 <div *ngIf="isLoading || record; then content else notFound"></div>
 
 <ng-template #content>
-    <h2 class="mat-h2 m-0 ms-2">Student Details</h2>
+    <h2 class="mat-h2 m-0 ms-2">School Details</h2>
     <div *ngIf="record" class="container mt-4">
         <div class="row">
             <!-- Main Info Section -->
             <div class="col-12 col-md-12 mb-4 text-center mb-4">
-                <img src="assets/images/icons8_school_200px.png" alt="{{ record.name }}" class="rounded-circle" width="150" height="150">
+                <img src="assets/images/icons8_school_200px.png" alt="{{ record.name }}" class="rounded-circle" width="200" height="200">
                 <h2 class="mt-3">{{ record.name }}</h2>
                 <p class="text-muted">
                     {{ record.censusNo }} | {{ record.type | titleCaseWithSpace }}
                 </p>
                 <div class="">
-                    @if (authService.loggedInUser?.isPrincipal || authService.loggedInUser?.isTeacher) {
+                    @if (authService.loggedInUser?.isPrincipal || authService.loggedInUser?.isTeacher || authService.loggedInUser?.id == record.createdUserId) {
                         <button class="btn btn-sm btn-primary me-2" (click)="editRecord()">
                             <i class="bi bi-pencil"></i>
                             Edit
                         </button>
+                    }
+                    <!-- @if (authService.loggedInUser?.isPrincipal) {
                         <button class="btn btn-sm btn-danger me-2" (click)="deleteRecord()">
                             <i class="bi bi-trash"></i>
                             Delete
                         </button>
-                    }
+                    } -->
                 </div>
             </div>
 
+            
+            <!-- Academic Info Section -->
+            <!-- <div class="col-12 col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="d-flex justify-content-between">
+                            <div class="card-title">
+                                <i class="bi bi-book"></i> Academic Info
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                    </div>
+                </div>
+            </div> -->
+
+            <!-- Classes Section -->
+            <div class="col-12 col-md-6 mb-4">
+                <div class="card">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between">
+                        <div class="card-title">
+                            <i class="bi bi-journal"></i> Classes
+                        </div>
+                        <div>
+                            @if (authService.loggedInUser?.isPrincipal) {
+                                <button class="btn btn-sm btn-primary" (click)="createClass()">
+                                    <i class="bi bi-plus"></i>
+                                    New
+                                </button>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div *ngFor="let gradeGroup of groupByToArrays(record.classes, 'grade')">
+                        <p>{{ gradeGroup[0].grade | titleCaseWithSpace }}</p>
+                        @for (class of gradeGroup; track $index) {
+                            <p>
+                                <i class="bi bi-card-text"></i>&nbsp;
+                                <a [routerLink]="['/schools', class.schoolId, 'classes', class.grade, class.section]">{{ class.grade | titleCaseWithSpace }}&nbsp;{{ class.section }}</a>&nbsp;({{ class.languageName }})
+                            </p>
+                        }
+                    </div>
+                </div>
+                </div>
+            </div>
+
+            <!-- Admission Details Section -->
+            <div class="col-12 col-md-6 mb-4">
+                <div class="card">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between">
+                        <div class="card-title">
+                            <i class="bi bi-journal"></i> School Student Enrollment Requests
+                        </div>
+                        <div>
+                            @if (authService.loggedInUser) {
+                                <button class="btn btn-sm btn-primary" (click)="createSchoolStudentEnrollmentRequest()">
+                                    <i class="bi bi-plus"></i>
+                                    New
+                                </button>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                            <th scope="col">Full Name</th>
+                            <th scope="col">Grade</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Details</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (request of record.schoolStudentEnrollmentRequests; track $index) {
+                                <tr>
+                                    <th scope="row"><a [routerLink]="['/users', request.createdUserId]">{{ request.personFullName }}</a></th>
+                                    <td>{{ request.grade | titleCaseWithSpace }}</td>
+                                    <td>{{ request.status | titleCaseWithSpace }}</td>
+                                    <td><a [routerLink]="['/schools', record.id, 'student-enrollment-requests', request.id ]">View Details</a></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                </div>
+            </div>
+  
             <!-- Contact Info Section -->
             <div class="col-12 col-md-6 mb-4">
                 <div class="card">
@@ -54,53 +147,6 @@
                 </div>
             </div>
 
-            <!-- Academic Info Section -->
-            <!-- <div class="col-12 col-md-6 mb-4">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="d-flex justify-content-between">
-                            <div class="card-title">
-                                <i class="bi bi-book"></i> Academic Info
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                    </div>
-                </div>
-            </div> -->
-
-            <!-- Classes Section -->
-            <div class="col-12 col-md-6 mb-4">
-                <div class="card">
-                <div class="card-header">
-                    <div class="d-flex justify-content-between">
-                        <div class="card-title">
-                            <i class="bi bi-journal"></i> Classes
-                        </div>
-                        <div>
-                            @if (authService.loggedInUser?.isPrincipal || authService.loggedInUser?.studentId == record.id) {
-                                <button class="btn btn-sm btn-primary" (click)="addClass()">
-                                    <i class="bi bi-plus"></i>
-                                    New
-                                </button>
-                            }
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div *ngFor="let gradeGroup of groupByToArrays(record.classes, 'grade')">
-                    <p>{{ gradeGroup[0].grade | titleCaseWithSpace }}</p>
-                    @for (class of gradeGroup; track $index) {
-                        <p>
-                            <i class="bi bi-card-text"></i>&nbsp;
-                            <a [routerLink]="['/schools', class.schoolId, 'classes', class.grade, class.section]">{{ class.grade | titleCaseWithSpace }}&nbsp;{{ class.section }}</a>&nbsp;({{ class.languageName }})
-                        </p>
-                    }
-                    </div>
-                </div>
-                </div>
-            </div>
-  
         </div>
     </div>
 </ng-template>

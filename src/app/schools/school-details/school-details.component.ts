@@ -6,7 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { GraphqlRecordFormComponent } from '../../shared/graphql-record-form/graphql-record-form.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { Age, calculateAge, GraphqlCollections, GraphqlService, GraphqlTypes } from '../../shared/services/graphql.service';
-import { EnrollmentStatus, SchoolModel, StudentInput, StudentModel } from '../../../../graphql/generated';
+import { EnrollmentStatus, RequestStatus, SchoolModel, StudentInput, StudentModel } from '../../../../graphql/generated';
 import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from '../../shared/components/base/base.component';
 import { GET_SCHOOL, GET_STUDENT } from '../../shared/queries';
@@ -16,6 +16,7 @@ import { SchoolsService } from '../schools.service';
 import { AddSpacesPipe } from "../../shared/pipes/add-spaces.pipe";
 import { TitleCaseWithSpacePipe } from "../../shared/pipes/title-case-with-space.pipe";
 import { groupBy, groupByToArrays } from '../../shared/functions';
+import { CreateSchoolStudentEnrollmentRequestComponent } from '../school-student-enrollment-requests/create-school-student-enrollment-request/create-school-student-enrollment-request.component';
 
 @Component({
   selector: 'app-school-details',
@@ -33,6 +34,7 @@ import { groupBy, groupByToArrays } from '../../shared/functions';
 })
 export class SchoolDetailsComponent extends RecordComponent<SchoolModel> implements OnInit {
   EnrollmentStatus = EnrollmentStatus;
+  RequestStatus = RequestStatus;
   groupByToArrays = groupByToArrays;
 
   constructor(
@@ -52,6 +54,16 @@ export class SchoolDetailsComponent extends RecordComponent<SchoolModel> impleme
 
   ngOnInit(): void {
     this.id = this.activatedRoute.snapshot.paramMap.get('id');
+    this.loadRecord();
+
+    this.activatedRoute.data.subscribe(data => {
+      if (data['isEdit']) {
+        this.openRecordFormModal();
+      }
+    });
+  }
+
+  loadRecord(): void {
     if (this.id) {
       this.isLoading = true;
       const variables = {
@@ -66,14 +78,8 @@ export class SchoolDetailsComponent extends RecordComponent<SchoolModel> impleme
           this.isLoading = false;
           console.error(err);
         }
-      })
+      });
     }
-
-    this.activatedRoute.data.subscribe(data => {
-      if (data['isEdit']) {
-        this.openRecordFormModal();
-      }
-    });
   }
 
   openRecordFormModal(): void {
@@ -104,8 +110,25 @@ export class SchoolDetailsComponent extends RecordComponent<SchoolModel> impleme
     this.toastr.error(`Could not delete`, 'Record');
   }
 
-  addClass() {
+  createClass() {
 
+  }
+
+  createSchoolStudentEnrollmentRequest() {
+    const dialogRef = this.matDialog.open(CreateSchoolStudentEnrollmentRequestComponent, {
+      width: '1200px',
+      data: {
+        school: this.record,
+        person: this.authService.loggedInUser?.person,
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      // this.router.navigate(['/teachers', this.id]);
+      this.loadRecord();
+      //reload data
+      console.log(result);
+    });
   }
 
 }

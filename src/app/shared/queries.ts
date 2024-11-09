@@ -90,13 +90,8 @@ export const GET_SCHOOL_STUDENT_ENROLLMENT_REQUEST = `
         type
       }
       schoolName
-
-      createdTime
+      academicYearYear
       createdUserId
-      lastModifiedTime
-      lastModifiedUserId
-      deletedTime
-      deletedUser
     }
   }
 `;
@@ -176,6 +171,14 @@ export const GET_SCHOOL = `
         section
         languageName
         schoolId
+      }
+      schoolStudentEnrollmentRequests {
+        id
+        grade
+        status
+        personId
+        personFullName
+        createdUserId
       }
     }
   }

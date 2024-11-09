@@ -70,6 +70,10 @@ export class TeacherDetailsComponent extends RecordComponent<TeacherModel> imple
     });
   }
 
+  override loadRecord(): void {
+    throw new Error('Method not implemented.');
+  }
+
   openRecordFormModal(): void {
     const inputDefs = {};
     const dialogRef = this.matDialog.open(GraphqlRecordFormComponent, {
