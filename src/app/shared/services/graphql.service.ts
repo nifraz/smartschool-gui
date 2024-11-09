@@ -46,6 +46,16 @@ export class GraphqlService {
     });
   }
 
+  getGqlSubscriptionObservable(subscription: string, variables: any = undefined, refetchQueries: string[] = []): Observable<MutationResult<any>> {
+    return this.apollo.subscribe({
+      query: gql `${subscription}`,
+      variables: variables,
+      /*
+        accepts options like `errorPolicy` and `fetchPolicy`
+      */
+    });
+  }
+
   createColDefs<T extends object>(model: T): ColDef[] {
     const colDefs: ColDef[] = [];
   
@@ -80,7 +90,6 @@ export interface RemoteGridApi<T> {
 }
 
 export interface GraphqlCollectionResponse<T> {
-  //res.data.classes.items
   data: GraphqlCollectionResponseData<T>;
 }
 
@@ -92,8 +101,12 @@ export interface GraphqlCollectionResponseDataProperty<T> {
   items: T[];
 }
 
-export interface GraphqlCollectionResponseDataPropertyItems<T> {
+export interface GraphqlSubscriptionResponse<T> {
+  data: GraphqlSubscriptionResponseData<T>;
+}
 
+export interface GraphqlSubscriptionResponseData<T> {
+  [index: string]: T;
 }
 
 export function convertToEndOfDay(dateString: string | undefined): string {

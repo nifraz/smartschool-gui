@@ -81,7 +81,9 @@ export class CreateSchoolStudentEnrollmentRequestComponent<SchoolStudentEnrollme
   ngOnInit() {
     this.getAcademicYears$ = this.graphqlService.getGqlQueryObservable(GET_ACADEMIC_YEARS).pipe(
       map((res: GraphqlCollectionResponse<AcademicYearModel>) => {
-          return res.data['academicYears'].items.map((x: AcademicYearModel) => ({ value: x.year, label: x.year }));
+          return res.data['academicYears'].items
+            .filter(x => x.year && x.year >= new Date().getFullYear())
+            .map((x: AcademicYearModel) => ({ value: x.year, label: x.year }));
       })
     );
 

@@ -7,11 +7,15 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { APOLLO_OPTIONS } from 'apollo-angular';
 import { HttpLink } from 'apollo-angular/http';
 import { Apollo } from "apollo-angular";
-import { ApolloClientOptions, ApolloLink, InMemoryCache } from '@apollo/client/core';
+import { ApolloClientOptions, ApolloLink, InMemoryCache, split } from '@apollo/client/core';
 import { ToastrModule } from 'ngx-toastr';
 import { FormlyModule } from '@ngx-formly/core';
 import { FormlyMaterialModule } from '@ngx-formly/material';
 import { JwtInterceptor } from './auth/jwt.interceptor';
+import { getMainDefinition } from '@apollo/client/utilities';
+import { Kind } from 'graphql';
+import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
+import { createClient } from 'graphql-ws';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -36,9 +40,27 @@ export const appConfig: ApplicationConfig = {
       useFactory: (
         httpLink: HttpLink,
       ): ApolloClientOptions<unknown> => ({
-        link: ApolloLink.from([
-          httpLink.create({ uri: 'https://localhost:5001/graphql' }),
-        ]),
+        // link: ApolloLink.from([
+        //   httpLink.create({ uri: 'https://localhost:5001/graphql' }),
+        // ]),
+        link: split(
+          // Split based on operation type
+          ({ query }) => {
+            const definition = getMainDefinition(query);
+            return (
+              definition.kind === Kind.OPERATION_DEFINITION &&
+              definition.operation === 'subscription'
+            );
+          },
+          new GraphQLWsLink(
+            createClient({
+              url: 'ws://localhost:5000/graphql',
+            }),
+          ),
+          httpLink.create({
+            uri: 'http://localhost:5000/graphql',
+          }),
+        ),
         cache: new InMemoryCache(),
         defaultOptions: {
           watchQuery: {

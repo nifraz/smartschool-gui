@@ -5,18 +5,20 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { ToastrService } from 'ngx-toastr';
 import { NotFoundComponent } from '../../../shared/not-found/not-found.component';
-import { StudentModel, EnrollmentStatus, SchoolStudentEnrollmentRequestModel, RequestStatus } from '../../../../../graphql/generated';
+import { StudentModel, EnrollmentStatus, SchoolStudentEnrollmentRequestModel, RequestStatus, SchoolStudentEnrollmentModel } from '../../../../../graphql/generated';
 import { AuthService } from '../../../auth/auth.service';
 import { RecordComponent } from '../../../shared/components/record/record.component';
 import { GraphqlRecordFormComponent } from '../../../shared/graphql-record-form/graphql-record-form.component';
 import { GET_SCHOOL_STUDENT_ENROLLMENT_REQUEST, GET_STUDENT } from '../../../shared/queries';
-import { GraphqlService, GraphqlTypes, GraphqlCollections } from '../../../shared/services/graphql.service';
+import { GraphqlService, GraphqlTypes, GraphqlCollections, GraphqlSubscriptionResponse, GraphqlSubscriptionResponseData } from '../../../shared/services/graphql.service';
 import { StudentsService } from '../../../students/students.service';
 import { TitleCaseWithSpacePipe } from "../../../shared/pipes/title-case-with-space.pipe";
 import { LaddaModule } from 'angular2-ladda';
 import { UPDATE_SCHOOL_STUDENT_ENROLLMENT_REQUEST_STATUS } from '../../../shared/mutations';
 import { CreateSchoolStudentEnrollmentComponent } from '../../school-student-enrollments/create-school-student-enrollment/create-school-student-enrollment.component';
 import { ApproveSchoolStudentEnrollmentComponent } from '../../school-student-enrollments/approve-school-student-enrollment/approve-school-student-enrollment.component';
+import { SCHOOL_STUDENT_ENROLLMENT_CREATED } from '../../../shared/subscriptions';
+import { MutationResult } from 'apollo-angular';
 
 @Component({
   selector: 'app-school-student-enrollment-request-details',
@@ -60,6 +62,16 @@ export class SchoolStudentEnrollmentRequestDetailsComponent extends RecordCompon
         this.openRecordFormModal();
       }
     });
+
+    this.graphqlService.getGqlSubscriptionObservable(SCHOOL_STUDENT_ENROLLMENT_CREATED).subscribe(
+      (res: MutationResult<any>) => {
+        if (res.data['schoolStudentEnrollmentCreated']?.schoolStudentEnrollmentRequestId == this.record?.id) {
+          this.toastr.success(`This request has been approved by the school.`, this.title)
+          this.loadRecord();
+        }
+      }
+    );
+    
   }
 
   override loadRecord(): void {
