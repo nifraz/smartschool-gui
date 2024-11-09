@@ -40,7 +40,7 @@ export interface UserResponse {
     email?: string | null;
     address?: string | null;
     image?: string | null;
-    schoolId?: number | null;
+    currentSchoolId?: number | null;
 
     isGuardian: boolean;
     isStudent: boolean;

@@ -90,8 +90,8 @@
                   @if (user.principalId) {
                     <li><a class="dropdown-item" [routerLink]="['/principals', user.principalId]">Principal Profile</a></li>
                   }
-                  @if (user.schoolId) {
-                    <li><a class="dropdown-item" [routerLink]="['/schools', user.schoolId]">My School</a></li>
+                  @if (user.currentSchoolId) {
+                    <li><a class="dropdown-item" [routerLink]="['/schools', user.currentSchoolId]">My School</a></li>
                   }
                   <li><a class="dropdown-item" [routerLink]="['/settings']">Settings</a></li>
                   <li><hr class="dropdown-divider"></li>

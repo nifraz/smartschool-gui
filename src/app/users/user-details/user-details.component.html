@@ -16,7 +16,7 @@
                     {{ record.sex | titlecase }}
                 </p>
                 <div class="">
-                    @if (authService.loggedInUser?.isPrincipal || authService.loggedInUser?.isTeacher || authService.loggedInUser?.id == record.createdUserId) {
+                    @if (authService.loggedInUser?.id == record.id || authService.loggedInUser?.id == record.createdUserId) {
                         <button class="btn btn-sm btn-primary me-2" (click)="editRecord()">
                             <i class="bi bi-pencil"></i>
                             Edit
