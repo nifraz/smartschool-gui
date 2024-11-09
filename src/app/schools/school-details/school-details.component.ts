@@ -115,6 +115,12 @@ export class SchoolDetailsComponent extends RecordComponent<SchoolModel> impleme
   }
 
   createSchoolStudentEnrollmentRequest() {
+    const userAge = this.authService.loggedInUser?.person.age?.years;
+    if (userAge && userAge >= 21) {
+      this.toastr.warning(`Sorry You cannot request for School Student Enrollment after 21 years. Your current age is ${userAge}.`);
+      return;
+    }
+    
     const dialogRef = this.matDialog.open(CreateSchoolStudentEnrollmentRequestComponent, {
       width: '1200px',
       data: {

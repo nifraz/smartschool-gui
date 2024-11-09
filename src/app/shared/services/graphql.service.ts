@@ -38,7 +38,7 @@ export class GraphqlService {
       .valueChanges;
   }
 
-  getGqlMutationObservable(mutation: string, variables: any, refetchQueries: string[]): Observable<MutationResult<any>> {
+  getGqlMutationObservable(mutation: string, variables: any, refetchQueries: string[] = []): Observable<MutationResult<any>> {
     return this.apollo.mutate<any>({
       mutation: gql `${mutation}`,
       variables: variables,
@@ -77,6 +77,23 @@ export interface RemoteGridApi<T> {
              => Observable<{ data: T[];  totalRecords: number }>;
   getDataError?: (err: any) => void;
   gridApi?: GridApi<T>;
+}
+
+export interface GraphqlCollectionResponse<T> {
+  //res.data.classes.items
+  data: GraphqlCollectionResponseData<T>;
+}
+
+export interface GraphqlCollectionResponseData<T> {
+  [index: string]: GraphqlCollectionResponseDataProperty<T>;
+}
+
+export interface GraphqlCollectionResponseDataProperty<T> {
+  items: T[];
+}
+
+export interface GraphqlCollectionResponseDataPropertyItems<T> {
+
 }
 
 export function convertToEndOfDay(dateString: string | undefined): string {

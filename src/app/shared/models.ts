@@ -57,6 +57,11 @@ export interface UserResponse {
     person: PersonModel;
 }
 
+export interface FormlyOption {
+    value: any | undefined;
+    label: any | undefined;
+}
+
 export enum Sex {
     NotKnown = 0,
     Male = 1,

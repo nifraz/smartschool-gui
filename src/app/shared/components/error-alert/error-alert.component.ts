@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 
 @Component({
   selector: 'app-error-alert',
@@ -10,6 +10,10 @@ import { Component, Input } from '@angular/core';
   templateUrl: './error-alert.component.html',
   styleUrl: './error-alert.component.scss'
 })
-export class ErrorAlertComponent {
+export class ErrorAlertComponent implements OnChanges {
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log(this.error);
+  }
   @Input() error: any | null;
+
 }

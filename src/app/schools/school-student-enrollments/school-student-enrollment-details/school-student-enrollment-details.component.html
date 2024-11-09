@@ -14,6 +14,9 @@
                         {{ record.student?.age?.years }} years, {{ record.student?.age?.months }} months, {{ record.student?.age?.days }} days old | 
                     </span>
                     {{ record.student?.sex | titlecase }}
+                    @if(record.schoolStudentEnrollmentRequest) {
+                        <a [routerLink]="['/schools', record.schoolId, 'student-enrollment-requests', record.schoolStudentEnrollmentRequest.id]">View Request</a>
+                    }
                 </p>
                 <p class="text-muted">Status: {{ record.status | titleCaseWithSpace }}</p>
                 <div class="">

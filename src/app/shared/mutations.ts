@@ -7,7 +7,7 @@ export const CREATE_SCHOOL_STUDENT_ENROLLMENT_REQUEST = `
 `;
 
 export const UPDATE_SCHOOL_STUDENT_ENROLLMENT_REQUEST_STATUS = `
-  mutation updateSchoolStudentEnrollmentRequestStatus($id: Long!, $input: RequestStatus!) {
+  mutation updateSchoolStudentEnrollmentRequestStatus($id: Long!, $input: SchoolStudentEnrollmentRequestStatusUpdateInput!) {
     updateSchoolStudentEnrollmentRequestStatus(id: $id, input: $input) {
       id
     }

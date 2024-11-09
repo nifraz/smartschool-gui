@@ -15,6 +15,8 @@ import { StudentsService } from '../../../students/students.service';
 import { TitleCaseWithSpacePipe } from "../../../shared/pipes/title-case-with-space.pipe";
 import { LaddaModule } from 'angular2-ladda';
 import { UPDATE_SCHOOL_STUDENT_ENROLLMENT_REQUEST_STATUS } from '../../../shared/mutations';
+import { CreateSchoolStudentEnrollmentComponent } from '../../school-student-enrollments/create-school-student-enrollment/create-school-student-enrollment.component';
+import { ApproveSchoolStudentEnrollmentComponent } from '../../school-student-enrollments/approve-school-student-enrollment/approve-school-student-enrollment.component';
 
 @Component({
   selector: 'app-school-student-enrollment-request-details',
@@ -107,9 +109,21 @@ export class SchoolStudentEnrollmentRequestDetailsComponent extends RecordCompon
     this.toastr.error(`Could not delete`, 'Record');
   }
 
-  updateSchoolStudentEnrollmentRequestStatus(input: RequestStatus) {
-    if (input == RequestStatus.Approved) {
-      //open modal
+  updateSchoolStudentEnrollmentRequestStatus(status: RequestStatus) {
+    if (status == RequestStatus.Approved) {
+      const dialogRef = this.matDialog.open(ApproveSchoolStudentEnrollmentComponent, {
+        width: '1200px',
+        data: {
+          schoolStudentEnrollmentRequest: this.record,
+        }
+      });
+  
+      dialogRef.afterClosed().subscribe(result => {
+        // this.router.navigate(['/teachers', this.id]);
+        this.loadRecord();
+        //reload data
+        console.log(result);
+      });
     }
     else {
       this.isLoading = true;
@@ -118,7 +132,10 @@ export class SchoolStudentEnrollmentRequestDetailsComponent extends RecordCompon
       const mutation = UPDATE_SCHOOL_STUDENT_ENROLLMENT_REQUEST_STATUS;
       const variables = {
         id: this.id ? +this.id : 0,
-        input,
+        input: {
+          status,
+          reason: null,
+        },
       };
       const refetchQueries: string[] = [];
 

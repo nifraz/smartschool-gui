@@ -10,20 +10,19 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from '../../../shared/components/base/base.component';
 import { ErrorAlertComponent } from '../../../shared/components/error-alert/error-alert.component';
-import { UserRegisterRequest, Sex, FormlyOption } from '../../../shared/models';
-import { enumToArray, GraphqlCollectionResponse, GraphqlService, toDateOnlyString } from '../../../shared/services/graphql.service';
-import { AcademicYearModel, ClassModel, Grade, PersonModel, SchoolModel, SchoolStudentEnrollmentRequestInput } from '../../../../../graphql/generated';
+import { UserRegisterRequest, Sex } from '../../../shared/models';
+import { enumToArray, GraphqlService, toDateOnlyString } from '../../../shared/services/graphql.service';
+import { AcademicYearModel, ClassModel, Grade, PersonModel, SchoolModel, SchoolStudentEnrollmentInput, SchoolStudentEnrollmentRequestInput, SchoolStudentEnrollmentRequestModel } from '../../../../../graphql/generated';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { GraphqlRecordFormComponent } from '../../../shared/graphql-record-form/graphql-record-form.component';
-import { CREATE_SCHOOL_STUDENT_ENROLLMENT_REQUEST } from '../../../shared/mutations';
+import { CREATE_SCHOOL_STUDENT_ENROLLMENT, CREATE_SCHOOL_STUDENT_ENROLLMENT_REQUEST } from '../../../shared/mutations';
 import { FormComponent } from '../../../shared/components/form/form.component';
 import { map, Observable } from 'rxjs';
 import { GET_ACADEMIC_YEARS, GET_CLASSES_BY_SCHOOL } from '../../../shared/queries';
-import { TitleCaseWithSpacePipe } from '../../../shared/pipes/title-case-with-space.pipe';
-import { groupByToArrays } from '../../../shared/functions';
+import { TitleCaseWithSpacePipe } from "../../../shared/pipes/title-case-with-space.pipe";
 
 @Component({
-  selector: 'app-create-school-student-enrollment-request',
+  selector: 'app-approve-school-student-enrollment',
   standalone: true,
   imports: [
     CommonModule,
@@ -36,23 +35,24 @@ import { groupByToArrays } from '../../../shared/functions';
     FormlyMatDatepickerModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    TitleCaseWithSpacePipe
   ],
   providers: [TitleCaseWithSpacePipe],
-  templateUrl: './create-school-student-enrollment-request.component.html',
-  styleUrl: './create-school-student-enrollment-request.component.scss'
+  templateUrl: './approve-school-student-enrollment.component.html',
+  styleUrl: './approve-school-student-enrollment.component.scss'
 })
-export class CreateSchoolStudentEnrollmentRequestComponent<SchoolStudentEnrollmentRequestModel> extends FormComponent<SchoolStudentEnrollmentRequestModel> implements OnInit {
-  school?: SchoolModel;
-  person?: PersonModel;
+export class ApproveSchoolStudentEnrollmentComponent<SchoolStudentEnrollmentModel> extends FormComponent<SchoolStudentEnrollmentModel> {
+  schoolStudentEnrollmentRequest?: SchoolStudentEnrollmentRequestModel;
 
-  getAcademicYears$?: Observable<FormlyOption[]>;
-  getGradesBySchool$?: Observable<FormlyOption[]>;
+  getAcademicYears$?: Observable<any[]>;
+  getClassesBySchool$?: Observable<any[]>;
   
   form = new FormGroup({});
-  model: SchoolStudentEnrollmentRequestInput = {
+  model: SchoolStudentEnrollmentInput = {
+    schoolStudentEnrollmentRequestId: this.schoolStudentEnrollmentRequest?.id,
     schoolId: 0,
-    academicYearYear: new Date().getFullYear(),
-    grade: Grade.None,
+    academicYearYear: 0,
+    classId: 0,
     personId: 0,
   };
   fields: FormlyFieldConfig[] = [];
@@ -63,31 +63,36 @@ export class CreateSchoolStudentEnrollmentRequestComponent<SchoolStudentEnrollme
     private toastr: ToastrService,
     private graphqlService: GraphqlService,
     private titleCaseWithSpacePipe: TitleCaseWithSpacePipe,
-    private dialogRef: MatDialogRef<CreateSchoolStudentEnrollmentRequestComponent<SchoolStudentEnrollmentRequestModel>>,
+    private dialogRef: MatDialogRef<ApproveSchoolStudentEnrollmentComponent<SchoolStudentEnrollmentModel>>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     // if (this.authService.currentUserValue) {
     //   this.router.navigate(['/']);
     // }
     super();
-    this.title = 'School Student Enrollment Request';
-    this.school = this.data.school;
-    this.person = this.data.person;
+    this.title = 'School Student Enrollment';
+    this.schoolStudentEnrollmentRequest = this.data.schoolStudentEnrollmentRequest;
 
-    this.model.schoolId = this.school?.id;
-    this.model.personId = this.person?.id;
+    this.model.schoolStudentEnrollmentRequestId = this.schoolStudentEnrollmentRequest?.id;
+    this.model.schoolId = this.schoolStudentEnrollmentRequest?.school?.id;
+    this.model.personId = this.schoolStudentEnrollmentRequest?.person?.id;
+    this.model.academicYearYear = this.schoolStudentEnrollmentRequest?.academicYearYear ?? new Date().getFullYear();
   }
 
   ngOnInit() {
     this.getAcademicYears$ = this.graphqlService.getGqlQueryObservable(GET_ACADEMIC_YEARS).pipe(
-      map((res: GraphqlCollectionResponse<AcademicYearModel>) => {
-          return res.data['academicYears'].items.map((x: AcademicYearModel) => ({ value: x.year, label: x.year }));
+      map(res => {
+        if (res && res.data && res.data.academicYears && res.data.academicYears.items) {
+          return res.data.academicYears.items.map((x: AcademicYearModel) => ({ value: x.year, label: x.year }))
+        }
       })
     );
 
-    this.getGradesBySchool$ = this.graphqlService.getGqlQueryObservable(GET_CLASSES_BY_SCHOOL, { schoolId: this.school?.id }).pipe(
-      map((res: GraphqlCollectionResponse<ClassModel>) => {
-          return groupByToArrays(res.data['classes'].items, 'grade').map((x: ClassModel[]) => ({ value: x[0].grade, label: `${this.titleCaseWithSpacePipe.transform(x[0].grade)}` }))
+    this.getClassesBySchool$ = this.graphqlService.getGqlQueryObservable(GET_CLASSES_BY_SCHOOL, { schoolId: this.schoolStudentEnrollmentRequest?.school?.id }).pipe(
+      map(res => {
+        if (res && res.data && res.data.classes && res.data.classes.items) {
+          return res.data.classes.items.map((x: ClassModel) => ({ value: x.id, label: `${this.titleCaseWithSpacePipe.transform(x.grade)} ${x.section} (${x.languageName})` }))
+        }
       })
     );
 
@@ -112,18 +117,17 @@ export class CreateSchoolStudentEnrollmentRequestComponent<SchoolStudentEnrollme
           },
           {
             className: 'col-12 col-md-6',
-            key: 'grade',
+            key: 'classId',
             type: 'select',
             props: {
-              label: 'Grade',
+              label: 'Class',
               type: 'select',
-              placeholder: 'Enter Grade',
-              // options: enumToArray(Grade).map(x => ({ label: x.caption, value: x.value })),
-              options: this.getGradesBySchool$,
+              placeholder: 'Enter Class',
+              options: this.getClassesBySchool$,
               required: true,
             },
             validators: {
-              validation: [(x: AbstractControl) => x && x.value && x.value != 'NONE' ? null : { 'grade': true }],
+              validation: [(x: AbstractControl) => x && x.value ? null : { 'classId': true }],
             },
           },
           
@@ -146,7 +150,7 @@ export class CreateSchoolStudentEnrollmentRequestComponent<SchoolStudentEnrollme
     this.isLoading = true;
     this.error = null;
 
-    const mutation = CREATE_SCHOOL_STUDENT_ENROLLMENT_REQUEST;
+    const mutation = CREATE_SCHOOL_STUDENT_ENROLLMENT;
     const variables = {
       input: this.model,
     };

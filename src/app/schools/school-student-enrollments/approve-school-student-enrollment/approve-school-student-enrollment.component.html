@@ -1,0 +1,21 @@
+<div class="m-3">
+    <div class="modal-header p-2 d-flex justify-content-between">
+        <h2 class="modal-title">{{ 'Approve' + title }}</h2>
+        <button type="button" class="btn btn-secondary" aria-label="Close" (click)="closeModal()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body p-2 mt-2">
+        <h3>School: {{ schoolStudentEnrollmentRequest?.school?.name }}&nbsp;- {{ schoolStudentEnrollmentRequest?.school?.address}}</h3>
+        <h3>Person: {{ schoolStudentEnrollmentRequest?.person?.fullName }}&nbsp;- {{ schoolStudentEnrollmentRequest?.person?.age?.years }}Y-{{ schoolStudentEnrollmentRequest?.person?.age?.months }}M-{{ schoolStudentEnrollmentRequest?.person?.age?.days }}D</h3>
+        <h3>{{ schoolStudentEnrollmentRequest?.grade | titleCaseWithSpace }}</h3>
+        <form class="mb-3" [formGroup]="form" (ngSubmit)="onSubmit()">
+            <formly-form [form]="form" [fields]="fields" [model]="model"></formly-form>
+            <div class="d-grid mb-3">
+                <button type="submit" [disabled]="isLoading" class="btn btn-primary ">Create New Enrollment</button>
+            </div>
+            <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+            <app-error-alert [error]="error"></app-error-alert>
+        </form>
+    </div>
+</div>

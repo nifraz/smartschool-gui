@@ -89,6 +89,10 @@ export const GET_SCHOOL_STUDENT_ENROLLMENT_REQUEST = `
         phoneNo
         type
       }
+      schoolStudentEnrollment {
+        id
+        no
+      }
       schoolName
       academicYearYear
       createdUserId
@@ -135,6 +139,9 @@ export const GET_SCHOOL_STUDENT_ENROLLMENT = `
       }
       studentFullName
       time
+      schoolStudentEnrollmentRequest {
+        id
+      }
       classStudentEnrollments {
         id
         rollNo
@@ -148,10 +155,6 @@ export const GET_SCHOOL_STUDENT_ENROLLMENT = `
 
       createdTime
       createdUserId
-      lastModifiedTime
-      lastModifiedUserId
-      deletedTime
-      deletedUserId
     }
   }
 `;
@@ -167,6 +170,7 @@ export const GET_SCHOOL = `
       phoneNo
       type
       classes {
+        id
         grade
         section
         languageName
@@ -292,6 +296,36 @@ export const GET_TEACHER = `
         status
         schoolId
         schoolName
+      }
+    }
+  }
+`;
+
+export const GET_ACADEMIC_YEARS = `
+  query getAcademicYears {
+    academicYears {
+      items {
+        year
+        endDate
+        startDate
+      }
+    }
+  }
+`;
+
+export const GET_CLASSES_BY_SCHOOL = `
+  query getClassesBySchool($schoolId: Long!) {
+    classes(
+      where: { and: [{ schoolId: { eq: $schoolId } }] }
+    ) {
+      items {
+        id
+        grade
+        section
+        languageCode
+        languageName
+        location
+        schoolId
       }
     }
   }

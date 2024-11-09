@@ -1,10 +1,25 @@
-<div *ngIf="error && error.error" class="alert alert-danger">
-    @if (error.error.message) {
-        <div>{{ error.error.message }}</div>
-    }
-    @if (error.error.errors) {
-        @for (errorEntry of error.error.errors | keyvalue; track errorEntry.value) {
-            <div>{{ errorEntry.value }}</div>
+<div *ngIf="error" class="alert alert-danger">
+    <strong>Errors:</strong>
+    <ul>
+        @if (error.error) {
+            @if (error.error.message) {
+                <li>{{ error.error.message }}</li>
+            }
+            @if (error.error.errors) {
+                @for (errorEntry of error.error.errors | keyvalue; track errorEntry.value) {
+                    <li>{{ errorEntry.value }}</li>
+                }
+            }
         }
-    }
+        @if (error.networkError.error.errors) {
+            @for (error of error.networkError.error.errors; track $index) {
+                <li>
+                    {{ error.message }}
+                    @if (error.extensions) {
+                        <span>: {{ error.extensions.message }}</span>
+                    }
+                </li>
+            }
+        }
+    </ul>
 </div>

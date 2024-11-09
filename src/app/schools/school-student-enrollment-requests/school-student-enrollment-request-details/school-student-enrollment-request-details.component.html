@@ -15,7 +15,12 @@
                     </span>
                     {{ record.person?.sex | titlecase }}
                 </p>
-                <p class="text-muted">{{ record.grade | titleCaseWithSpace }} | Academic Year: {{ record.academicYearYear }} | Status: {{ record.status | titleCaseWithSpace }}</p>
+                <p class="text-muted">
+                    {{ record.grade | titleCaseWithSpace }} | Academic Year: {{ record.academicYearYear }} | Status: {{ record.status | titleCaseWithSpace }}
+                    @if(record.status == RequestStatus.Approved) {
+                        <a [routerLink]="['/schools', record.schoolId, 'student-enrollments', record.schoolStudentEnrollment?.id]">View Enrollment</a>
+                    }
+                </p>
                 <div class="">
                     @if (![RequestStatus.Approved, RequestStatus.Rejected, RequestStatus.Cancelled ].includes(record.status!)) {
                         @if ((authService.loggedInUser?.isPrincipal || authService.loggedInUser?.isTeacher || authService.loggedInUser?.id == record.createdUserId)) {
@@ -98,6 +103,10 @@
                         </div>
                     </div>
                     <div class="card-body">
+                        <p *ngIf="record.school?.name"><i class="bi bi-person-circle"></i> Name: {{ record.school?.name }}</p>
+                        <p *ngIf="record.school?.censusNo"><i class="bi bi-card-list"></i> Census No: {{ record.school?.censusNo }}</p>
+                        <p *ngIf="record.school?.type"><i class="bi bi-card-checklist"></i> Type: {{ record.school?.type | titleCaseWithSpace }}</p>
+
                         <p *ngIf="record.school?.phoneNo">
                             <i class="bi bi-phone"></i>
                             <a href="tel:{{ record.school?.phoneNo }}">
@@ -110,11 +119,8 @@
                                 {{ record.school?.email }}
                             </a>
                         </p>
-                        <p *ngIf="record.school?.address"><i class="bi bi-house"></i> {{ record.school?.address }}</p>
+                        <p *ngIf="record.school?.address"><i class="bi bi-geo-alt"></i> {{ record.school?.address }}</p>
 
-                        <p *ngIf="record.school?.name"><i class="bi bi-person-circle"></i> Nickname: {{ record.school?.name }}</p>
-                        <p *ngIf="record.school?.censusNo"><i class="bi bi-calendar"></i> Date of Birth: {{ record.school?.censusNo | date }}</p>
-                        <p *ngIf="record.school?.type"><i class="bi bi-card-checklist"></i> Birth Certificate No: {{ record.school?.type }}</p>
                     </div>
                 </div>
             </div>

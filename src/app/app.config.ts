@@ -23,7 +23,7 @@ export const appConfig: ApplicationConfig = {
       HttpClientModule,
       ToastrModule.forRoot(
         {
-          timeOut: 3000,
+          timeOut: 5000,
           // positionClass: 'toast-bottom-right',
           // preventDuplicates: true,
         }

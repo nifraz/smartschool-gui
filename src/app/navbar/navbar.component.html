@@ -1,9 +1,9 @@
 <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark shadow">
     <div class="container-fluid">
-        <a class="navbar-brand d-flex" routerLink="/dashboard" routerLinkActive="active">
-            <img src="assets/smartschool-icon.svg" width="25" height="25" class="d-inline-block align-top mx-1" alt="SmartSchool Logo">
+        <a class="navbar-brand d-flex me-2" routerLink="/dashboard" routerLinkActive="active">
+            <img src="assets/images/icons8_classroom_200px_1.png" width="24" height="24" class="d-inline-block align-top ms-1" alt="SmartSchool Logo">
             <span class="mx-1"><strong><u>S</u></strong>mart<strong><u>S</u></strong>chool</span>
-            <span class="badge rounded-pill text-bg-warning px-1 py-0 mb-auto">
+            <span class="badge rounded-pill text-bg-warning mx-1 px-1 py-0 mb-auto">
               beta
               <span class="visually-hidden">beta version</span>
             </span>
@@ -77,7 +77,7 @@
             @if (user) {
               <div class="dropdown text-end">
                 <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                  <img src="https://github.com/nifraz.png" alt="mdo" width="32" height="32" class="rounded-circle">
+                  <img [src]="user.image ? user.image : 'assets/images/icons8_male_user_200px_1.png'" alt="mdo" width="32" height="32" class="rounded-circle">
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end text-small shadow">
                   <li><a class="dropdown-item" [routerLink]="['/users', user.id]">User Profile</a></li>
