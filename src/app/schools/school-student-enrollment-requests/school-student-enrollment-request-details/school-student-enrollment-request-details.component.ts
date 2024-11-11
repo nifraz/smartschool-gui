@@ -19,6 +19,7 @@ import { CreateSchoolStudentEnrollmentComponent } from '../../school-student-enr
 import { ApproveSchoolStudentEnrollmentComponent } from '../../school-student-enrollments/approve-school-student-enrollment/approve-school-student-enrollment.component';
 import { SCHOOL_STUDENT_ENROLLMENT_CREATED } from '../../../shared/subscriptions';
 import { MutationResult } from 'apollo-angular';
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 
 @Component({
   selector: 'app-school-student-enrollment-request-details',
@@ -29,7 +30,8 @@ import { MutationResult } from 'apollo-angular';
     MatProgressBarModule,
     RouterLink,
     TitleCaseWithSpacePipe,
-    LaddaModule
+    LaddaModule,
+    SweetAlert2Module,
 ],
   templateUrl: './school-student-enrollment-request-details.component.html',
   styleUrl: './school-student-enrollment-request-details.component.scss'
@@ -140,6 +142,8 @@ export class SchoolStudentEnrollmentRequestDetailsComponent extends RecordCompon
     else {
       this.isLoading = true;
       this.error = null;
+
+
 
       const mutation = UPDATE_SCHOOL_STUDENT_ENROLLMENT_REQUEST_STATUS;
       const variables = {

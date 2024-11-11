@@ -16,13 +16,13 @@
                     {{ record.sex | titlecase }}
                 </p>
                 <div class="">
-                    @if (authService.loggedInUser?.isPrincipal || authService.loggedInUser?.isTeacher || authService.loggedInUser?.id == record.createdUserId) {
+                    @if (authService.loggedInUser?.principalId || authService.loggedInUser?.teacherId || authService.loggedInUser?.id == record.createdUserId) {
                         <button class="btn btn-sm btn-primary me-2" (click)="editRecord()">
                             <i class="bi bi-pencil"></i>
                             Edit
                         </button>
                     }
-                    <!-- @if (authService.loggedInUser?.isPrincipal) {
+                    <!-- @if (authService.loggedInUser?.principalId) {
                         <button class="btn btn-sm btn-danger me-2" (click)="deleteRecord()">
                             <i class="bi bi-trash"></i>
                             Delete
@@ -104,7 +104,7 @@
                             <i class="bi bi-journal"></i> Enrollment Details
                         </div>
                         <div>
-                            @if (authService.loggedInUser?.isPrincipal) {
+                            @if (authService.loggedInUser?.principalId) {
                                 <button class="btn btn-sm btn-primary" (click)="addSchoolStudentEnrollment()">
                                     <i class="bi bi-plus"></i>
                                     New

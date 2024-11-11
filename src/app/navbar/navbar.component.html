@@ -15,7 +15,7 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav me-auto mb-2 mb-md-0">
 
-                @if (user && (user.isStudent || user.isGuardian || user.isStaff || user.isTeacher || user.isPrincipal)) {
+                @if (authService.loggedInUser && (authService.loggedInUser.studentId || authService.loggedInUser.guardianId || authService.loggedInUser.staffId || authService.loggedInUser.teacherId || authService.loggedInUser.principalId)) {
                   <li class="nav-item">
                     <div class="btn-group">
                       <a class="nav-link" routerLink="/schools" routerLinkActive="active">Schools</a>
@@ -34,7 +34,7 @@
                   </li>
                 }
 
-                @if (user && (user.isStudent || user.isStaff || user.isTeacher || user.isPrincipal)) {
+                @if (authService.loggedInUser && (authService.loggedInUser.studentId || authService.loggedInUser.staffId || authService.loggedInUser.teacherId || authService.loggedInUser.principalId)) {
                   <li class="nav-item">
                       <div class="btn-group">
                         <a class="nav-link btn" routerLink="/students" routerLinkActive="active">Students</a>
@@ -52,7 +52,7 @@
                   </li>
                 }
 
-                @if (user && (user.isStaff || user.isTeacher || user.isPrincipal)) {
+                @if (authService.loggedInUser && (authService.loggedInUser.staffId || authService.loggedInUser.teacherId || authService.loggedInUser.principalId)) {
                   <li class="nav-item">
                     <div class="btn-group">
                       <a class="nav-link" routerLink="/teachers" routerLinkActive="active">Teachers</a>
@@ -74,24 +74,24 @@
               <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
             </form> -->
 
-            @if (user) {
+            @if (authService.loggedInUser) {
               <div class="dropdown text-end">
                 <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                  <img [src]="user.image ? user.image : 'assets/images/icons8_male_user_200px_1.png'" alt="mdo" width="32" height="32" class="rounded-circle">
+                  <img [src]="authService.loggedInUser.person?.image ? authService.loggedInUser.person?.image : 'assets/images/icons8_male_user_200px_1.png'" alt="mdo" width="32" height="32" class="rounded-circle">
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end text-small shadow">
-                  <li><a class="dropdown-item" [routerLink]="['/users', user.id]">User Profile</a></li>
-                  @if (user.studentId) {
-                    <li><a class="dropdown-item" [routerLink]="['/students', user.studentId]">Student Profile</a></li>
+                  <li><a class="dropdown-item" [routerLink]="['/users', authService.loggedInUser.id]">User Profile</a></li>
+                  @if (authService.loggedInUser.studentId) {
+                    <li><a class="dropdown-item" [routerLink]="['/students', authService.loggedInUser.studentId]">Student Profile</a></li>
                   }
-                  @if (user.teacherId) {
-                    <li><a class="dropdown-item" [routerLink]="['/teachers', user.teacherId]">Teacher Profile</a></li>
+                  @if (authService.loggedInUser.teacherId) {
+                    <li><a class="dropdown-item" [routerLink]="['/teachers', authService.loggedInUser.teacherId]">Teacher Profile</a></li>
                   }
-                  @if (user.principalId) {
-                    <li><a class="dropdown-item" [routerLink]="['/principals', user.principalId]">Principal Profile</a></li>
+                  @if (authService.loggedInUser.principalId) {
+                    <li><a class="dropdown-item" [routerLink]="['/principals', authService.loggedInUser.principalId]">Principal Profile</a></li>
                   }
-                  @if (user.currentSchoolId) {
-                    <li><a class="dropdown-item" [routerLink]="['/schools', user.currentSchoolId]">My School</a></li>
+                  @if (authService.loggedInUser.currentSchoolId) {
+                    <li><a class="dropdown-item" [routerLink]="['/schools', authService.loggedInUser.currentSchoolId]">My School</a></li>
                   }
                   <li><a class="dropdown-item" [routerLink]="['/settings']">Settings</a></li>
                   <li><hr class="dropdown-divider"></li>

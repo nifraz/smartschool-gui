@@ -3,17 +3,25 @@ export const GET_USER = `
   query getUser($id: Long!) {
     user(id: $id) {
       id
-      address
-      bcNo
-      mobileNo
-      dateOfBirth
-      email
-      fullName
-      nickname
-      nicNo
-      passportNo
-      sex
-      shortName
+      person {
+        address
+        bcNo
+        mobileNo
+        dateOfBirth
+        email
+        fullName
+        nickname
+        nicNo
+        passportNo
+        sex
+        shortName
+        image
+        age {
+          years
+          months
+          days
+        }
+      }
       currentSchoolId
   
       guardianId
@@ -22,11 +30,6 @@ export const GET_USER = `
       teacherId
       principalId
 
-      age {
-        years
-        months
-        days
-      }
       createdSchoolStudentEnrollmentRequests {
         id
         grade

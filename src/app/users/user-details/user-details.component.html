@@ -7,13 +7,13 @@
         <div class="row">
             <!-- Main Info Section -->
             <div class="col-12 col-md-12 mb-4 text-center mb-4">
-                <img src="assets/images/icons8_male_user_200px.png" alt="{{ record.fullName }}" class="rounded-circle" width="200" height="200">
-                <h2 class="mt-3">{{ record.fullName }}</h2>
+                <img src="assets/images/icons8_male_user_200px.png" alt="{{ record.person?.fullName }}" class="rounded-circle" width="200" height="200">
+                <h2 class="mt-3">{{ record.person?.fullName }}</h2>
                 <p class="text-muted">
-                    <span *ngIf="record.age">
-                        {{ record.age.years }} years, {{ record.age.months }} months, {{ record.age.days }} days old | 
+                    <span *ngIf="record.person?.age">
+                        {{ record.person?.age?.years }} years, {{ record.person?.age?.months }} months, {{ record.person?.age?.days }} days old | 
                     </span>
-                    {{ record.sex | titlecase }}
+                    {{ record.person?.sex | titlecase }}
                 </p>
                 <div class="">
                     @if (authService.loggedInUser?.id == record.id || authService.loggedInUser?.id == record.createdUserId) {
@@ -22,7 +22,7 @@
                             Edit
                         </button>
                     }
-                    <!-- @if (authService.loggedInUser?.isPrincipal) {
+                    <!-- @if (authService.loggedInUser?.principalId) {
                         <button class="btn btn-sm btn-danger me-2" (click)="deleteRecord()">
                             <i class="bi bi-trash"></i>
                             Delete
@@ -43,11 +43,11 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <p *ngIf="record.nickname"><i class="bi bi-person-circle"></i> Nickname: {{ record.nickname }}</p>
-                        <p *ngIf="record.dateOfBirth"><i class="bi bi-calendar"></i> Date of Birth: {{ record.dateOfBirth | date }}</p>
-                        <p *ngIf="record.bcNo"><i class="bi bi-card-checklist"></i> Birth Certificate No: {{ record.bcNo }}</p>
-                        <p *ngIf="record.nicNo"><i class="bi bi-card-list"></i> NIC No: {{ record.nicNo }}</p>
-                        <p *ngIf="record.passportNo"><i class="bi bi-card-heading"></i> Passport No: {{ record.passportNo }}</p>
+                        <p *ngIf="record.person?.nickname"><i class="bi bi-person-circle"></i> Nickname: {{ record.person?.nickname }}</p>
+                        <p *ngIf="record.person?.dateOfBirth"><i class="bi bi-calendar"></i> Date of Birth: {{ record.person?.dateOfBirth | date }}</p>
+                        <p *ngIf="record.person?.bcNo"><i class="bi bi-card-checklist"></i> Birth Certificate No: {{ record.person?.bcNo }}</p>
+                        <p *ngIf="record.person?.nicNo"><i class="bi bi-card-list"></i> NIC No: {{ record.person?.nicNo }}</p>
+                        <p *ngIf="record.person?.passportNo"><i class="bi bi-card-heading"></i> Passport No: {{ record.person?.passportNo }}</p>
                     </div>
                 </div>
             </div>
@@ -63,19 +63,19 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <p *ngIf="record.mobileNo">
+                        <p *ngIf="record.person?.mobileNo">
                             <i class="bi bi-phone"></i>
-                            <a href="tel:{{ record.mobileNo }}">
-                                {{ record.mobileNo }}
+                            <a href="tel:{{ record.person?.mobileNo }}">
+                                {{ record.person?.mobileNo }}
                             </a>
                         </p>
-                        <p *ngIf="record.email">
+                        <p *ngIf="record.person?.email">
                             <i class="bi bi-envelope"></i>
-                            <a href="mailto:{{ record.email }}">
-                                {{ record.email }}
+                            <a href="mailto:{{ record.person?.email }}">
+                                {{ record.person?.email }}
                             </a>
                         </p>
-                        <p *ngIf="record.address"><i class="bi bi-house"></i> {{ record.address }}</p>
+                        <p *ngIf="record.person?.address"><i class="bi bi-house"></i> {{ record.person?.address }}</p>
                     </div>
                 </div>
             </div>

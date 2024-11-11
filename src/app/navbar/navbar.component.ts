@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/router';
-import { UserResponse } from '../shared/models';
 import { AuthService } from '../auth/auth.service';
 import { iif, of, Subject, switchMap, takeUntil } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
@@ -21,10 +20,9 @@ import { BaseComponent } from '../shared/components/base/base.component';
 })
 export class NavbarComponent extends BaseComponent implements OnInit, OnDestroy {
   destroy$: Subject<boolean> = new Subject<boolean>();
-  user?: UserResponse | null;
   
   constructor(
-    private authService: AuthService,
+    public authService: AuthService,
     private toastr: ToastrService,
     private router: Router,
   ) {
@@ -44,7 +42,6 @@ export class NavbarComponent extends BaseComponent implements OnInit, OnDestroy 
     ).subscribe({
       next: res => {
         this.isLoading = false;
-        this.user = res;
       },
       error: err => {
         this.isLoading = false;

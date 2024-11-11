@@ -1032,6 +1032,11 @@ export type SchoolStudentEnrollmentsCollectionSegment = {
   totalCount: Scalars['Int']['output'];
 };
 
+export type SchoolSubscription = {
+  __typename?: 'SchoolSubscription';
+  schoolStudentEnrollmentCreated: SchoolStudentEnrollmentModel;
+};
+
 export type SchoolTeacherEnrollmentModel = {
   __typename?: 'SchoolTeacherEnrollmentModel';
   createdTime?: Maybe<Scalars['DateTime']['output']>;
@@ -1374,107 +1379,74 @@ export type TeachersCollectionSegment = {
 
 export type UserModel = {
   __typename?: 'UserModel';
-  address?: Maybe<Scalars['String']['output']>;
-  age?: Maybe<AgeModel>;
-  bcNo?: Maybe<Scalars['String']['output']>;
   createdSchoolStudentEnrollmentRequests: Array<SchoolStudentEnrollmentRequestModel>;
   createdTime?: Maybe<Scalars['DateTime']['output']>;
   createdUser?: Maybe<UserModel>;
   createdUserId?: Maybe<Scalars['Long']['output']>;
   currentSchoolId?: Maybe<Scalars['Long']['output']>;
-  dateOfBirth?: Maybe<Scalars['Date']['output']>;
   deletedSchoolStudentEnrollmentRequests: Array<SchoolStudentEnrollmentRequestModel>;
   deletedTime?: Maybe<Scalars['DateTime']['output']>;
   deletedUser?: Maybe<UserModel>;
   deletedUserId?: Maybe<Scalars['Long']['output']>;
-  email?: Maybe<Scalars['String']['output']>;
-  fullName?: Maybe<Scalars['String']['output']>;
   guardianId?: Maybe<Scalars['Long']['output']>;
   id?: Maybe<Scalars['Long']['output']>;
-  image?: Maybe<Scalars['String']['output']>;
   lastModifiedSchoolStudentEnrollmentRequests: Array<SchoolStudentEnrollmentRequestModel>;
   lastModifiedTime?: Maybe<Scalars['DateTime']['output']>;
   lastModifiedUser?: Maybe<UserModel>;
   lastModifiedUserId?: Maybe<Scalars['Long']['output']>;
-  mobileNo?: Maybe<Scalars['String']['output']>;
-  nicNo?: Maybe<Scalars['String']['output']>;
-  nickname?: Maybe<Scalars['String']['output']>;
   notes?: Maybe<Scalars['String']['output']>;
-  passportNo?: Maybe<Scalars['String']['output']>;
+  person?: Maybe<PersonModel>;
+  personId?: Maybe<Scalars['Long']['output']>;
   principalId?: Maybe<Scalars['Long']['output']>;
-  sex?: Maybe<Sex>;
-  shortName?: Maybe<Scalars['String']['output']>;
   staffId?: Maybe<Scalars['Long']['output']>;
   studentId?: Maybe<Scalars['Long']['output']>;
   teacherId?: Maybe<Scalars['Long']['output']>;
 };
 
 export type UserModelFilterInput = {
-  address?: InputMaybe<StringOperationFilterInput>;
-  age?: InputMaybe<AgeModelFilterInput>;
   and?: InputMaybe<Array<UserModelFilterInput>>;
-  bcNo?: InputMaybe<StringOperationFilterInput>;
   createdSchoolStudentEnrollmentRequests?: InputMaybe<ListFilterInputTypeOfSchoolStudentEnrollmentRequestModelFilterInput>;
   createdTime?: InputMaybe<DateTimeOperationFilterInput>;
   createdUser?: InputMaybe<UserModelFilterInput>;
   createdUserId?: InputMaybe<LongOperationFilterInput>;
   currentSchoolId?: InputMaybe<LongOperationFilterInput>;
-  dateOfBirth?: InputMaybe<DateOperationFilterInput>;
   deletedSchoolStudentEnrollmentRequests?: InputMaybe<ListFilterInputTypeOfSchoolStudentEnrollmentRequestModelFilterInput>;
   deletedTime?: InputMaybe<DateTimeOperationFilterInput>;
   deletedUser?: InputMaybe<UserModelFilterInput>;
   deletedUserId?: InputMaybe<LongOperationFilterInput>;
-  email?: InputMaybe<StringOperationFilterInput>;
-  fullName?: InputMaybe<StringOperationFilterInput>;
   guardianId?: InputMaybe<LongOperationFilterInput>;
   id?: InputMaybe<LongOperationFilterInput>;
-  image?: InputMaybe<StringOperationFilterInput>;
   lastModifiedSchoolStudentEnrollmentRequests?: InputMaybe<ListFilterInputTypeOfSchoolStudentEnrollmentRequestModelFilterInput>;
   lastModifiedTime?: InputMaybe<DateTimeOperationFilterInput>;
   lastModifiedUser?: InputMaybe<UserModelFilterInput>;
   lastModifiedUserId?: InputMaybe<LongOperationFilterInput>;
-  mobileNo?: InputMaybe<StringOperationFilterInput>;
-  nicNo?: InputMaybe<StringOperationFilterInput>;
-  nickname?: InputMaybe<StringOperationFilterInput>;
   notes?: InputMaybe<StringOperationFilterInput>;
   or?: InputMaybe<Array<UserModelFilterInput>>;
-  passportNo?: InputMaybe<StringOperationFilterInput>;
+  person?: InputMaybe<PersonModelFilterInput>;
+  personId?: InputMaybe<LongOperationFilterInput>;
   principalId?: InputMaybe<LongOperationFilterInput>;
-  sex?: InputMaybe<NullableOfSexOperationFilterInput>;
-  shortName?: InputMaybe<StringOperationFilterInput>;
   staffId?: InputMaybe<LongOperationFilterInput>;
   studentId?: InputMaybe<LongOperationFilterInput>;
   teacherId?: InputMaybe<LongOperationFilterInput>;
 };
 
 export type UserModelSortInput = {
-  address?: InputMaybe<SortEnumType>;
-  age?: InputMaybe<AgeModelSortInput>;
-  bcNo?: InputMaybe<SortEnumType>;
   createdTime?: InputMaybe<SortEnumType>;
   createdUser?: InputMaybe<UserModelSortInput>;
   createdUserId?: InputMaybe<SortEnumType>;
   currentSchoolId?: InputMaybe<SortEnumType>;
-  dateOfBirth?: InputMaybe<SortEnumType>;
   deletedTime?: InputMaybe<SortEnumType>;
   deletedUser?: InputMaybe<UserModelSortInput>;
   deletedUserId?: InputMaybe<SortEnumType>;
-  email?: InputMaybe<SortEnumType>;
-  fullName?: InputMaybe<SortEnumType>;
   guardianId?: InputMaybe<SortEnumType>;
   id?: InputMaybe<SortEnumType>;
-  image?: InputMaybe<SortEnumType>;
   lastModifiedTime?: InputMaybe<SortEnumType>;
   lastModifiedUser?: InputMaybe<UserModelSortInput>;
   lastModifiedUserId?: InputMaybe<SortEnumType>;
-  mobileNo?: InputMaybe<SortEnumType>;
-  nicNo?: InputMaybe<SortEnumType>;
-  nickname?: InputMaybe<SortEnumType>;
   notes?: InputMaybe<SortEnumType>;
-  passportNo?: InputMaybe<SortEnumType>;
+  person?: InputMaybe<PersonModelSortInput>;
+  personId?: InputMaybe<SortEnumType>;
   principalId?: InputMaybe<SortEnumType>;
-  sex?: InputMaybe<SortEnumType>;
-  shortName?: InputMaybe<SortEnumType>;
   staffId?: InputMaybe<SortEnumType>;
   studentId?: InputMaybe<SortEnumType>;
   teacherId?: InputMaybe<SortEnumType>;

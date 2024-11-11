@@ -26,7 +26,7 @@ export interface AuthenticateResponse {
     expires: string;
 }
 
-export interface UserResponse {
+export interface RegisterResponse {
     id: number;
     fullName: string;
     shortName: string;
@@ -40,21 +40,22 @@ export interface UserResponse {
     email?: string | null;
     address?: string | null;
     image?: string | null;
-    currentSchoolId?: number | null;
 
-    isGuardian: boolean;
-    isStudent: boolean;
-    isStaff: boolean;
-    isTeacher: boolean;
-    isPrincipal: boolean;
+    isEmailVerified: boolean;
+    isMobileNoVerified: boolean;
+}
 
-    guardianId: number | null;
-    studentId: number | null;
-    staffId: number | null;
-    teacherId: number | null;
-    principalId: number | null;
+export interface VerifyEmailRequest
+{
+    email: string;
+    otp: string;
+    token: string;
+}
 
-    person: PersonModel;
+export interface VerifyEmailResponse
+{
+    email: string;
+    isEmailVerified: boolean;
 }
 
 export interface FormlyOption {
