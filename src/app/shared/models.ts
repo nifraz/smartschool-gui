@@ -24,38 +24,29 @@ export interface AuthenticateResponse {
   fullName: string;
   email: string;
   mobileNo: string;
+  isEmailVerified: boolean;
+  isMobileNoVerified: boolean;
   token: string;
   expires: string;
 }
 
-export interface RegisterResponse {
-  id: number;
-  fullName: string;
-  shortName: string;
-  nickname?: string | null;
-  dateOfBirth?: string | null;
-  bcNo?: string | null;
-  sex: Sex;
-  nicNo?: string | null;
-  passportNo?: string | null;
-  mobileNo?: string | null;
+export interface VerifyRequest {
   email?: string | null;
-  address?: string | null;
-  image?: string | null;
+  emailOtp?: string | null;
+  emailToken?: string | null;
 
+  mobileNo?: string | null;
+  mobileNoOtp?: string | null;
+  mobileNoToken?: string | null;
+}
+
+
+export interface UserResponse {
+  id: number;
+  email?: string | null;
   isEmailVerified: boolean;
+  mobileNo?: string | null;
   isMobileNoVerified: boolean;
-}
-
-export interface VerifyEmailRequest {
-  email: string;
-  otp: string;
-  token: string;
-}
-
-export interface VerifyEmailResponse {
-  email: string;
-  isEmailVerified: boolean;
 }
 
 export interface AgGridFilter {

@@ -180,11 +180,11 @@ export class RegisterComponent extends BaseComponent implements OnInit {
 
     this.authService.register(this.model)
       .subscribe({
-        next: () => {
+        next: (res) => {
           this.isLoading = false;
           this.error = null;
-          this.toastr.success(`Registration Successful. Please Login.`, 'Register');
-          this.router.navigate(['/auth', 'login']);
+          this.toastr.success(`Registration successful. Verification code has been sent.`, 'Register');
+          this.router.navigate(['/auth', 'verify'], { queryParams: { email: res.email }});
         },
         error: error => {
           this.isLoading = false;

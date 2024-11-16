@@ -1,0 +1,23 @@
+<div class="m-3">
+    @if (email || mobileNo) {
+        @if (!token) {
+            <h2 class="card-title text-center mb-1">Verify {{ email ? 'Email' : 'Mobile No' }}</h2>
+            @if (email) {
+                <h4 class="card-title text-center mb-3">{{ email }}</h4>
+            }
+            @else {
+                <h4 class="card-title text-center mb-3">{{ mobileNo }}</h4>
+            }
+            <h3 class="card-title text-center mb-1">Enter the Verification Code:{{ mobileNo }}</h3>
+            <form class="mb-3" [formGroup]="form" (ngSubmit)="onSubmit()">
+                <ng-otp-input (onInputChange)="onOtpChange($event)" [config]="{ length: 6, allowNumbersOnly: true }"></ng-otp-input>
+                <div class="d-grid my-3">
+                    <button type="submit" [disabled]="isLoading || !otp || otp.length < 6" class="btn btn-primary ">Verify</button>
+                </div>
+                <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+                <app-error-alert [error]="error"></app-error-alert>
+                <a class="" [routerLink]="['/auth', 'login']" routerLinkActive="active">&gt;&gt;&gt; Resend Code</a>
+            </form>
+        }
+    }
+</div>

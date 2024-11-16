@@ -47,7 +47,6 @@ export class CreateSchoolStudentEnrollmentComponent<SchoolStudentEnrollmentModel
   getAcademicYears$?: Observable<FormlyOption[]>;
   getClassesBySchool$?: Observable<FormlyOption[]>;
   
-  form = new FormGroup({});
   model: SchoolStudentEnrollmentInput = {
     schoolId: 0,
     academicYearYear: 0,

@@ -15,7 +15,6 @@ import { DocumentNode } from 'graphql';
 export class GraphqlFormComponent<T> extends FormComponent<T> {
   type: string = '';
 
-  @Input() form: FormGroup = new FormGroup({});
   @Input() model!: T;
   @Input() fields: FormlyFieldConfig[] = [];
   

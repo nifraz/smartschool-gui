@@ -27,6 +27,7 @@ import { UserDetailsComponent } from './users/user-details/user-details.componen
 import { UserSchoolStudentEnrollmentRequestsComponent } from './users/user-school-student-enrollment-requests/user-school-student-enrollment-requests.component';
 import { UserSchoolTeacherEnrollmentRequestsComponent } from './users/user-school-teacher-enrollment-requests/user-school-teacher-enrollment-requests.component';
 import { UsersComponent } from './users/users.component';
+import { VerifyComponent } from './auth/verify/verify.component';
 
 export const routes: Routes = [
     //main
@@ -38,6 +39,7 @@ export const routes: Routes = [
         children: [
             { path: 'login', title: 'Login | SmartSchool', component: LoginComponent, canActivate: [accountGuard] },
             { path: 'register', title: 'Register | SmartSchool', component: RegisterComponent, canActivate: [accountGuard] },
+            { path: 'verify', title: 'Verify | SmartSchool', component: VerifyComponent, canActivate: [accountGuard] },
         ],
     },
 

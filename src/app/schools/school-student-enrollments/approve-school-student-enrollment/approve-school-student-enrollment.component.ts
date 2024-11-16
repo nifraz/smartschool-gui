@@ -47,7 +47,6 @@ export class ApproveSchoolStudentEnrollmentComponent<SchoolStudentEnrollmentMode
   getAcademicYears$?: Observable<any[]>;
   getClassesBySchool$?: Observable<any[]>;
   
-  form = new FormGroup({});
   model: SchoolStudentEnrollmentInput = {
     schoolStudentEnrollmentRequestId: this.schoolStudentEnrollmentRequest?.id,
     schoolId: 0,

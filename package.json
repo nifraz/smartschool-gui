@@ -31,6 +31,7 @@
     "bootstrap": "^5.3.3",
     "graphql": "^15.9.0",
     "graphql-ws": "^5.16.0",
+    "ng-otp-input": "^1.9.3",
     "ngx-toastr": "^19.0.0",
     "rxjs": "~7.8.0",
     "smartschool-gui": "file:",

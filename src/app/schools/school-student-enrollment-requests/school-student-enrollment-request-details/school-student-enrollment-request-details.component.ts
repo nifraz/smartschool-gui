@@ -19,7 +19,6 @@ import { CreateSchoolStudentEnrollmentComponent } from '../../school-student-enr
 import { ApproveSchoolStudentEnrollmentComponent } from '../../school-student-enrollments/approve-school-student-enrollment/approve-school-student-enrollment.component';
 import { SCHOOL_STUDENT_ENROLLMENT_CREATED } from '../../../shared/subscriptions';
 import { MutationResult } from 'apollo-angular';
-import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { GraphqlTypes, GraphqlCollections } from '../../../shared/enums';
 
 @Component({
@@ -32,7 +31,6 @@ import { GraphqlTypes, GraphqlCollections } from '../../../shared/enums';
     RouterLink,
     TitleCaseWithSpacePipe,
     LaddaModule,
-    SweetAlert2Module,
 ],
   templateUrl: './school-student-enrollment-request-details.component.html',
   styleUrl: './school-student-enrollment-request-details.component.scss'

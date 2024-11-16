@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, catchError, iif, map, Observable, of, switchMap, tap, throwError } from 'rxjs';
-import { AuthenticateResponse, UserLoginRequest, UserRegisterRequest, VerifyEmailRequest, VerifyEmailResponse } from '../shared/models';
+import { AuthenticateResponse, UserLoginRequest, UserRegisterRequest, VerifyRequest, UserResponse } from '../shared/models';
 import moment, { Moment } from 'moment';
 import { UserModel } from '../../../graphql/generated';
 import { GraphqlService } from '../shared/services/graphql.service';
@@ -20,15 +20,16 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private graphqlService: GraphqlService,
+    private router: Router
   ) {
     this.userLoggedSubject = new BehaviorSubject<number>(this.getUserId());
     this.userLogged = this.userLoggedSubject.asObservable();
   }
 
-  register(model: UserRegisterRequest): Observable<AuthenticateResponse> {
+  register(model: UserRegisterRequest): Observable<UserResponse> {
     return iif(
       () => !!(model.password == model.password2),
-      this.http.post<any>('https://localhost:5001/api/auth/register', model),
+      this.http.post<UserResponse>('https://localhost:5001/api/auth/register', model),
       throwError(() => ({
         error: {
           message: "Passwords do not match.",
@@ -37,15 +38,21 @@ export class AuthService {
     )
   }
 
-  verifyEmail(model: VerifyEmailRequest): Observable<VerifyEmailResponse> {
-    return this.http.post<VerifyEmailResponse>('https://localhost:5001/api/auth/verify-email', model);
+  verify(model: VerifyRequest): Observable<UserResponse> {
+    return this.http.put<UserResponse>('https://localhost:5001/api/auth/verify', model);
   }
   
   login(model: UserLoginRequest): Observable<AuthenticateResponse> {
     return this.http.post<AuthenticateResponse>('https://localhost:5001/api/auth/login', model).pipe(
       tap(res => {
-        this.setSession(res);
-        this.userLoggedSubject.next(res.userId);
+        if ((model.email && res.isEmailVerified) || (model.mobileNo && res.isMobileNoVerified)) {
+          this.setSession(res);
+          this.userLoggedSubject.next(res.userId);
+          this.router.navigate(['/']);
+        }
+        else {
+          this.router.navigate(['/auth', 'verify'], { queryParams: { email: model.email, mobileNo: model.mobileNo }});
+        }
       })
     );
   }

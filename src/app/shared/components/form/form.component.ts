@@ -19,4 +19,5 @@ export abstract class FormComponent<T> extends BaseComponent {
   oldRecord?: T;
   isAddAnother?: boolean;
 
+  @Input() form: FormGroup = new FormGroup({});
 }

@@ -100,7 +100,6 @@ export class LoginComponent {
         next: () => {
           this.loading = false;
           this.error = null;
-          this.router.navigate(['/']);
         },
         error: error => {
           this.loading = false;

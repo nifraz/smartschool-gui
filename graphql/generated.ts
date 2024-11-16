@@ -83,6 +83,11 @@ export type AgeModelSortInput = {
   years?: InputMaybe<SortEnumType>;
 };
 
+export type BooleanOperationFilterInput = {
+  eq?: InputMaybe<Scalars['Boolean']['input']>;
+  neq?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
 export type ClassModel = {
   __typename?: 'ClassModel';
   classStudentEnrollments: Array<ClassStudentEnrollmentModel>;
@@ -1429,6 +1434,8 @@ export type UserModel = {
   deletedUserId?: Maybe<Scalars['Long']['output']>;
   guardianId?: Maybe<Scalars['Long']['output']>;
   id?: Maybe<Scalars['Long']['output']>;
+  isEmailVerified?: Maybe<Scalars['Boolean']['output']>;
+  isMobileNoVerified?: Maybe<Scalars['Boolean']['output']>;
   label?: Maybe<Scalars['String']['output']>;
   lastModifiedSchoolStudentEnrollmentRequests: Array<SchoolStudentEnrollmentRequestModel>;
   lastModifiedTime?: Maybe<Scalars['DateTime']['output']>;
@@ -1456,6 +1463,8 @@ export type UserModelFilterInput = {
   deletedUserId?: InputMaybe<LongOperationFilterInput>;
   guardianId?: InputMaybe<LongOperationFilterInput>;
   id?: InputMaybe<LongOperationFilterInput>;
+  isEmailVerified?: InputMaybe<BooleanOperationFilterInput>;
+  isMobileNoVerified?: InputMaybe<BooleanOperationFilterInput>;
   label?: InputMaybe<StringOperationFilterInput>;
   lastModifiedSchoolStudentEnrollmentRequests?: InputMaybe<ListFilterInputTypeOfSchoolStudentEnrollmentRequestModelFilterInput>;
   lastModifiedTime?: InputMaybe<DateTimeOperationFilterInput>;
@@ -1481,6 +1490,8 @@ export type UserModelSortInput = {
   deletedUserId?: InputMaybe<SortEnumType>;
   guardianId?: InputMaybe<SortEnumType>;
   id?: InputMaybe<SortEnumType>;
+  isEmailVerified?: InputMaybe<SortEnumType>;
+  isMobileNoVerified?: InputMaybe<SortEnumType>;
   label?: InputMaybe<SortEnumType>;
   lastModifiedTime?: InputMaybe<SortEnumType>;
   lastModifiedUser?: InputMaybe<UserModelSortInput>;
