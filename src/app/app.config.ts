@@ -16,6 +16,7 @@ import { getMainDefinition } from '@apollo/client/utilities';
 import { Kind } from 'graphql';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { createClient } from 'graphql-ws';
+import { AutocompleteTypeComponent } from './shared/components/autocomplete-type/autocomplete-type.component';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -32,7 +33,16 @@ export const appConfig: ApplicationConfig = {
           // preventDuplicates: true,
         }
       ),
-      FormlyModule.forRoot(),
+      FormlyModule.forRoot({
+        types: [
+          {
+            name: 'autocomplete',
+            component: AutocompleteTypeComponent,
+            wrappers: ['form-field'],
+          },
+        ],
+        validationMessages: [{ name: 'required', message: 'This field is required' }],
+      }),
       FormlyMaterialModule,
     ),
     {

@@ -113,6 +113,18 @@ export class GraphqlRecordFormComponent<M, I> extends GraphqlFormComponent<I> im
       //show toast message
       return;
     }
+
+    for (const key in this.model) {
+      if (Object.prototype.hasOwnProperty.call(this.model, key)) {
+        const value = this.model[key];
+  
+        // Check if the property value is an object and contains a `value` property
+        if (value && typeof value === 'object' && 'value' in value) {
+          // Ensure TypeScript knows `value` is a property of the value
+          this.model[key] = (value as { value: any }).value;
+        }
+      }
+    }
     
     const mutation = this.isEditMode ? this.recordUpdateMutation : this.recordCreateMutation;
 

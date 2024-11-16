@@ -2,6 +2,9 @@
     <strong>Errors:</strong>
     <ul>
         @if (error.error) {
+            @if ((error.error | typeof) === 'number') {
+                <li>{{ error.error }}</li>
+            }
             @if (error.error.message) {
                 <li>{{ error.error.message }}</li>
             }
@@ -11,7 +14,7 @@
                 }
             }
         }
-        @if (error.networkError.error.errors) {
+        @if (error.networkError) {
             @for (error of error.networkError.error.errors; track $index) {
                 <li>
                     {{ error.message }}

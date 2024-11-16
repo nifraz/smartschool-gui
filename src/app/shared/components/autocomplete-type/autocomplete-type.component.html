@@ -1,0 +1,16 @@
+<input
+  matInput
+  [matAutocomplete]="auto"
+  [formControl]="formControl"
+  [formlyAttributes]="field"
+  [placeholder]="props.placeholder || ''"
+  [errorStateMatcher]="errorStateMatcher"
+/>
+<mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+  <mat-option
+    *ngFor="let option of filter | async"
+    [value]="option"
+  >
+    {{ option.label }}
+  </mat-option>
+</mat-autocomplete>

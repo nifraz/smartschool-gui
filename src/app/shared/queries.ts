@@ -47,18 +47,6 @@ export const GET_USER = gql`
   }
 `;
 
-export const GET_STUDENT_EMAILS_COUNT = gql`
-  query getStudentEmailsCount($email: String!) {
-    students(
-      skip: 0
-      take: 1
-      where: { and: [{email: {eq: $email}}] } 
-    ) {
-      totalCount
-    }
-  }
-`;
-
 export const GET_SCHOOL_STUDENT_ENROLLMENT_REQUEST = gql`
   query getSchoolStudentEnrollmentRequest($id: Long!) {
     schoolStudentEnrollmentRequest(id: $id) {
@@ -162,6 +150,24 @@ export const GET_SCHOOL_STUDENT_ENROLLMENT = gql`
 
       createdTime
       createdUserId
+    }
+  }
+`;
+
+export const GET_SCHOOLS_FILTERED_BY_NAME = gql`
+  query getSchools($filter: String!) {
+    schools(
+      skip: 0
+      take: 20
+      where: { and: [{label: {contains: $filter}}] }
+    ) {
+      items {
+        id
+        label
+        censusNo
+        name
+        address
+      }
     }
   }
 `;

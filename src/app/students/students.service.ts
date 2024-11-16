@@ -4,7 +4,6 @@ import { gql } from 'apollo-angular';
 import { Sex, StudentInput } from '../../../graphql/generated';
 import { enumToArray, GraphqlService } from '../shared/services/graphql.service';
 import { map, Observable, switchMap, timer } from 'rxjs';
-import { GET_STUDENT_EMAILS_COUNT } from '../shared/queries';
 
 @Injectable({
   providedIn: 'root'
@@ -100,17 +99,17 @@ export class StudentsService {
   //   ];
   // }
 
-  checkIfStudentEmailExists(email: string): Observable<boolean> {
-    return this.graphqlService.getGqlQueryObservable(GET_STUDENT_EMAILS_COUNT, {email}).pipe(
-      map((res: any) => !!res.data['students']?.totalCount)
-    );
-  }
+  // checkIfStudentEmailExists(email: string): Observable<boolean> {
+  //   return this.graphqlService.getGqlQueryObservable(GET_STUDENT_EMAILS_COUNT, {email}).pipe(
+  //     map((res: any) => !!res.data['students']?.totalCount)
+  //   );
+  // }
 
-  studentEmailValidator(): AsyncValidatorFn {
-    return (control: AbstractControl) => {
-        return this.checkIfStudentEmailExists(control.value).pipe(
-          map((result: boolean) => result ? { invalid: true } : null)
-        )
-    };
-  }
+  // studentEmailValidator(): AsyncValidatorFn {
+  //   return (control: AbstractControl) => {
+  //       return this.checkIfStudentEmailExists(control.value).pipe(
+  //         map((result: boolean) => result ? { invalid: true } : null)
+  //       )
+  //   };
+  // }
 }

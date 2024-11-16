@@ -43,7 +43,7 @@ export class RegisterComponent extends BaseComponent implements OnInit {
     fullName: '',
     shortName: '',
     dateOfBirth: '',
-    sex: Sex.NotKnown,
+    sex: Sex.Male,
   };
   fields: FormlyFieldConfig[] = [
     {

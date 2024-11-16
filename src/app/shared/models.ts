@@ -75,16 +75,12 @@ export interface AgGridFilter {
   value?: string[];
 }
 
-export interface Option {
-  caption: string;
-  value: any;
-}
-
 export interface Age {
   years: number;
   months: number;
   days: number;
 }
+
 export interface FormlyOption {
   value: any | undefined;
   label: any | undefined;

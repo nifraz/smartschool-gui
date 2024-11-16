@@ -5,8 +5,8 @@ import { NotFoundComponent } from "../../shared/not-found/not-found.component";
 import { MatDialog } from '@angular/material/dialog';
 import { GraphqlRecordFormComponent } from '../../shared/graphql-record-form/graphql-record-form.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { GraphqlCollectionResponse, GraphqlService } from '../../shared/services/graphql.service';
-import { AcademicYearModel, ClassModel, EnrollmentStatus, Grade, RequestStatus, SchoolModel, SchoolStudentEnrollmentInput, SchoolStudentEnrollmentModel, SchoolStudentEnrollmentRequestModel, StudentInput, StudentModel } from '../../../../graphql/generated';
+import { enumToArray, GraphqlCollectionResponse, GraphqlService } from '../../shared/services/graphql.service';
+import { AcademicYearModel, ClassModel, EnrollmentStatus, Grade, RequestStatus, SchoolModel, SchoolStudentEnrollmentInput, SchoolStudentEnrollmentModel, SchoolStudentEnrollmentRequestInput, SchoolStudentEnrollmentRequestModel, StudentInput, StudentModel } from '../../../../graphql/generated';
 import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from '../../shared/components/base/base.component';
 import { GET_ACADEMIC_YEARS, GET_CLASSES_BY_SCHOOL, GET_SCHOOL, GET_STUDENT } from '../../shared/queries';
@@ -125,8 +125,6 @@ export class SchoolDetailsComponent extends RecordComponent<SchoolModel> impleme
     //   this.toastr.warning(`Sorry You cannot request for School Student Enrollment after 21 years. Your current age is ${userAge}.`);
     //   return;
     // }
-
-    
     
     // this.model = model;
     const getAcademicYears$ = this.graphqlService.getGqlQueryObservable(GET_ACADEMIC_YEARS).pipe(
@@ -139,7 +137,7 @@ export class SchoolDetailsComponent extends RecordComponent<SchoolModel> impleme
 
     const getGradesBySchool$ = this.graphqlService.getGqlQueryObservable(GET_CLASSES_BY_SCHOOL, { schoolId: this.record?.id }).pipe(
       map((res: GraphqlCollectionResponse<ClassModel>) => {
-          return groupByToArrays(res.data['classes'].items, 'grade').map((x: ClassModel[]) => ({ value: x[0].grade, label: `${this.titleCaseWithSpacePipe.transform(x[0].grade)}` }))
+          return groupByToArrays(res.data['classes'].items, 'grade').map((x: ClassModel[]) => ({ value: x[0].grade, label: `${this.titleCaseWithSpacePipe.transform(x[0].grade)}` }));
       })
     );
 
@@ -147,26 +145,8 @@ export class SchoolDetailsComponent extends RecordComponent<SchoolModel> impleme
       {
         fieldGroupClassName: 'row',
         fieldGroup: [
-        {
-            className: 'col-12 col-md-6',
-            key: 'schoolId',
-            type: 'select',
-            props: {
-              label: 'School',
-              type: 'select',
-              placeholder: 'Enter School',
-              options: [
-                {
-                  value: this.record?.id,
-                  label: `${this.record?.name} (${this.record?.address})`
-                }
-              ],
-              required: true,
-              disabled: true,
-            },
-          },
           {
-            className: 'col-12 col-md-6',
+            className: 'col-12 col-md-12',
             key: 'personId',
             type: 'select',
             props: {
@@ -177,6 +157,24 @@ export class SchoolDetailsComponent extends RecordComponent<SchoolModel> impleme
                 {
                   value: this.authService.loggedInUser?.person?.id,
                   label: `${this.authService.loggedInUser?.person?.fullName} (${this.authService.loggedInUser?.person?.age?.shortString})`
+                }
+              ],
+              required: true,
+              disabled: true,
+            },
+          },
+          {
+            className: 'col-12 col-md-12',
+            key: 'schoolId',
+            type: 'select',
+            props: {
+              label: 'School',
+              type: 'select',
+              placeholder: 'Enter School',
+              options: [
+                {
+                  value: this.record?.id,
+                  label: `${this.record?.name} (${this.record?.address})`
                 }
               ],
               required: true,
@@ -206,8 +204,8 @@ export class SchoolDetailsComponent extends RecordComponent<SchoolModel> impleme
               label: 'Grade',
               type: 'select',
               placeholder: 'Enter Grade',
-              // options: enumToArray(Grade).map(x => ({ label: x.caption, value: x.value })),
-              options: getGradesBySchool$,
+              options: enumToArray(Grade).map(x => ({ label: x.caption, value: x.value })),
+              // options: getGradesBySchool$,
               required: true,
             },
             validators: {
@@ -224,14 +222,14 @@ export class SchoolDetailsComponent extends RecordComponent<SchoolModel> impleme
   
     ];
 
-    const model: SchoolStudentEnrollmentRequestModel = {
+    const model: SchoolStudentEnrollmentRequestInput = {
       schoolId: this.record?.id,
       personId: this.authService.loggedInUser?.person?.id,
       academicYearYear: new Date().getFullYear(),
-      grade: Grade.None,
+      grade: Grade.Grade1,
     };
 
-    const dialogRef = this.matDialog.open(GraphqlRecordFormComponent<SchoolStudentEnrollmentModel, SchoolStudentEnrollmentInput>, {
+    const dialogRef = this.matDialog.open(GraphqlRecordFormComponent<SchoolStudentEnrollmentRequestModel, SchoolStudentEnrollmentRequestInput>, {
       width: '1200px',
       data: {
         title: 'School Student Enrollment Request',
