@@ -5,8 +5,9 @@ import { BehaviorSubject, catchError, iif, map, Observable, of, switchMap, tap, 
 import { AuthenticateResponse, UserLoginRequest, UserRegisterRequest, VerifyEmailRequest, VerifyEmailResponse } from '../shared/models';
 import moment, { Moment } from 'moment';
 import { UserModel } from '../../../graphql/generated';
-import { GraphqlService, GraphqlTypes } from '../shared/services/graphql.service';
+import { GraphqlService } from '../shared/services/graphql.service';
 import { GET_USER } from '../shared/queries';
+import { GraphqlTypes } from '../shared/enums';
 
 @Injectable({
   providedIn: 'root'

@@ -5,18 +5,21 @@ import { NotFoundComponent } from "../../shared/not-found/not-found.component";
 import { MatDialog } from '@angular/material/dialog';
 import { GraphqlRecordFormComponent } from '../../shared/graphql-record-form/graphql-record-form.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { Age, calculateAge, GraphqlCollections, GraphqlService, GraphqlTypes } from '../../shared/services/graphql.service';
-import { EnrollmentStatus, RequestStatus, SchoolModel, StudentInput, StudentModel } from '../../../../graphql/generated';
+import { GraphqlCollectionResponse, GraphqlService } from '../../shared/services/graphql.service';
+import { AcademicYearModel, ClassModel, EnrollmentStatus, Grade, RequestStatus, SchoolModel, SchoolStudentEnrollmentInput, SchoolStudentEnrollmentModel, SchoolStudentEnrollmentRequestModel, StudentInput, StudentModel } from '../../../../graphql/generated';
 import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from '../../shared/components/base/base.component';
-import { GET_SCHOOL, GET_STUDENT } from '../../shared/queries';
+import { GET_ACADEMIC_YEARS, GET_CLASSES_BY_SCHOOL, GET_SCHOOL, GET_STUDENT } from '../../shared/queries';
 import { AuthService } from '../../auth/auth.service';
 import { RecordComponent } from '../../shared/components/record/record.component';
 import { SchoolsService } from '../schools.service';
 import { AddSpacesPipe } from "../../shared/pipes/add-spaces.pipe";
 import { TitleCaseWithSpacePipe } from "../../shared/pipes/title-case-with-space.pipe";
 import { groupBy, groupByToArrays } from '../../shared/functions';
-import { CreateSchoolStudentEnrollmentRequestComponent } from '../school-student-enrollment-requests/create-school-student-enrollment-request/create-school-student-enrollment-request.component';
+import { AbstractControl } from '@angular/forms';
+import { map } from 'rxjs';
+import { GraphqlCollections, GraphqlTypes } from '../../shared/enums';
+import { CREATE_SCHOOL_STUDENT_ENROLLMENT_REQUEST } from '../../shared/mutations';
 
 @Component({
   selector: 'app-school-details',
@@ -28,7 +31,8 @@ import { CreateSchoolStudentEnrollmentRequestComponent } from '../school-student
     RouterLink,
     AddSpacesPipe,
     TitleCaseWithSpacePipe
-],
+  ],
+  providers: [TitleCaseWithSpacePipe],
   templateUrl: './school-details.component.html',
   styleUrl: './school-details.component.scss'
 })
@@ -45,6 +49,7 @@ export class SchoolDetailsComponent extends RecordComponent<SchoolModel> impleme
     private graphqlService: GraphqlService,
     private toastr: ToastrService,
     public authService: AuthService,
+    private titleCaseWithSpacePipe: TitleCaseWithSpacePipe,
   ) {
     // this.activatedRoute.params.subscribe(params => {
     //   this.id = params['id'];
@@ -121,11 +126,119 @@ export class SchoolDetailsComponent extends RecordComponent<SchoolModel> impleme
     //   return;
     // }
 
-    const dialogRef = this.matDialog.open(CreateSchoolStudentEnrollmentRequestComponent, {
+    
+    
+    // this.model = model;
+    const getAcademicYears$ = this.graphqlService.getGqlQueryObservable(GET_ACADEMIC_YEARS).pipe(
+      map((res: GraphqlCollectionResponse<AcademicYearModel>) => {
+          return res.data['academicYears'].items
+            .filter(x => x.year && x.year >= new Date().getFullYear())
+            .map((x: AcademicYearModel) => ({ value: x.year, label: x.year }));
+      })
+    );
+
+    const getGradesBySchool$ = this.graphqlService.getGqlQueryObservable(GET_CLASSES_BY_SCHOOL, { schoolId: this.record?.id }).pipe(
+      map((res: GraphqlCollectionResponse<ClassModel>) => {
+          return groupByToArrays(res.data['classes'].items, 'grade').map((x: ClassModel[]) => ({ value: x[0].grade, label: `${this.titleCaseWithSpacePipe.transform(x[0].grade)}` }))
+      })
+    );
+
+    const fields = [
+      {
+        fieldGroupClassName: 'row',
+        fieldGroup: [
+        {
+            className: 'col-12 col-md-6',
+            key: 'schoolId',
+            type: 'select',
+            props: {
+              label: 'School',
+              type: 'select',
+              placeholder: 'Enter School',
+              options: [
+                {
+                  value: this.record?.id,
+                  label: `${this.record?.name} (${this.record?.address})`
+                }
+              ],
+              required: true,
+              disabled: true,
+            },
+          },
+          {
+            className: 'col-12 col-md-6',
+            key: 'personId',
+            type: 'select',
+            props: {
+              label: 'Person',
+              type: 'select',
+              placeholder: 'Enter Person',
+              options: [
+                {
+                  value: this.authService.loggedInUser?.person?.id,
+                  label: `${this.authService.loggedInUser?.person?.fullName} (${this.authService.loggedInUser?.person?.age?.shortString})`
+                }
+              ],
+              required: true,
+              disabled: true,
+            },
+          },
+          {
+            className: 'col-12 col-md-6',
+            key: 'academicYearYear',
+            type: 'select',
+            props: {
+              label: 'Academic Year',
+              type: 'select',
+              placeholder: 'Enter Academic Year',
+              options: getAcademicYears$,
+              required: true,
+            },
+            validators: {
+              validation: [(x: AbstractControl) => x && x.value ? null : { 'academicYearYear': true }],
+            },
+          },
+          {
+            className: 'col-12 col-md-6',
+            key: 'grade',
+            type: 'select',
+            props: {
+              label: 'Grade',
+              type: 'select',
+              placeholder: 'Enter Grade',
+              // options: enumToArray(Grade).map(x => ({ label: x.caption, value: x.value })),
+              options: getGradesBySchool$,
+              required: true,
+            },
+            validators: {
+              validation: [(x: AbstractControl) => x && x.value && x.value != 'NONE' ? null : { 'grade': true }],
+            },
+          },
+          
+        ],
+      },
+      // {
+      //   className: 'section-label',
+      //   template: '<hr /><div><strong>Address:</strong></div>',
+      // },
+  
+    ];
+
+    const model: SchoolStudentEnrollmentRequestModel = {
+      schoolId: this.record?.id,
+      personId: this.authService.loggedInUser?.person?.id,
+      academicYearYear: new Date().getFullYear(),
+      grade: Grade.None,
+    };
+
+    const dialogRef = this.matDialog.open(GraphqlRecordFormComponent<SchoolStudentEnrollmentModel, SchoolStudentEnrollmentInput>, {
       width: '1200px',
       data: {
-        school: this.record,
-        person: this.authService.loggedInUser?.person,
+        title: 'School Student Enrollment Request',
+        type: 'SchoolStudentEnrollment',
+        model,
+        fields,
+        recordCreateMutation: CREATE_SCHOOL_STUDENT_ENROLLMENT_REQUEST,
       }
     });
 

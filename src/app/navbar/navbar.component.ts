@@ -19,8 +19,6 @@ import { BaseComponent } from '../shared/components/base/base.component';
   styleUrl: './navbar.component.scss'
 })
 export class NavbarComponent extends BaseComponent implements OnInit, OnDestroy {
-  destroy$: Subject<boolean> = new Subject<boolean>();
-  
   constructor(
     public authService: AuthService,
     private toastr: ToastrService,
@@ -31,7 +29,7 @@ export class NavbarComponent extends BaseComponent implements OnInit, OnDestroy 
   
   ngOnInit(): void {
     this.authService.userLogged.pipe(
-      takeUntil(this.destroy$),
+      takeUntil(this.unsubscribe$),
       switchMap(res => {
         this.isLoading = true;
         if (res && this.authService.isLoggedIn()) {
@@ -51,8 +49,8 @@ export class NavbarComponent extends BaseComponent implements OnInit, OnDestroy 
   }
   
   ngOnDestroy(): void {
-    this.destroy$.next(true);
-    this.destroy$.unsubscribe();
+    this.unsubscribe$.next();
+    this.unsubscribe$.unsubscribe();
   }
   
   onLogout() {

@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-base',
@@ -18,6 +19,8 @@ export abstract class BaseComponent {
   isSaving: boolean = false;
 
   error: any | null;
+
+  protected unsubscribe$ = new Subject<void>();
 
   constructor() { }
 

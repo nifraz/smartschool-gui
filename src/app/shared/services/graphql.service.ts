@@ -2,9 +2,10 @@ import { Injectable } from '@angular/core';
 import { ColDef, GridApi, IGetRowsParams } from 'ag-grid-community';
 import { ISimpleFilterModelType } from 'ag-grid-community/dist/types/core/filter/provided/simpleFilter';
 import { Observable } from 'rxjs';
-import { ApolloQueryResult } from '@apollo/client'
-import { Apollo, gql, MutationResult } from 'apollo-angular';
+import { ApolloQueryResult, DocumentNode } from '@apollo/client'
+import { Apollo, gql, MutationResult, TypedDocumentNode } from 'apollo-angular';
 import { FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { AgeModel } from '../../../../graphql/generated';
 
 @Injectable({
   providedIn: 'root'
@@ -29,26 +30,26 @@ export class GraphqlService {
     localStorage.removeItem(key);
   }
   
-  getGqlQueryObservable(query: string, variables: any = undefined): Observable<ApolloQueryResult<any>> {
+  getGqlQueryObservable(query: DocumentNode | TypedDocumentNode<any, any>, variables: any = undefined): Observable<ApolloQueryResult<any>> {
     return this.apollo
       .watchQuery<any>({ 
-        query: gql `${query}`,
+        query: query,
         variables: variables,
       })
       .valueChanges;
   }
 
-  getGqlMutationObservable(mutation: string, variables: any, refetchQueries: string[] = []): Observable<MutationResult<any>> {
+  getGqlMutationObservable(mutation: DocumentNode | TypedDocumentNode<any, any>, variables: any, refetchQueries: string[] = []): Observable<MutationResult<any>> {
     return this.apollo.mutate<any>({
-      mutation: gql `${mutation}`,
+      mutation: mutation,
       variables: variables,
       refetchQueries: refetchQueries
     });
   }
 
-  getGqlSubscriptionObservable(subscription: string, variables: any = undefined, refetchQueries: string[] = []): Observable<MutationResult<any>> {
+  getGqlSubscriptionObservable(subscription: DocumentNode | TypedDocumentNode<any, any>, variables: any = undefined, refetchQueries: string[] = []): Observable<MutationResult<any>> {
     return this.apollo.subscribe({
-      query: gql `${subscription}`,
+      query: subscription,
       variables: variables,
       /*
         accepts options like `errorPolicy` and `fetchPolicy`
@@ -69,16 +70,6 @@ export class GraphqlService {
     });
   
     return colDefs;
-  }
-
-  createInputFormGroup<T>(inputDefs: InputDef<T>[]): FormGroup<any> {
-    const group: any = {};
-  
-    inputDefs.forEach(x => {
-      group[x.field] = [x.value, x.validators, x.asyncValidators];
-    });
-  
-    return this.formBuilder.group(group);
   }
 }
 
@@ -159,30 +150,30 @@ export function enumToArray(enumObj: any): { caption: string; value: string }[] 
     }));
 }
 
-export function calculateAge(dateOfBirth: string | null | undefined): Age {
-  if (!dateOfBirth) {
-    return {years: 0, months: 0, days: 0};
-  }
+// export function calculateAge(dateOfBirth: string | null | undefined): AgeModel {
+//   if (!dateOfBirth) {
+//     return {years: 0, months: 0, days: 0};
+//   }
 
-  const dob = new Date(dateOfBirth);
-  const today = new Date();
+//   const dob = new Date(dateOfBirth);
+//   const today = new Date();
   
-  let years = today.getFullYear() - dob.getFullYear();
-  let months = today.getMonth() - dob.getMonth();
-  let days = today.getDate() - dob.getDate();
+//   let years = today.getFullYear() - dob.getFullYear();
+//   let months = today.getMonth() - dob.getMonth();
+//   let days = today.getDate() - dob.getDate();
 
-  if (days < 0) {
-    months--;
-    days += new Date(today.getFullYear(), today.getMonth(), 0).getDate();
-  }
+//   if (days < 0) {
+//     months--;
+//     days += new Date(today.getFullYear(), today.getMonth(), 0).getDate();
+//   }
 
-  if (months < 0) {
-    years--;
-    months += 12;
-  }
+//   if (months < 0) {
+//     years--;
+//     months += 12;
+//   }
 
-  return { years, months, days };
-}
+//   return { years, months, days };
+// }
 
 export function toDateOnlyString(date: Date): string {
   const year = date.getFullYear();
@@ -192,76 +183,3 @@ export function toDateOnlyString(date: Date): string {
   return `${year}-${month}-${day}`;
 }
 
-
-export interface AgGridFilter {
-  filterType: AgGridFilterType,
-  type?: ISimpleFilterModelType,
-
-  filter?: number | string,
-  filterTo?: number | string,
-  dateFrom?: string,
-  dateTo?: string,
-
-  operator?: ConditionalOperator,
-  conditions?: AgGridFilter[],
-  condition1?: AgGridFilter,
-  condition2?: AgGridFilter,
-
-  value?: string[],
-}
-
-export enum AgGridFilterType {
-  NUMBER = 'number',
-  TEXT = 'text',
-  DATE = 'date',
-}
-
-export enum ConditionalOperator {
-  AND = 'AND',
-  OR = 'OR',
-  // NOT = 'NOT',
-}
-
-export enum GraphqlCollections {
-  USERS = 'users',
-  SCHOOLS = 'schools',
-  SCHOOL_STUDENT_ENROLLMENT_REQUESTS = 'schoolStudentEnrollmentRequests',
-  SCHOOL_STUDENT_ENROLLMENTS = 'schoolStudentEnrollments',
-  CLASSES = 'classes',
-  STUDENTS = 'students',
-  TEACHERS = 'teachers',
-}
-
-export enum GraphqlTypes {
-  USER = 'user',
-  SCHOOL = 'school',
-  SCHOOL_STUDENT_ENROLLMENT_REQUEST = 'schoolStudentEnrollmentRequest',
-  SCHOOL_STUDENT_ENROLLMENT = 'schoolStudentEnrollment',
-  CLASS = 'class',
-  STUDENT = 'student',
-  TEACHER = 'teacher',
-}
-
-export interface InputDef<T> {
-  field: keyof T,
-  type: 'text' | 'date' | 'email' | 'select' | 'textarea', // add more
-  caption: string,
-
-  value?: any,
-  options?: Option[],
-  class?: string,
-
-  validators?: ValidatorFn[],
-  asyncValidators?: ValidatorFn[],
-}
-
-export interface Option {
-  caption: string,
-  value: any,
-}
-
-export interface Age {
-  years: number,
-  months: number,
-  days: number,
-}

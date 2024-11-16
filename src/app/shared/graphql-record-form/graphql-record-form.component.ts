@@ -2,12 +2,20 @@ import { Component, Inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges }
 import { AbstractControl, FormArray, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Apollo, gql, MutationResult } from 'apollo-angular';
-import { capitalizeFirstLetter, GraphqlService, InputDef, toLowercaseFirstLetter } from '../services/graphql.service';
+import { capitalizeFirstLetter, GraphqlCollectionResponse, GraphqlService, toLowercaseFirstLetter } from '../services/graphql.service';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { ToastrService } from 'ngx-toastr';
 import { MatError } from '@angular/material/form-field'
+import { FormComponent } from '../components/form/form.component';
+import { GraphqlFormComponent } from '../components/graphql-form/graphql-form.component';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { RouterLink, RouterLinkActive } from '@angular/router';
+import { FormlyModule } from '@ngx-formly/core';
+import { FormlyMatDatepickerModule } from '@ngx-formly/material/datepicker';
+import { ErrorAlertComponent } from '../components/error-alert/error-alert.component';
 
 @Component({
   selector: 'app-graphql-record-form',
@@ -17,98 +25,73 @@ import { MatError } from '@angular/material/form-field'
     ReactiveFormsModule,
     MatProgressBarModule,
     MatError,
+    FormlyModule,
+    ErrorAlertComponent,
+    RouterLink,
+    RouterLinkActive,
+    FormlyMatDatepickerModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
   ],
   templateUrl: './graphql-record-form.component.html',
   styleUrl: './graphql-record-form.component.scss'
 })
-export class GraphqlRecordFormComponent<T extends object> implements OnInit, OnChanges, OnDestroy {
-  collectionKey: string = '';
-  typeKey: string = '';
-  typeName: string = '';
-  id: number = 0;
-  oldRecord?: T;
-
-  inputDefs: InputDef<T>[] = [];
-  formGroup: FormGroup<any> = new FormGroup<any>({});
-
-  loading: boolean = false;
-  editMode: boolean = false;
-  addAnother: boolean = false;
-
-  private destroy$ = new Subject<void>();
-
+export class GraphqlRecordFormComponent<M, I> extends GraphqlFormComponent<I> implements OnInit, OnChanges, OnDestroy {
   constructor(
     private graphqlService: GraphqlService,
-    private dialogRef: MatDialogRef<GraphqlRecordFormComponent<T>>,
+    private dialogRef: MatDialogRef<GraphqlRecordFormComponent<M, I>>,
     private toastr: ToastrService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
+    super();
     // this.formGroup?.setValue({});
     dialogRef.disableClose = true;
   }
   ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   ngOnInit(): void {
-    this.collectionKey = toLowercaseFirstLetter(this.data.collection);
-    this.typeName = capitalizeFirstLetter(this.data.type);
-    this.typeKey = toLowercaseFirstLetter(this.data.type);
-    this.inputDefs = this.data.inputDefs;
-    this.formGroup = this.graphqlService.createInputFormGroup(this.inputDefs);
-    this.id = this.data.id ? +this.data.id : 0;
-    this.editMode = !!this.id;
-    this.oldRecord = this.getFormattedInput(this.formGroup.value);
-    
+    if (this.data) {
+      this.title = this.data.title;
+      this.type = this.data.type;
+      this.model = this.data.model;
+      this.fields = this.data.fields;
+      this.id = this.data.id;
+      this.isEditMode = !!this.id;
+      this.oldRecord = this.model;
+      
+      this.recordFetchQuery = this.data.recordFetchQuery;
+      this.recordCreateMutation = this.data.recordCreateMutation;
+      this.recordUpdateMutation = this.data.recordUpdateMutation;
+    }
     // this.updateControls();
 
-    if (this.editMode) {
-      this.loading = true;
-      this.formGroup.disable();
-      const recordQuery = this.constructRecordQuery();
+    if (this.isEditMode) {
+      this.isLoading = true;
+      this.form.disable();
       const variables = {
         id: this.id,
       }
-      this.graphqlService.getGqlQueryObservable(recordQuery, variables).subscribe({
-        next: res => {
-          this.loading = false;
-          const input = this.getFormattedInput(res.data[this.typeKey]);
-          this.formGroup.patchValue(input);
-          this.oldRecord = this.getFormattedInput(this.formGroup.value);
-          this.formGroup.enable();
+      this.graphqlService.getGqlQueryObservable(this.recordFetchQuery, variables).subscribe({
+        next: (res: GraphqlCollectionResponse<M>) => {
+          this.isLoading = false;
+          const model = res.data[this.type];
+          this.form.patchValue(model);
+          this.oldRecord = this.form.value;
+          this.form.enable();
         },
         error: err => {
-          this.loading = false;
-          this.toastr.error(`Could not load details`, this.typeName);
+          this.isLoading = false;
+          this.toastr.error(`Could not load details`, this.type);
         }
-      })
-      // const student = this.studentsService.getStudentById(this.id);
-      // if (student) {
-      //   // Convert dateOfBirth to string in YYYY-MM-DD format
-      //   const formattedDate = student.dateOfBirth.toISOString().split('T')[0];
-      //   this.studentForm.patchValue({ ...student, dateOfBirth: formattedDate });
-      // }
+      });
     }
 
-    this.dialogRef.beforeClosed().pipe(takeUntil(this.destroy$)).subscribe(() => {
+    this.dialogRef.beforeClosed().pipe(takeUntil(this.unsubscribe$)).subscribe(() => {
       
     });
-  }
-
-  getFormattedInput(input: any): any {
-    const formattedInput = {...input, };
-    Object.keys(input).forEach(key => {
-      if (!input[key]) {
-        formattedInput[key] = null;
-        return;
-      }
-      const inputDef = this.inputDefs.find(x => x.field.toString() == key);
-      if (inputDef && inputDef.type == 'date') {
-        formattedInput[key] = input[key].split('T')[0];
-      }
-    });
-    return formattedInput;
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -126,96 +109,52 @@ export class GraphqlRecordFormComponent<T extends object> implements OnInit, OnC
   }
 
   onSubmit(): void {
-    if (this.formGroup.invalid) {
+    if (this.form.invalid) {
       //show toast message
       return;
     }
     
-    const input = this.getFormattedInput(this.formGroup.value);
-    const mutation = this.editMode ? this.constructUpdateMutation() : this.constructCreateMutation();
+    const mutation = this.isEditMode ? this.recordUpdateMutation : this.recordCreateMutation;
+
     const variables = {
-      id: this.id,
-      input,
+      input: this.model,
     };
 
-    const refetchQueries = [this.collectionKey, this.typeKey];
+    // const refetchQueries = [this.collectionKey, this.typeKey];
     
-    this.graphqlService.getGqlMutationObservable(mutation, variables, refetchQueries).subscribe({
+    this.graphqlService.getGqlMutationObservable(mutation, variables).subscribe({
       next: ({ data, errors, loading }) => {
         if (errors) {
-          this.toastr.error(`Could not ${this.editMode ? 'update' : 'create'} record`, this.typeName);
+          this.toastr.error(`Could not ${this.isEditMode ? 'update' : 'create'} record`, this.type);
         }
         if (data) {
-          this.toastr.success(`Record ${this.editMode ? 'updated' : 'created'}`, this.typeName);
-          if (this.addAnother) {
-            this.formGroup.reset();
+          this.toastr.success(`Record ${this.isEditMode ? 'updated' : 'created'}`, this.type);
+          if (this.isAddAnother) {
+            this.form.reset();
             return;
           }
-          this.oldRecord = input;
+          this.oldRecord = this.model;
           this.closeModal();
         }
       },
       error: err => {
-        this.toastr.error(`Error occured`, this.typeName);
+        this.toastr.error(`Error occured`, this.type);
         console.log(err);
       }
     });
   }
 
-  constructRecordQuery(): string {
-    const fields = this.inputDefs
-      .map(x => x.field)
-      .join(', ');
-
-    const query: string = `
-      query ${this.typeKey}($id: Long!) {
-        ${this.typeKey}(id: $id) {
-          id,
-          ${fields}
-        }
-      }
-    `;
-    console.log(query);
-    return query;
-  }
-
-  constructCreateMutation(): string {
-    const mutation: string = `
-      mutation create${this.typeName}($input: ${this.typeName}Input!) {
-        create${this.typeName}(input: $input) {
-          id
-        }
-      }
-    `;
-    
-    console.log(mutation);
-    return mutation;
-  }
-
-  constructUpdateMutation(): string {
-    const mutation: string = `
-      mutation update${this.typeName}($id: Long!, $input: ${this.typeName}Input!) {
-        update${this.typeName}(id: $id, input: $input) {
-          id
-        }
-      }
-    `;
-    
-    console.log(mutation);
-    return mutation;
-  }
-
   closeModal(): void {
-    const oldValue = JSON.stringify(this.oldRecord);
-    const newRecord = this.getFormattedInput(this.formGroup.value);
-    const newValue = JSON.stringify(newRecord);
-    if (oldValue != newValue) {
-      if (!confirm("Are you sure you want to close without saving your changes?")) {
-        return;
-      }
-      this.toastr.warning(`Changes were not saved`, this.typeName);
-    }
-    this.dialogRef.close(this.formGroup.value);
+    // const oldValue = JSON.stringify(this.oldRecord);
+    // const newRecord = this.getFormattedInput(this.model);
+    // const newValue = JSON.stringify(newRecord);
+    // if (oldValue != newValue) {
+    //   if (!confirm("Are you sure you want to close without saving your changes?")) {
+    //     return;
+    //   }
+    //   this.toastr.warning(`Changes were not saved`, this.typeName);
+    // }
+    this.dialogRef.close(this.model);
   }
 
 }

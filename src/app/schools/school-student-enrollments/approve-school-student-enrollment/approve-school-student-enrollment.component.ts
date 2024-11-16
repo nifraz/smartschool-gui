@@ -10,7 +10,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from '../../../shared/components/base/base.component';
 import { ErrorAlertComponent } from '../../../shared/components/error-alert/error-alert.component';
-import { UserRegisterRequest, Sex } from '../../../shared/models';
+import { UserRegisterRequest } from '../../../shared/models';
 import { enumToArray, GraphqlService, toDateOnlyString } from '../../../shared/services/graphql.service';
 import { AcademicYearModel, ClassModel, Grade, PersonModel, SchoolModel, SchoolStudentEnrollmentInput, SchoolStudentEnrollmentRequestInput, SchoolStudentEnrollmentRequestModel } from '../../../../../graphql/generated';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';

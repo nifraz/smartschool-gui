@@ -4,12 +4,13 @@ import { GraphqlDataGridComponent } from '../shared/graphql-data-grid/graphql-da
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { GraphqlRecordFormComponent } from '../shared/graphql-record-form/graphql-record-form.component';
-import { GraphqlCollections, GraphqlService, GraphqlTypes } from '../shared/services/graphql.service';
+import { GraphqlService } from '../shared/services/graphql.service';
 import { Sex, SchoolModel, SchoolType } from '../../../graphql/generated';
 import { MultiSelectFilterComponent } from '../shared/components/multi-select-filter/multi-select-filter.component';
 import { CustomFloatingFilterComponent } from '../shared/components/custom-floating-filter/custom-floating-filter.component';
 import { SchoolsService } from './schools.service';
 import { BaseComponent } from '../shared/components/base/base.component';
+import { GraphqlCollections, GraphqlTypes } from '../shared/enums';
 
 @Component({
   selector: 'app-schools',

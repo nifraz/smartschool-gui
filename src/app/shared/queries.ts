@@ -1,9 +1,11 @@
+import { gql } from "apollo-angular";
 
-export const GET_USER = `
+export const GET_USER = gql`
   query getUser($id: Long!) {
     user(id: $id) {
       id
       person {
+        id
         address
         bcNo
         mobileNo
@@ -20,6 +22,8 @@ export const GET_USER = `
           years
           months
           days
+          shortString
+          longString
         }
       }
       currentSchoolId
@@ -43,7 +47,7 @@ export const GET_USER = `
   }
 `;
 
-export const GET_STUDENT_EMAILS_COUNT = `
+export const GET_STUDENT_EMAILS_COUNT = gql`
   query getStudentEmailsCount($email: String!) {
     students(
       skip: 0
@@ -55,7 +59,7 @@ export const GET_STUDENT_EMAILS_COUNT = `
   }
 `;
 
-export const GET_SCHOOL_STUDENT_ENROLLMENT_REQUEST = `
+export const GET_SCHOOL_STUDENT_ENROLLMENT_REQUEST = gql`
   query getSchoolStudentEnrollmentRequest($id: Long!) {
     schoolStudentEnrollmentRequest(id: $id) {
       id
@@ -103,7 +107,7 @@ export const GET_SCHOOL_STUDENT_ENROLLMENT_REQUEST = `
   }
 `;
 
-export const GET_SCHOOL_STUDENT_ENROLLMENT = `
+export const GET_SCHOOL_STUDENT_ENROLLMENT = gql`
   query getSchoolStudentEnrollment($id: Long!) {
     schoolStudentEnrollment(id: $id) {
       id
@@ -162,7 +166,7 @@ export const GET_SCHOOL_STUDENT_ENROLLMENT = `
   }
 `;
 
-export const GET_SCHOOL = `
+export const GET_SCHOOL = gql`
   query getSchool($id: Long!) {
     school(id: $id) {
       id
@@ -191,7 +195,7 @@ export const GET_SCHOOL = `
   }
 `;
 
-// export const GET_CLASS = `
+// export const GET_CLASS = gql`
 //   query getClass($id: Long!) {
 //     class(id: $id) {
 //       id
@@ -206,7 +210,7 @@ export const GET_SCHOOL = `
 //   }
 // `;
 
-export const GET_CLASS_BY_SCHOOL_GRADE_SECTION = `
+export const GET_CLASS_BY_SCHOOL_GRADE_SECTION = gql`
   query getClassBySchoolGradeSection($schoolId: Long!, $grade: Grade!, $section: String!) {
     class(schoolId: $schoolId, grade: $grade, section: $section) {
       id
@@ -241,7 +245,7 @@ export const GET_CLASS_BY_SCHOOL_GRADE_SECTION = `
   }
 `;
 
-export const GET_STUDENT = `
+export const GET_STUDENT = gql`
   query getStudent($id: Long!) {
     student(id: $id) {
       id
@@ -273,7 +277,7 @@ export const GET_STUDENT = `
   }
 `;
 
-export const GET_TEACHER = `
+export const GET_TEACHER = gql`
   query getTeacher($id: Long!) {
     teacher(id: $id) {
       id
@@ -304,7 +308,7 @@ export const GET_TEACHER = `
   }
 `;
 
-export const GET_ACADEMIC_YEARS = `
+export const GET_ACADEMIC_YEARS = gql`
   query getAcademicYears {
     academicYears {
       items {
@@ -316,7 +320,7 @@ export const GET_ACADEMIC_YEARS = `
   }
 `;
 
-export const GET_CLASSES_BY_SCHOOL = `
+export const GET_CLASSES_BY_SCHOOL = gql`
   query getClassesBySchool($schoolId: Long!) {
     classes(
       where: { and: [{ schoolId: { eq: $schoolId } }] }

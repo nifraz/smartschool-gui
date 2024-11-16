@@ -10,7 +10,7 @@ import { AuthService } from '../../../auth/auth.service';
 import { RecordComponent } from '../../../shared/components/record/record.component';
 import { GraphqlRecordFormComponent } from '../../../shared/graphql-record-form/graphql-record-form.component';
 import { GET_SCHOOL_STUDENT_ENROLLMENT_REQUEST, GET_STUDENT } from '../../../shared/queries';
-import { GraphqlService, GraphqlTypes, GraphqlCollections, GraphqlSubscriptionResponse, GraphqlSubscriptionResponseData } from '../../../shared/services/graphql.service';
+import { GraphqlService, GraphqlSubscriptionResponse, GraphqlSubscriptionResponseData } from '../../../shared/services/graphql.service';
 import { StudentsService } from '../../../students/students.service';
 import { TitleCaseWithSpacePipe } from "../../../shared/pipes/title-case-with-space.pipe";
 import { LaddaModule } from 'angular2-ladda';
@@ -20,6 +20,7 @@ import { ApproveSchoolStudentEnrollmentComponent } from '../../school-student-en
 import { SCHOOL_STUDENT_ENROLLMENT_CREATED } from '../../../shared/subscriptions';
 import { MutationResult } from 'apollo-angular';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import { GraphqlTypes, GraphqlCollections } from '../../../shared/enums';
 
 @Component({
   selector: 'app-school-student-enrollment-request-details',
@@ -96,7 +97,7 @@ export class SchoolStudentEnrollmentRequestDetailsComponent extends RecordCompon
   }
 
   openRecordFormModal(): void {
-    const inputDefs = this.studentsService.getStudentInputDefs();
+    const inputDefs = {};
     const dialogRef = this.matDialog.open(GraphqlRecordFormComponent, {
       width: '1200px',
       data: {

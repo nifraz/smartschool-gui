@@ -12,9 +12,13 @@ import {
   SortModelItem,
 } from 'ag-grid-community'; // Column Definition Type Interface
 import { Observable, catchError, map, of } from 'rxjs';
-import { AgGridFilter, AgGridFilterType, ConditionalOperator, GraphqlService, RemoteGridApi, capitalizeFirstLetter, formatCamelCaseText } from '../services/graphql.service';
+import { GraphqlService, RemoteGridApi, capitalizeFirstLetter, formatCamelCaseText } from '../services/graphql.service';
 import { RemoteGridBindingDirective } from '../directives/remote-grid-binding.directive';
 import { ISimpleFilterModelType } from 'ag-grid-community/dist/types/core/filter/provided/simpleFilter';
+import { gql, TypedDocumentNode } from 'apollo-angular';
+import { ConditionalOperator, AgGridFilterType } from '../enums';
+import { AgGridFilter } from '../models';
+import { DocumentNode } from 'graphql';
 
 @Component({
   selector: 'app-graphql-data-grid',
@@ -261,7 +265,7 @@ export class GraphqlDataGridComponent<T extends object> implements OnInit, Remot
       .join(', ');
   }
 
-  constructQuery(params: IGetRowsParams): string {
+  constructQuery(params: IGetRowsParams): DocumentNode | TypedDocumentNode<any, any> {
     const filterModel: {[key: string]: AgGridFilter} = params.filterModel;
     const sortModel = params.sortModel;
     const visibleColumns = this.gridApi?.getAllDisplayedColumns().map(col => col.getColId()).filter(colId => colId != 'id') || [];
@@ -286,7 +290,7 @@ export class GraphqlDataGridComponent<T extends object> implements OnInit, Remot
     }`;
     
     console.log(query);
-    return query;
+    return gql`${query}`;
   }
 
   private convertToGqlFilterInput(filterModelType: ISimpleFilterModelType): string {

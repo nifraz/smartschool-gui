@@ -4,7 +4,7 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { CommonModule } from '@angular/common';
 import { FormlyFieldConfig, FormlyModule } from '@ngx-formly/core';
-import { Sex, UserRegisterRequest } from '../../shared/models';
+import { UserRegisterRequest } from '../../shared/models';
 import { ErrorAlertComponent } from "../../shared/components/error-alert/error-alert.component";
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { enumToArray, toDateOnlyString } from '../../shared/services/graphql.service';
@@ -13,6 +13,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from '../../shared/components/base/base.component';
+import { Sex } from '../../../../graphql/generated';
 
 @Component({
   selector: 'app-register',

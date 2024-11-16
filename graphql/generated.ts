@@ -59,21 +59,27 @@ export type AcademicYearsCollectionSegment = {
 export type AgeModel = {
   __typename?: 'AgeModel';
   days: Scalars['Int']['output'];
+  longString: Scalars['String']['output'];
   months: Scalars['Int']['output'];
+  shortString: Scalars['String']['output'];
   years: Scalars['Int']['output'];
 };
 
 export type AgeModelFilterInput = {
   and?: InputMaybe<Array<AgeModelFilterInput>>;
   days?: InputMaybe<IntOperationFilterInput>;
+  longString?: InputMaybe<StringOperationFilterInput>;
   months?: InputMaybe<IntOperationFilterInput>;
   or?: InputMaybe<Array<AgeModelFilterInput>>;
+  shortString?: InputMaybe<StringOperationFilterInput>;
   years?: InputMaybe<IntOperationFilterInput>;
 };
 
 export type AgeModelSortInput = {
   days?: InputMaybe<SortEnumType>;
+  longString?: InputMaybe<SortEnumType>;
   months?: InputMaybe<SortEnumType>;
+  shortString?: InputMaybe<SortEnumType>;
   years?: InputMaybe<SortEnumType>;
 };
 
@@ -832,6 +838,7 @@ export type SchoolPrincipalEnrollmentModelFilterInput = {
 export type SchoolStudentEnrollmentInput = {
   academicYearYear: Scalars['Int']['input'];
   classId: Scalars['Long']['input'];
+  id?: InputMaybe<Scalars['Long']['input']>;
   no?: InputMaybe<Scalars['Int']['input']>;
   personId: Scalars['Long']['input'];
   schoolId: Scalars['Long']['input'];
@@ -922,6 +929,7 @@ export type SchoolStudentEnrollmentModelSortInput = {
 export type SchoolStudentEnrollmentRequestInput = {
   academicYearYear: Scalars['Int']['input'];
   grade: Grade;
+  id?: InputMaybe<Scalars['Long']['input']>;
   personId: Scalars['Long']['input'];
   schoolId: Scalars['Long']['input'];
 };
@@ -1008,6 +1016,7 @@ export type SchoolStudentEnrollmentRequestModelSortInput = {
 };
 
 export type SchoolStudentEnrollmentRequestStatusUpdateInput = {
+  id?: InputMaybe<Scalars['Long']['input']>;
   reason?: InputMaybe<Scalars['String']['input']>;
   status: RequestStatus;
 };
@@ -1177,6 +1186,7 @@ export type StudentInput = {
   dateOfBirth?: InputMaybe<Scalars['Date']['input']>;
   email?: InputMaybe<Scalars['String']['input']>;
   fullName: Scalars['String']['input'];
+  id?: InputMaybe<Scalars['Long']['input']>;
   mobileNo?: InputMaybe<Scalars['String']['input']>;
   nicNo?: InputMaybe<Scalars['String']['input']>;
   nickname?: InputMaybe<Scalars['String']['input']>;

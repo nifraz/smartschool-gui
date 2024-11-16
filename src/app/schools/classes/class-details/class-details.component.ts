@@ -13,8 +13,9 @@ import { AuthService } from '../../../auth/auth.service';
 import { groupByToArrays } from '../../../shared/functions';
 import { GraphqlRecordFormComponent } from '../../../shared/graphql-record-form/graphql-record-form.component';
 import { GET_CLASS_BY_SCHOOL_GRADE_SECTION, GET_SCHOOL } from '../../../shared/queries';
-import { GraphqlService, GraphqlTypes, GraphqlCollections } from '../../../shared/services/graphql.service';
+import { GraphqlService } from '../../../shared/services/graphql.service';
 import { SchoolsService } from '../../schools.service';
+import { GraphqlTypes, GraphqlCollections } from '../../../shared/enums';
 
 @Component({
   selector: 'app-class-details',

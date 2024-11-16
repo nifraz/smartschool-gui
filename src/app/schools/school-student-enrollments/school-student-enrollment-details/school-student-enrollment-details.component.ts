@@ -10,9 +10,10 @@ import { RecordComponent } from '../../../shared/components/record/record.compon
 import { GraphqlRecordFormComponent } from '../../../shared/graphql-record-form/graphql-record-form.component';
 import { NotFoundComponent } from '../../../shared/not-found/not-found.component';
 import { GET_SCHOOL_STUDENT_ENROLLMENT, GET_STUDENT } from '../../../shared/queries';
-import { GraphqlService, GraphqlTypes, GraphqlCollections } from '../../../shared/services/graphql.service';
+import { GraphqlService } from '../../../shared/services/graphql.service';
 import { StudentsService } from '../../../students/students.service';
 import { TitleCaseWithSpacePipe } from "../../../shared/pipes/title-case-with-space.pipe";
+import { GraphqlTypes, GraphqlCollections } from '../../../shared/enums';
 
 @Component({
   selector: 'app-school-student-enrollment-details',
@@ -76,7 +77,7 @@ export class SchoolStudentEnrollmentDetailsComponent extends RecordComponent<Sch
   }
 
   openRecordFormModal(): void {
-    const inputDefs = this.studentsService.getStudentInputDefs();
+    const inputDefs = {};
     const dialogRef = this.matDialog.open(GraphqlRecordFormComponent, {
       width: '1200px',
       data: {

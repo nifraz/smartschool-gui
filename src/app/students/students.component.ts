@@ -5,11 +5,12 @@ import { StudentsService } from './students.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { GraphqlRecordFormComponent } from '../shared/graphql-record-form/graphql-record-form.component';
-import { GraphqlCollections, GraphqlService, GraphqlTypes } from '../shared/services/graphql.service';
+import { GraphqlService } from '../shared/services/graphql.service';
 import { Sex, StudentModel } from '../../../graphql/generated';
 import { MultiSelectFilterComponent } from '../shared/components/multi-select-filter/multi-select-filter.component';
 import { CustomFloatingFilterComponent } from '../shared/components/custom-floating-filter/custom-floating-filter.component';
 import { BaseComponent } from '../shared/components/base/base.component';
+import { GraphqlCollections, GraphqlTypes } from '../shared/enums';
 
 @Component({
   selector: 'app-students',
@@ -52,7 +53,7 @@ export class StudentsComponent extends BaseComponent implements OnInit {
   }
 
   openCreateModal(): void {
-    const inputDefs = this.studentsService.getStudentInputDefs();
+    const inputDefs = {};
     const dialogRef = this.matDialog.open(GraphqlRecordFormComponent, {
       width: '1200px',
       data: {

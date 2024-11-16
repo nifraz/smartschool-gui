@@ -5,7 +5,7 @@ import { NotFoundComponent } from "../../shared/not-found/not-found.component";
 import { MatDialog } from '@angular/material/dialog';
 import { GraphqlRecordFormComponent } from '../../shared/graphql-record-form/graphql-record-form.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { Age, calculateAge, GraphqlCollections, GraphqlService, GraphqlTypes } from '../../shared/services/graphql.service';
+import { GraphqlService } from '../../shared/services/graphql.service';
 import { EnrollmentStatus, RequestStatus, StudentInput, StudentModel, UserModel } from '../../../../graphql/generated';
 import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from '../../shared/components/base/base.component';
@@ -13,6 +13,7 @@ import { GET_STUDENT, GET_USER } from '../../shared/queries';
 import { AuthService } from '../../auth/auth.service';
 import { RecordComponent } from '../../shared/components/record/record.component';
 import { TitleCaseWithSpacePipe } from "../../shared/pipes/title-case-with-space.pipe";
+import { GraphqlTypes, GraphqlCollections } from '../../shared/enums';
 
 @Component({
   selector: 'app-user-details',
