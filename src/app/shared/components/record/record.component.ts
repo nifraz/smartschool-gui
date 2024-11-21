@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { BaseComponent } from '../base/base.component';
+import { DataComponent } from '../data/data.component';
 
 @Component({
   selector: 'app-record',
@@ -8,12 +9,11 @@ import { BaseComponent } from '../base/base.component';
   templateUrl: './record.component.html',
   styleUrl: './record.component.scss'
 })
-export abstract class RecordComponent<T> extends BaseComponent {
+export abstract class RecordComponent<T> extends DataComponent {
   id?: string | null;
   record?: T | null;
   isEditMode?: boolean;
 
-  abstract loadRecord(): void;
   abstract openRecordFormModal(): void;
   abstract editRecord(): void;
   abstract deleteRecord(): void;

@@ -136,7 +136,7 @@ export class RegisterComponent extends BaseComponent implements OnInit {
           props: {
             label: 'Sex',
             type: 'select',
-            placeholder: 'Enter Sex',
+            placeholder: 'Select Sex',
             options: enumToArray(Sex).map(x => ({ label: x.caption, value: x.value })),
             required: true,
           },

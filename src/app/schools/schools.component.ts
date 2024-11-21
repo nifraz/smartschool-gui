@@ -11,6 +11,7 @@ import { CustomFloatingFilterComponent } from '../shared/components/custom-float
 import { SchoolsService } from './schools.service';
 import { BaseComponent } from '../shared/components/base/base.component';
 import { GraphqlCollections, GraphqlTypes } from '../shared/enums';
+import { GridComponent } from '../shared/components/grid/grid.component';
 
 @Component({
   selector: 'app-schools',
@@ -21,7 +22,10 @@ import { GraphqlCollections, GraphqlTypes } from '../shared/enums';
   templateUrl: './schools.component.html',
   styleUrl: './schools.component.scss'
 })
-export class SchoolsComponent extends BaseComponent implements OnInit {
+export class SchoolsComponent extends GridComponent<SchoolModel> implements OnInit {
+  override loadData(): void {
+    throw new Error('Method not implemented.');
+  }
   collectionKey: string = GraphqlCollections.SCHOOLS;
 
   constructor(
@@ -38,7 +42,7 @@ export class SchoolsComponent extends BaseComponent implements OnInit {
     this.router.navigate(['/schools', $event.id]);
   }
 
-  onNewClicked($event: any) {
+  onNewClicked() {
     this.navigateToCreateRecord();
   }
 
@@ -52,14 +56,11 @@ export class SchoolsComponent extends BaseComponent implements OnInit {
   }
 
   openCreateModal(): void {
-    // const inputDefs = this.schoolsService.getSchoolInputDefs();
-    const inputDefs = {};
-    const dialogRef = this.matDialog.open(GraphqlRecordFormComponent, {
+    const dialogRef = this.matDialog.open(GraphqlRecordFormComponent<SchoolModel, any>, {
       width: '1200px',
       data: {
         collection: GraphqlCollections.SCHOOLS,
         type: GraphqlTypes.SCHOOL,
-        inputDefs,
       },
     });
 

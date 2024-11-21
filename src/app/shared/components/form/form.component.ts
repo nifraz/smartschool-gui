@@ -4,6 +4,7 @@ import { FormGroup } from '@angular/forms';
 import { FormlyFieldConfig } from '@ngx-formly/core';
 import { DocumentNode } from 'graphql';
 import { TypedDocumentNode } from 'apollo-angular';
+import { DataComponent } from '../data/data.component';
 
 @Component({
   selector: 'app-form',
@@ -12,11 +13,11 @@ import { TypedDocumentNode } from 'apollo-angular';
   templateUrl: './form.component.html',
   styleUrl: './form.component.scss'
 })
-export abstract class FormComponent<T> extends BaseComponent {
+export abstract class FormComponent<M> extends DataComponent {
   id?: number;
-  record?: T;
+  record?: M;
   isEditMode?: boolean;
-  oldRecord?: T;
+  oldRecord?: M;
   isAddAnother?: boolean;
 
   @Input() form: FormGroup = new FormGroup({});

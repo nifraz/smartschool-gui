@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GraphqlFormComponent } from './graphql-form.component';
+import { DataComponent } from './data.component';
 
-describe('GraphqlFormComponent', () => {
-  let component: GraphqlFormComponent;
-  let fixture: ComponentFixture<GraphqlFormComponent>;
+describe('DataComponent', () => {
+  let component: DataComponent;
+  let fixture: ComponentFixture<DataComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [GraphqlFormComponent]
+      imports: [DataComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(GraphqlFormComponent);
+    fixture = TestBed.createComponent(DataComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

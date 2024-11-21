@@ -6,11 +6,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { GraphqlRecordFormComponent } from '../shared/graphql-record-form/graphql-record-form.component';
 import { GraphqlService } from '../shared/services/graphql.service';
-import { Sex, StudentModel } from '../../../graphql/generated';
+import { Sex, StudentInput, StudentModel } from '../../../graphql/generated';
 import { MultiSelectFilterComponent } from '../shared/components/multi-select-filter/multi-select-filter.component';
 import { CustomFloatingFilterComponent } from '../shared/components/custom-floating-filter/custom-floating-filter.component';
 import { BaseComponent } from '../shared/components/base/base.component';
 import { GraphqlCollections, GraphqlTypes } from '../shared/enums';
+import { GridComponent } from '../shared/components/grid/grid.component';
 
 @Component({
   selector: 'app-students',
@@ -21,12 +22,11 @@ import { GraphqlCollections, GraphqlTypes } from '../shared/enums';
   templateUrl: './students.component.html',
   styleUrl: './students.component.scss'
 })
-export class StudentsComponent extends BaseComponent implements OnInit {
+export class StudentsComponent extends GridComponent<StudentModel> implements OnInit {
+
   collectionKey: string = GraphqlCollections.STUDENTS;
 
   constructor(
-    private studentsService: StudentsService,
-    private graphqlService: GraphqlService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private matDialog: MatDialog,
@@ -34,12 +34,16 @@ export class StudentsComponent extends BaseComponent implements OnInit {
     super();
   }
 
-  onRecordClicked($event: StudentModel) {
-    this.router.navigate(['/students', $event.id]);
+  override loadData(): void {
+    throw new Error('Method not implemented.');
+  }
+
+  onRecordClicked(record: StudentModel) {
+    this.router.navigate(['/students', record.id]);
     // this.router.navigateByUrl('/students/1');
   }
 
-  onNewClicked($event: any) {
+  onNewClicked() {
     this.navigateToCreateStudent();
   }
 
@@ -53,13 +57,11 @@ export class StudentsComponent extends BaseComponent implements OnInit {
   }
 
   openCreateModal(): void {
-    const inputDefs = {};
-    const dialogRef = this.matDialog.open(GraphqlRecordFormComponent, {
+    const dialogRef = this.matDialog.open(GraphqlRecordFormComponent<StudentModel, StudentInput>, {
       width: '1200px',
       data: {
         collection: GraphqlCollections.STUDENTS,
         type: GraphqlTypes.STUDENT,
-        inputDefs,
       },
     });
 

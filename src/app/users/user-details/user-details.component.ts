@@ -55,7 +55,7 @@ export class UserDetailsComponent extends RecordComponent<UserModel> implements 
 
   ngOnInit(): void {
     this.id = this.activatedRoute.snapshot.paramMap.get('id');
-    this.loadRecord();
+    this.loadData();
 
     this.activatedRoute.data.subscribe(data => {
       if (data['isEdit']) {
@@ -64,7 +64,7 @@ export class UserDetailsComponent extends RecordComponent<UserModel> implements 
     });
   }
 
-  override loadRecord(): void {
+  override loadData(): void {
     if (this.id) {
       this.isLoading = true;
       const variables = {
@@ -150,9 +150,9 @@ export class UserDetailsComponent extends RecordComponent<UserModel> implements 
             key: 'personId',
             type: 'select',
             props: {
-              label: 'Person',
+              label: 'Candidate',
               type: 'select',
-              placeholder: 'Enter Person',
+              placeholder: 'Select Candidate',
               options: [
                 {
                   value: this.record?.person?.id,
@@ -185,7 +185,7 @@ export class UserDetailsComponent extends RecordComponent<UserModel> implements 
             props: {
               label: 'Academic Year',
               type: 'select',
-              placeholder: 'Enter Academic Year',
+              placeholder: 'Select Academic Year',
               options: getAcademicYears$,
               required: true,
             },
@@ -200,7 +200,7 @@ export class UserDetailsComponent extends RecordComponent<UserModel> implements 
             props: {
               label: 'Grade',
               type: 'select',
-              placeholder: 'Enter Grade',
+              placeholder: 'Select Grade',
               options: enumToArray(Grade).map(x => ({ label: x.caption, value: x.value })),
               // options: getGradesBySchool$,
               required: true,
@@ -230,7 +230,7 @@ export class UserDetailsComponent extends RecordComponent<UserModel> implements 
       width: '1200px',
       data: {
         title: 'School Student Enrollment Request',
-        type: 'SchoolStudentEnrollment',
+        type: 'SchoolStudentEnrollmentRequest',
         model,
         fields,
         recordCreateMutation: CREATE_SCHOOL_STUDENT_ENROLLMENT_REQUEST,
@@ -238,10 +238,7 @@ export class UserDetailsComponent extends RecordComponent<UserModel> implements 
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      // this.router.navigate(['/teachers', this.id]);
-      this.loadRecord();
-      //reload data
-      console.log(result);
+      this.loadData();
     });
   }
 

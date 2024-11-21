@@ -72,7 +72,7 @@ export class SchoolStudentEnrollmentDetailsComponent extends RecordComponent<Sch
     });
   }
 
-  override loadRecord(): void {
+  override loadData(): void {
     throw new Error('Method not implemented.');
   }
 

@@ -42,6 +42,9 @@ import { TitleCaseWithSpacePipe } from "../../../shared/pipes/title-case-with-sp
   styleUrl: './create-school-student-enrollment.component.scss'
 })
 export class CreateSchoolStudentEnrollmentComponent<SchoolStudentEnrollmentModel> extends FormComponent<SchoolStudentEnrollmentModel> {
+  override loadData(): void {
+    throw new Error('Method not implemented.');
+  }
   schoolStudentEnrollmentRequest?: SchoolStudentEnrollmentRequestModel;
 
   getAcademicYears$?: Observable<FormlyOption[]>;
@@ -100,7 +103,7 @@ export class CreateSchoolStudentEnrollmentComponent<SchoolStudentEnrollmentModel
             props: {
               label: 'Academic Year',
               type: 'select',
-              placeholder: 'Enter Academic Year',
+              placeholder: 'Select Academic Year',
               options: this.getAcademicYears$,
               required: true,
             },
@@ -115,7 +118,7 @@ export class CreateSchoolStudentEnrollmentComponent<SchoolStudentEnrollmentModel
             props: {
               label: 'Class',
               type: 'select',
-              placeholder: 'Enter Class',
+              placeholder: 'Select Class',
               options: this.getClassesBySchool$,
               required: true,
             },

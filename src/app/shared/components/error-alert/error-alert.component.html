@@ -2,13 +2,13 @@
     <strong>Errors:</strong>
     <ul>
         @if (error.error) {
-            @if ((error.error | typeof) === 'number') {
+            @if ((error.error | typeof) === 'string') {
                 <li>{{ error.error }}</li>
             }
             @if (error.error.message) {
                 <li>{{ error.error.message }}</li>
             }
-            @if (error.error.errors) {
+            @if (error.error.errors && error.error.errors.length) {
                 @for (errorEntry of error.error.errors | keyvalue; track errorEntry.value) {
                     <li>{{ errorEntry.value }}</li>
                 }

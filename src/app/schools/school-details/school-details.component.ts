@@ -59,7 +59,7 @@ export class SchoolDetailsComponent extends RecordComponent<SchoolModel> impleme
 
   ngOnInit(): void {
     this.id = this.activatedRoute.snapshot.paramMap.get('id');
-    this.loadRecord();
+    this.loadData();
 
     this.activatedRoute.data.subscribe(data => {
       if (data['isEdit']) {
@@ -68,7 +68,7 @@ export class SchoolDetailsComponent extends RecordComponent<SchoolModel> impleme
     });
   }
 
-  loadRecord(): void {
+  loadData(): void {
     if (this.id) {
       this.isLoading = true;
       const variables = {
@@ -150,9 +150,9 @@ export class SchoolDetailsComponent extends RecordComponent<SchoolModel> impleme
             key: 'personId',
             type: 'select',
             props: {
-              label: 'Person',
+              label: 'Candidate',
               type: 'select',
-              placeholder: 'Enter Person',
+              placeholder: 'Select Candidate',
               options: [
                 {
                   value: this.authService.loggedInUser?.person?.id,
@@ -170,7 +170,7 @@ export class SchoolDetailsComponent extends RecordComponent<SchoolModel> impleme
             props: {
               label: 'School',
               type: 'select',
-              placeholder: 'Enter School',
+              placeholder: 'Select School',
               options: [
                 {
                   value: this.record?.id,
@@ -188,7 +188,7 @@ export class SchoolDetailsComponent extends RecordComponent<SchoolModel> impleme
             props: {
               label: 'Academic Year',
               type: 'select',
-              placeholder: 'Enter Academic Year',
+              placeholder: 'Select Academic Year',
               options: getAcademicYears$,
               required: true,
             },
@@ -203,7 +203,7 @@ export class SchoolDetailsComponent extends RecordComponent<SchoolModel> impleme
             props: {
               label: 'Grade',
               type: 'select',
-              placeholder: 'Enter Grade',
+              placeholder: 'Select Grade',
               options: enumToArray(Grade).map(x => ({ label: x.caption, value: x.value })),
               // options: getGradesBySchool$,
               required: true,
@@ -242,7 +242,7 @@ export class SchoolDetailsComponent extends RecordComponent<SchoolModel> impleme
 
     dialogRef.afterClosed().subscribe(result => {
       // this.router.navigate(['/teachers', this.id]);
-      this.loadRecord();
+      this.loadData();
       //reload data
       console.log(result);
     });

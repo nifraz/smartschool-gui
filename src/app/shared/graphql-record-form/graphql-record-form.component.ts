@@ -1,7 +1,7 @@
 import { Component, Inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { AbstractControl, FormArray, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Apollo, gql, MutationResult } from 'apollo-angular';
+import { Apollo, gql, MutationResult, TypedDocumentNode } from 'apollo-angular';
 import { capitalizeFirstLetter, GraphqlCollectionResponse, GraphqlService, toLowercaseFirstLetter } from '../services/graphql.service';
 import { Observable, Subject, takeUntil } from 'rxjs';
 import { CommonModule } from '@angular/common';
@@ -9,13 +9,14 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { ToastrService } from 'ngx-toastr';
 import { MatError } from '@angular/material/form-field'
 import { FormComponent } from '../components/form/form.component';
-import { GraphqlFormComponent } from '../components/graphql-form/graphql-form.component';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { FormlyModule } from '@ngx-formly/core';
+import { FormlyFieldConfig, FormlyModule } from '@ngx-formly/core';
 import { FormlyMatDatepickerModule } from '@ngx-formly/material/datepicker';
 import { ErrorAlertComponent } from '../components/error-alert/error-alert.component';
+import { DocumentNode } from 'graphql';
+import { DataComponent } from '../components/data/data.component';
 
 @Component({
   selector: 'app-graphql-record-form',
@@ -36,7 +37,21 @@ import { ErrorAlertComponent } from '../components/error-alert/error-alert.compo
   templateUrl: './graphql-record-form.component.html',
   styleUrl: './graphql-record-form.component.scss'
 })
-export class GraphqlRecordFormComponent<M, I> extends GraphqlFormComponent<I> implements OnInit, OnChanges, OnDestroy {
+export class GraphqlRecordFormComponent<M, I> extends FormComponent<M> implements OnInit, OnChanges, OnDestroy {
+  override loadData(): void {
+    throw new Error('Method not implemented.');
+  }
+
+  type: string = '';
+
+  @Input() model!: I;
+  @Input() fields: FormlyFieldConfig[] = [];
+  
+  enableMultipleCreate: boolean = false;
+
+  recordFetchQuery!: DocumentNode | TypedDocumentNode<any, any>;
+  recordCreateMutation!: DocumentNode | TypedDocumentNode<any, any>;
+  recordUpdateMutation!: DocumentNode | TypedDocumentNode<any, any>;
   constructor(
     private graphqlService: GraphqlService,
     private dialogRef: MatDialogRef<GraphqlRecordFormComponent<M, I>>,
@@ -60,7 +75,7 @@ export class GraphqlRecordFormComponent<M, I> extends GraphqlFormComponent<I> im
       this.fields = this.data.fields;
       this.id = this.data.id;
       this.isEditMode = !!this.id;
-      this.oldRecord = this.model;
+      // this.oldRecord = this.model;
       
       this.recordFetchQuery = this.data.recordFetchQuery;
       this.recordCreateMutation = this.data.recordCreateMutation;
@@ -145,7 +160,7 @@ export class GraphqlRecordFormComponent<M, I> extends GraphqlFormComponent<I> im
             this.form.reset();
             return;
           }
-          this.oldRecord = this.model;
+          // this.oldRecord = this.model;
           this.closeModal();
         }
       },

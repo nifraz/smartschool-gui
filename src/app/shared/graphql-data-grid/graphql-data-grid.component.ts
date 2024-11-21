@@ -40,7 +40,7 @@ export class GraphqlDataGridComponent<T extends object> implements OnInit, Remot
   @Input()colDefs: ColDef<T>[] = [];
 
   @Output()recordClicked: EventEmitter<T> = new EventEmitter<T>();
-  @Output()newClicked: EventEmitter<any> = new EventEmitter<any>();
+  @Output()addNewClicked: EventEmitter<void> = new EventEmitter<void>();
 
   defaultColDef: ColDef = {
     flex: 1,
@@ -113,7 +113,7 @@ export class GraphqlDataGridComponent<T extends object> implements OnInit, Remot
   }
 
   onNew(): void {
-    this.newClicked.emit();
+    this.addNewClicked.emit();
   }
 
   onExport(): void {

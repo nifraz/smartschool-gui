@@ -47,7 +47,7 @@ export class StudentDetailsComponent extends RecordComponent<StudentModel> imple
 
   ngOnInit(): void {
     this.id = this.activatedRoute.snapshot.paramMap.get('id');
-    this.loadRecord();
+    this.loadData();
 
     this.activatedRoute.data.subscribe(data => {
       if (data['isEdit']) {
@@ -56,7 +56,7 @@ export class StudentDetailsComponent extends RecordComponent<StudentModel> imple
     });
   }
 
-  loadRecord(): void {
+  loadData(): void {
     if (this.id) {
       this.isLoading = true;
       const variables = {

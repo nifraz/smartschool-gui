@@ -35,6 +35,9 @@ import { ToastrService } from 'ngx-toastr';
   styleUrl: './verify.component.scss'
 })
 export class VerifyComponent extends FormComponent<UserResponse> implements OnInit {
+  override loadData(): void {
+    throw new Error('Method not implemented.');
+  }
   email?: string | null;
   mobileNo?: string | null;
   otp?: string | null;

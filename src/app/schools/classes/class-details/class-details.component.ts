@@ -85,7 +85,7 @@ export class ClassDetailsComponent extends RecordComponent<ClassModel> implement
     });
   }
 
-  override loadRecord(): void {
+  override loadData(): void {
     throw new Error('Method not implemented.');
   }
 
