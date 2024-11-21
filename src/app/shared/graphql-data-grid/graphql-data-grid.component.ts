@@ -38,6 +38,8 @@ export class GraphqlDataGridComponent<T extends object> implements OnInit, Remot
   @Input()collection: string = '';
   @Input()themeClass: string = "ag-theme-quartz-dark";
   @Input()colDefs: ColDef<T>[] = [];
+  
+  @Input()initialFilterModel?: {[key: string]: AgGridFilter};
 
   @Output()recordClicked: EventEmitter<T> = new EventEmitter<T>();
   @Output()addNewClicked: EventEmitter<void> = new EventEmitter<void>();
@@ -256,6 +258,11 @@ export class GraphqlDataGridComponent<T extends object> implements OnInit, Remot
   private getFilterQuery(filterModel: {[key: string]: AgGridFilter}): string {
     const filterFields = Object.entries(filterModel)
       .map(([field, agGridFilter]) => this.getFilterField(field, agGridFilter));
+    if (this.initialFilterModel) {
+      const initialFilterFields = Object.entries(this.initialFilterModel)
+        .map(([field, agGridFilter]) => this.getFilterField(field, agGridFilter));
+      filterFields.push(...initialFilterFields);
+    }
     return this.getFilterConditionalOperation(filterFields, ConditionalOperator.AND);
   }
 

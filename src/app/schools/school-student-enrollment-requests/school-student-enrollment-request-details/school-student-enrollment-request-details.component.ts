@@ -60,7 +60,7 @@ export class SchoolStudentEnrollmentRequestDetailsComponent extends RecordCompon
   }
 
   ngOnInit(): void {
-    this.id = this.activatedRoute.snapshot.paramMap.get('id');
+    this.id = this.activatedRoute.snapshot.paramMap.get('schoolStudentEnrollmentRequestId');
     this.loadData();
 
     this.activatedRoute.data.subscribe(data => {

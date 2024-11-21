@@ -126,26 +126,32 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                            <th scope="col">School Name</th>
-                            <th scope="col">Grade</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Details</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @for (request of record.createdSchoolStudentEnrollmentRequests; track $index) {
+                    @if (record.createdSchoolStudentEnrollmentRequests.length) {
+                        <p>Showing latest 10 records (<a [routerLink]="['/users', id, 'school-student-enrollment-requests' ]">View all</a>)</p>
+                        <table class="table">
+                            <thead>
                                 <tr>
-                                    <th scope="row"><a [routerLink]="['/users', request.createdUserId]">{{ request.schoolName }}</a></th>
-                                    <td>{{ request.grade | titleCaseWithSpace }}</td>
-                                    <td>{{ request.status | titleCaseWithSpace }}</td>
-                                    <td><a [routerLink]="['/schools', request.schoolId, 'student-enrollment-requests', request.id ]">View Details</a></td>
+                                <th scope="col">School Name</th>
+                                <th scope="col">Grade</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Details</th>
                                 </tr>
-                            }
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @for (request of record.createdSchoolStudentEnrollmentRequests; track $index) {
+                                    <tr>
+                                        <th scope="row"><a [routerLink]="['/users', request.createdUserId]">{{ request.schoolName }}</a></th>
+                                        <td>{{ request.grade | titleCaseWithSpace }}</td>
+                                        <td>{{ request.status | titleCaseWithSpace }}</td>
+                                        <td><a [routerLink]="['/schools', request.schoolId, 'student-enrollment-requests', request.id ]">View Details</a></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    @else {
+                        <p>No records found</p>
+                    }
                 </div>
                 </div>
             </div>

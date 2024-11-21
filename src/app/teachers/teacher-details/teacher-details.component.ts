@@ -46,7 +46,7 @@ export class TeacherDetailsComponent extends RecordComponent<TeacherModel> imple
   }
 
   ngOnInit(): void {
-    this.id = this.activatedRoute.snapshot.paramMap.get('id');
+    this.id = this.activatedRoute.snapshot.paramMap.get('teacherId');
     if (this.id) {
       this.isLoading = true;
       const variables = {

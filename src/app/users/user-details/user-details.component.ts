@@ -54,7 +54,7 @@ export class UserDetailsComponent extends RecordComponent<UserModel> implements 
   }
 
   ngOnInit(): void {
-    this.id = this.activatedRoute.snapshot.paramMap.get('id');
+    this.id = this.activatedRoute.snapshot.paramMap.get('userId');
     this.loadData();
 
     this.activatedRoute.data.subscribe(data => {

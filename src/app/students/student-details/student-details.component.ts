@@ -46,7 +46,7 @@ export class StudentDetailsComponent extends RecordComponent<StudentModel> imple
   }
 
   ngOnInit(): void {
-    this.id = this.activatedRoute.snapshot.paramMap.get('id');
+    this.id = this.activatedRoute.snapshot.paramMap.get('studentId');
     this.loadData();
 
     this.activatedRoute.data.subscribe(data => {

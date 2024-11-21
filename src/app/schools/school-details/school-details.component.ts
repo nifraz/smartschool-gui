@@ -58,7 +58,7 @@ export class SchoolDetailsComponent extends RecordComponent<SchoolModel> impleme
   }
 
   ngOnInit(): void {
-    this.id = this.activatedRoute.snapshot.paramMap.get('id');
+    this.id = this.activatedRoute.snapshot.paramMap.get('schoolId');
     this.loadData();
 
     this.activatedRoute.data.subscribe(data => {
