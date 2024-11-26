@@ -53,6 +53,7 @@ export const GET_SCHOOL_STUDENT_ENROLLMENT_REQUEST = gql`
       id
       grade
       status
+      reason
       personId
       person {
         id

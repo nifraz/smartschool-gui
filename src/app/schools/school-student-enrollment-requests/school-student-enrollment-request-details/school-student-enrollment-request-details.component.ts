@@ -21,6 +21,7 @@ import { GraphqlTypes, GraphqlCollections } from '../../../shared/enums';
 import { AbstractControl } from '@angular/forms';
 import { map, of, switchMap, takeUntil } from 'rxjs';
 import { RecordFormComponent } from '../../../shared/components/record-form/record-form.component';
+import { PopoverModule } from 'ngx-bootstrap/popover';
 
 @Component({
   selector: 'app-school-student-enrollment-request-details',
@@ -32,6 +33,7 @@ import { RecordFormComponent } from '../../../shared/components/record-form/reco
     RouterLink,
     TitleCaseWithSpacePipe,
     LaddaModule,
+    PopoverModule
   ],
   providers: [
     TitleCaseWithSpacePipe

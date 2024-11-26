@@ -17,6 +17,15 @@
                 </p>
                 <p class="text-muted">
                     {{ record.grade | titleCaseWithSpace }} | Academic Year: {{ record.academicYearYear }} | Status: {{ record.status | titleCaseWithSpace }}
+                    @if (record.reason) {
+                        <button type="button" class="rounded-pill border-0"
+                            title="Reason"
+                            [popover]="record.reason"
+                            popoverTitle="Reason"
+                            triggers="focus">
+                            <i class="bi bi-exclamation-circle"></i>
+                        </button>
+                    }
                     @if(record.status == RequestStatus.Approved) {
                         <a [routerLink]="['/schools', record.schoolId, 'student-enrollments', record.schoolStudentEnrollment?.id]">View Enrollment</a>
                     }
