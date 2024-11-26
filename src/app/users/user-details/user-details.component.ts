@@ -242,4 +242,8 @@ export class UserDetailsComponent extends RecordComponent<UserModel> implements 
     });
   }
 
+  createPersonRelationship(): void {
+    
+  }
+
 }

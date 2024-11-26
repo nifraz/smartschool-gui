@@ -156,7 +156,7 @@ export class SchoolDetailsComponent extends RecordComponent<SchoolModel> impleme
               options: [
                 {
                   value: this.authService.loggedInUser?.person?.id,
-                  label: `${this.authService.loggedInUser?.person?.fullName} (${this.authService.loggedInUser?.person?.age?.shortString})`
+                  label: `${this.authService.loggedInUser?.person?.label}`
                 }
               ],
               required: true,
@@ -174,7 +174,7 @@ export class SchoolDetailsComponent extends RecordComponent<SchoolModel> impleme
               options: [
                 {
                   value: this.record?.id,
-                  label: `${this.record?.name} (${this.record?.address})`
+                  label: `${this.record?.label}`
                 }
               ],
               required: true,

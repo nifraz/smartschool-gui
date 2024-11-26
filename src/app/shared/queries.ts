@@ -6,6 +6,7 @@ export const GET_USER = gql`
       id
       person {
         id
+        label
         address
         bcNo
         mobileNo
@@ -39,9 +40,13 @@ export const GET_USER = gql`
         grade
         status
         schoolId
-        schoolName
+        school {
+          name
+        }
         personId
-        personFullName
+        person {
+          fullName
+        }
       }
     }
   }
@@ -74,7 +79,9 @@ export const GET_SCHOOL_STUDENT_ENROLLMENT_REQUEST = gql`
             days
         }
       }
-      personFullName
+      person {
+        fullName
+      }
       schoolId
       school {
         id
@@ -89,7 +96,9 @@ export const GET_SCHOOL_STUDENT_ENROLLMENT_REQUEST = gql`
         id
         no
       }
-      schoolName
+      school {
+        name
+      }
       academicYearYear
       createdUserId
     }
@@ -111,7 +120,9 @@ export const GET_SCHOOL_STUDENT_ENROLLMENT = gql`
         phoneNo
         type
       }
-      schoolName
+      school {
+        name
+      }
       status
       studentId
       student {
@@ -177,8 +188,10 @@ export const GET_SCHOOL = gql`
   query getSchool($id: Long!) {
     school(id: $id) {
       id
+      label
       censusNo
       name
+      location
       address
       email
       phoneNo
@@ -195,7 +208,9 @@ export const GET_SCHOOL = gql`
         grade
         status
         personId
-        personFullName
+        person {
+          fullName
+        }
         createdUserId
       }
     }
@@ -278,7 +293,9 @@ export const GET_STUDENT = gql`
         time
         status
         schoolId
-        schoolName
+        school {
+          name
+        }
       }
     }
   }
@@ -309,7 +326,9 @@ export const GET_TEACHER = gql`
         time
         status
         schoolId
-        schoolName
+        school {
+          name
+        }
       }
     }
   }

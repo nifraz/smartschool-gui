@@ -117,9 +117,8 @@
                         </div>
                         <div>
                             @if (authService.loggedInUser) {
-                                <button class="btn btn-sm btn-primary" (click)="createSchoolStudentEnrollmentRequest()">
+                                <button type="button" title="New" class="btn btn-sm btn-primary" (click)="createSchoolStudentEnrollmentRequest()">
                                     <i class="bi bi-plus"></i>
-                                    New
                                 </button>
                             }
                         </div>
@@ -127,23 +126,25 @@
                 </div>
                 <div class="card-body">
                     @if (record.createdSchoolStudentEnrollmentRequests.length) {
-                        <p>Showing latest 10 records (<a [routerLink]="['/users', id, 'school-student-enrollment-requests' ]">View all</a>)</p>
+                        <p>Showing latest 10 records (<a [routerLink]="['/users', record.id, 'school-student-enrollment-requests' ]">View all</a>)</p>
                         <table class="table">
                             <thead>
                                 <tr>
-                                <th scope="col">School Name</th>
-                                <th scope="col">Grade</th>
-                                <th scope="col">Status</th>
-                                <th scope="col">Details</th>
+                                    <th scope="col">School</th>
+                                    <th scope="col">Candidate</th>
+                                    <th scope="col">Grade</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Details</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @for (request of record.createdSchoolStudentEnrollmentRequests; track $index) {
+                                @for (item of record.createdSchoolStudentEnrollmentRequests; track $index) {
                                     <tr>
-                                        <th scope="row"><a [routerLink]="['/users', request.createdUserId]">{{ request.schoolName }}</a></th>
-                                        <td>{{ request.grade | titleCaseWithSpace }}</td>
-                                        <td>{{ request.status | titleCaseWithSpace }}</td>
-                                        <td><a [routerLink]="['/schools', request.schoolId, 'student-enrollment-requests', request.id ]">View Details</a></td>
+                                        <th scope="row"><a [routerLink]="['/schools', item.schoolId]">{{ item.school?.name }}</a></th>
+                                        <td><a [routerLink]="['/persons', item.person?.id]">{{ item.person?.fullName }}</a></td>
+                                        <td>{{ item.grade | titleCaseWithSpace }}</td>
+                                        <td>{{ item.status | titleCaseWithSpace }}</td>
+                                        <td><a [routerLink]="['/users', record.id, 'student-enrollment-requests', item.id ]">View</a></td>
                                     </tr>
                                 }
                             </tbody>
@@ -151,6 +152,54 @@
                     }
                     @else {
                         <p>No records found</p>
+                    }
+                </div>
+                </div>
+            </div>
+
+            <!-- Candidate Profiles Section -->
+            <div class="col-12 col-md-6 mb-4">
+                <div class="card">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between">
+                        <div class="card-title">
+                            <i class="bi bi-journal"></i> Candidate Profiles
+                        </div>
+                        <div>
+                            @if (authService.loggedInUser) {
+                                <button type="button" title="New" class="btn btn-sm btn-primary" (click)="createPersonRelationship()">
+                                    <i class="bi bi-plus"></i>
+                                </button>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    @if (record.createdPersons.length) {
+                        <p>Showing latest 10 records (<a [routerLink]="['/users', record.id, 'persons' ]">View all</a>)</p>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">Age</th>
+                                <th scope="col">Sex</th>
+                                <th scope="col">Details</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (item of record.createdPersons; track $index) {
+                                    <tr>
+                                        <th scope="row"><a [routerLink]="['/persons', item.id]">{{ item.fullName }}</a></th>
+                                        <td>{{ item.age?.shortString }}</td>
+                                        <td>{{ item.sex| titleCaseWithSpace }}</td>
+                                        <td><a [routerLink]="['/users', record.id, 'persons', item.id ]">View</a></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    @else {
+                        <p>No records found.</p>
                     }
                 </div>
                 </div>

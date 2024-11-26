@@ -54,9 +54,8 @@
                         </div>
                         <div>
                             @if (authService.loggedInUser?.principalId && authService.loggedInUser?.currentSchoolId == record.id) {
-                                <button class="btn btn-sm btn-primary" (click)="createClass()">
+                                <button type="button" title="New" class="btn btn-sm btn-primary" (click)="createClass()">
                                     <i class="bi bi-plus"></i>
-                                    New
                                 </button>
                             }
                         </div>
@@ -86,35 +85,40 @@
                         </div>
                         <div>
                             @if (authService.loggedInUser) {
-                                <button class="btn btn-sm btn-primary" (click)="createSchoolStudentEnrollmentRequest()">
+                                <button type="button" title="New" class="btn btn-sm btn-primary" (click)="createSchoolStudentEnrollmentRequest()">
                                     <i class="bi bi-plus"></i>
-                                    New
                                 </button>
                             }
                         </div>
                     </div>
                 </div>
                 <div class="card-body">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                            <th scope="col">Full Name</th>
-                            <th scope="col">Grade</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Details</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @for (request of record.schoolStudentEnrollmentRequests; track $index) {
+                    @if (record.schoolStudentEnrollmentRequests.length) {
+                        <p>Showing latest 10 records (<a [routerLink]="['/schools', record.id, 'student-enrollment-requests']">View all</a>)</p>
+                        <table class="table">
+                            <thead>
                                 <tr>
-                                    <th scope="row"><a [routerLink]="['/users', request.createdUserId]">{{ request.personFullName }}</a></th>
-                                    <td>{{ request.grade | titleCaseWithSpace }}</td>
-                                    <td>{{ request.status | titleCaseWithSpace }}</td>
-                                    <td><a [routerLink]="['/schools', record.id, 'student-enrollment-requests', request.id ]">View Details</a></td>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Grade</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Details</th>
                                 </tr>
-                            }
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @for (item of record.schoolStudentEnrollmentRequests; track $index) {
+                                    <tr>
+                                        <th scope="row"><a [routerLink]="['/users', item.createdUserId]">{{ item.person?.fullName }}</a></th>
+                                        <td>{{ item.grade | titleCaseWithSpace }}</td>
+                                        <td>{{ item.status | titleCaseWithSpace }}</td>
+                                        <td><a [routerLink]="['/schools', record.id, 'student-enrollment-requests', item.id ]">View</a></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    @else {
+                        <p>No records found.</p>
+                    }
                 </div>
                 </div>
             </div>

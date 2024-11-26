@@ -28,6 +28,8 @@ import { UserSchoolStudentEnrollmentRequestsComponent } from './users/user-schoo
 import { UserSchoolTeacherEnrollmentRequestsComponent } from './users/user-school-teacher-enrollment-requests/user-school-teacher-enrollment-requests.component';
 import { UsersComponent } from './users/users.component';
 import { VerifyComponent } from './auth/verify/verify.component';
+import { ClassStudentEnrollmentDetailsComponent } from './schools/classes/class-student-enrollments/class-student-enrollment-details/class-student-enrollment-details.component';
+import { ClassTeacherEnrollmentDetailsComponent } from './schools/classes/class-teacher-enrollments/class-teacher-enrollment-details/class-teacher-enrollment-details.component';
 
 export const routes: Routes = [
     //main
@@ -63,9 +65,11 @@ export const routes: Routes = [
     { path: 'schools/:schoolId/teacher-enrollments', title: 'School Teacher Enrollments | SmartSchool', component: SchoolTeacherEnrollmentsComponent, canActivate: [authGuard] },
     { path: 'schools/:schoolId/teacher-enrollments/:schoolTeacherEnrollmentId', title: 'School Teacher Enrollment Details | SmartSchool', component: SchoolTeacherEnrollmentDetailsComponent, canActivate: [authGuard] },
     { path: 'schools/:schoolId/classes', title: 'School Classes | SmartSchool', component: ClassDetailsComponent, canActivate: [authGuard] },
-    { path: 'schools/:schoolId/classes/:grade/:section', title: 'Class Details | SmartSchool', component: ClassDetailsComponent, canActivate: [authGuard] },
-    { path: 'schools/:schoolId/classes/:grade/:section/student-enrollments', title: 'Class Student Enrollments | SmartSchool', component: ClassStudentEnrollmentsComponent, canActivate: [authGuard] },
-    { path: 'schools/:schoolId/classes/:grade/:section/teacher-enrollments', title: 'Class Teacher Enrollments | SmartSchool', component: ClassTeacherEnrollmentsComponent, canActivate: [authGuard] },
+    { path: 'schools/:schoolId/classes/:classId', title: 'Class Details | SmartSchool', component: ClassDetailsComponent, canActivate: [authGuard] },
+    { path: 'schools/:schoolId/classes/:classId/student-enrollments', title: 'Class Student Enrollments | SmartSchool', component: ClassStudentEnrollmentsComponent, canActivate: [authGuard] },
+    { path: 'schools/:schoolId/classes/:classId/student-enrollments/:classStudentEnrollmentId', title: 'Class Student Enrollments | SmartSchool', component: ClassStudentEnrollmentDetailsComponent, canActivate: [authGuard] },
+    { path: 'schools/:schoolId/classes/:classId/teacher-enrollments', title: 'Class Teacher Enrollments | SmartSchool', component: ClassTeacherEnrollmentsComponent, canActivate: [authGuard] },
+    { path: 'schools/:schoolId/classes/:classId/teacher-enrollments/:classTeacherEnrollmentId', title: 'Class Teacher Enrollments | SmartSchool', component: ClassTeacherEnrollmentDetailsComponent, canActivate: [authGuard] },
 
     //students
     { path: 'students', title: 'Students | SmartSchool', component: StudentsComponent, canActivate: [authGuard] },

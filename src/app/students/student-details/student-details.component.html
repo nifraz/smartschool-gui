@@ -105,23 +105,40 @@
                         </div>
                         <div>
                             @if (authService.loggedInUser?.principalId) {
-                                <button class="btn btn-sm btn-primary" (click)="addSchoolStudentEnrollment()">
+                                <button type="button" title="New" class="btn btn-sm btn-primary" (click)="addSchoolStudentEnrollment()">
                                     <i class="bi bi-plus"></i>
-                                    New
                                 </button>
                             }
                         </div>
                     </div>
                 </div>
                 <div class="card-body">
-                    <div *ngFor="let enrollment of record.schoolStudentEnrollments" [ngClass]="{'bg-light': enrollment.status == EnrollmentStatus.Active}">
-                    <p>
-                        <i class="bi bi-card-text"></i>&nbsp;
-                        <a [routerLink]="['/schools', enrollment.schoolId]">{{ enrollment.schoolName }}</a>&nbsp;
-                        <a [routerLink]="['/schools', enrollment.schoolId, 'student-enrollments', enrollment.id]">(#{{ enrollment.no }})</a>&nbsp;
-                        | {{ enrollment.time | date }}
-                    </p>
-                    </div>
+                    @if (record.schoolStudentEnrollments.length) {
+                        <p>Showing latest 10 records (<a [routerLink]="['/schools', record.id, 'student-enrollments']">View all</a>)</p>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">School</th>
+                                    <th scope="col">Enrollment No</th>
+                                    <th scope="col">Time</th>
+                                    <th scope="col">Details</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (item of record.schoolStudentEnrollments; track $index) {
+                                    <tr>
+                                        <th scope="row"><a [routerLink]="['/schools', item.schoolId]">{{ item.school?.name }}</a></th>
+                                        <td>{{ item.no }}</td>
+                                        <td>{{ item.time | date }}</td>
+                                        <td><a [routerLink]="['/schools', item.schoolId, 'student-enrollments', item.id]">View</a></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    @else {
+                        <p>No records found.</p>
+                    }
                 </div>
                 </div>
             </div>

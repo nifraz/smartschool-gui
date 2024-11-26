@@ -13,12 +13,33 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+  /** The `Byte` scalar type represents non-fractional whole numeric values. Byte can represent values between 0 and 255. */
+  Byte: { input: any; output: any; }
   /** The `Date` scalar represents an ISO-8601 compliant date type. */
   Date: { input: any; output: any; }
   /** The `DateTime` scalar represents an ISO-8601 compliant date time type. */
   DateTime: { input: any; output: any; }
   /** The `Long` scalar type represents non-fractional signed whole 64-bit numeric values. Long can represent values between -(2^63) and 2^63 - 1. */
   Long: { input: any; output: any; }
+};
+
+export type AcademicYear = {
+  __typename?: 'AcademicYear';
+  classStudentEnrollments: Array<ClassStudentEnrollment>;
+  classTeacherEnrollments: Array<ClassTeacherEnrollment>;
+  endDate: Scalars['Date']['output'];
+  startDate: Scalars['Date']['output'];
+  year: Scalars['Int']['output'];
+};
+
+export type AcademicYearFilterInput = {
+  and?: InputMaybe<Array<AcademicYearFilterInput>>;
+  classStudentEnrollments?: InputMaybe<ListFilterInputTypeOfClassStudentEnrollmentFilterInput>;
+  classTeacherEnrollments?: InputMaybe<ListFilterInputTypeOfClassTeacherEnrollmentFilterInput>;
+  endDate?: InputMaybe<DateOperationFilterInput>;
+  or?: InputMaybe<Array<AcademicYearFilterInput>>;
+  startDate?: InputMaybe<DateOperationFilterInput>;
+  year?: InputMaybe<IntOperationFilterInput>;
 };
 
 export type AcademicYearModel = {
@@ -86,6 +107,70 @@ export type AgeModelSortInput = {
 export type BooleanOperationFilterInput = {
   eq?: InputMaybe<Scalars['Boolean']['input']>;
   neq?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type ByteOperationFilterInput = {
+  eq?: InputMaybe<Scalars['Byte']['input']>;
+  gt?: InputMaybe<Scalars['Byte']['input']>;
+  gte?: InputMaybe<Scalars['Byte']['input']>;
+  in?: InputMaybe<Array<InputMaybe<Scalars['Byte']['input']>>>;
+  lt?: InputMaybe<Scalars['Byte']['input']>;
+  lte?: InputMaybe<Scalars['Byte']['input']>;
+  neq?: InputMaybe<Scalars['Byte']['input']>;
+  ngt?: InputMaybe<Scalars['Byte']['input']>;
+  ngte?: InputMaybe<Scalars['Byte']['input']>;
+  nin?: InputMaybe<Array<InputMaybe<Scalars['Byte']['input']>>>;
+  nlt?: InputMaybe<Scalars['Byte']['input']>;
+  nlte?: InputMaybe<Scalars['Byte']['input']>;
+};
+
+export type Class = {
+  __typename?: 'Class';
+  classStudentEnrollments: Array<ClassStudentEnrollment>;
+  classTeacherEnrollments: Array<ClassTeacherEnrollment>;
+  createdTime?: Maybe<Scalars['DateTime']['output']>;
+  createdUser?: Maybe<User>;
+  createdUserId?: Maybe<Scalars['Long']['output']>;
+  deletedTime?: Maybe<Scalars['DateTime']['output']>;
+  deletedUser?: Maybe<User>;
+  deletedUserId?: Maybe<Scalars['Long']['output']>;
+  grade: Grade;
+  id: Scalars['Long']['output'];
+  language: Language;
+  languageCode: Scalars['String']['output'];
+  lastModifiedTime?: Maybe<Scalars['DateTime']['output']>;
+  lastModifiedUser?: Maybe<User>;
+  lastModifiedUserId?: Maybe<Scalars['Long']['output']>;
+  location?: Maybe<Scalars['String']['output']>;
+  notes?: Maybe<Scalars['String']['output']>;
+  school: School;
+  schoolId: Scalars['Long']['output'];
+  section: Scalars['String']['output'];
+};
+
+export type ClassFilterInput = {
+  and?: InputMaybe<Array<ClassFilterInput>>;
+  classStudentEnrollments?: InputMaybe<ListFilterInputTypeOfClassStudentEnrollmentFilterInput>;
+  classTeacherEnrollments?: InputMaybe<ListFilterInputTypeOfClassTeacherEnrollmentFilterInput>;
+  createdTime?: InputMaybe<DateTimeOperationFilterInput>;
+  createdUser?: InputMaybe<UserFilterInput>;
+  createdUserId?: InputMaybe<LongOperationFilterInput>;
+  deletedTime?: InputMaybe<DateTimeOperationFilterInput>;
+  deletedUser?: InputMaybe<UserFilterInput>;
+  deletedUserId?: InputMaybe<LongOperationFilterInput>;
+  grade?: InputMaybe<GradeOperationFilterInput>;
+  id?: InputMaybe<LongOperationFilterInput>;
+  language?: InputMaybe<LanguageFilterInput>;
+  languageCode?: InputMaybe<StringOperationFilterInput>;
+  lastModifiedTime?: InputMaybe<DateTimeOperationFilterInput>;
+  lastModifiedUser?: InputMaybe<UserFilterInput>;
+  lastModifiedUserId?: InputMaybe<LongOperationFilterInput>;
+  location?: InputMaybe<StringOperationFilterInput>;
+  notes?: InputMaybe<StringOperationFilterInput>;
+  or?: InputMaybe<Array<ClassFilterInput>>;
+  school?: InputMaybe<SchoolFilterInput>;
+  schoolId?: InputMaybe<LongOperationFilterInput>;
+  section?: InputMaybe<StringOperationFilterInput>;
 };
 
 export type ClassModel = {
@@ -161,9 +246,64 @@ export type ClassModelSortInput = {
   section?: InputMaybe<SortEnumType>;
 };
 
+export type ClassStudentEnrollment = {
+  __typename?: 'ClassStudentEnrollment';
+  academicYear: AcademicYear;
+  academicYearYear: Scalars['Int']['output'];
+  class: Class;
+  classId: Scalars['Long']['output'];
+  createdTime?: Maybe<Scalars['DateTime']['output']>;
+  createdUser?: Maybe<User>;
+  createdUserId?: Maybe<Scalars['Long']['output']>;
+  deletedTime?: Maybe<Scalars['DateTime']['output']>;
+  deletedUser?: Maybe<User>;
+  deletedUserId?: Maybe<Scalars['Long']['output']>;
+  id: Scalars['Long']['output'];
+  lastModifiedTime?: Maybe<Scalars['DateTime']['output']>;
+  lastModifiedUser?: Maybe<User>;
+  lastModifiedUserId?: Maybe<Scalars['Long']['output']>;
+  notes?: Maybe<Scalars['String']['output']>;
+  removeReason?: Maybe<Scalars['String']['output']>;
+  removedTime?: Maybe<Scalars['DateTime']['output']>;
+  rollNo?: Maybe<Scalars['Int']['output']>;
+  schoolStudentEnrollment: SchoolStudentEnrollment;
+  schoolStudentEnrollmentId: Scalars['Long']['output'];
+  status: EnrollmentStatus;
+  time?: Maybe<Scalars['DateTime']['output']>;
+};
+
+export type ClassStudentEnrollmentFilterInput = {
+  academicYear?: InputMaybe<AcademicYearFilterInput>;
+  academicYearYear?: InputMaybe<IntOperationFilterInput>;
+  and?: InputMaybe<Array<ClassStudentEnrollmentFilterInput>>;
+  class?: InputMaybe<ClassFilterInput>;
+  classId?: InputMaybe<LongOperationFilterInput>;
+  createdTime?: InputMaybe<DateTimeOperationFilterInput>;
+  createdUser?: InputMaybe<UserFilterInput>;
+  createdUserId?: InputMaybe<LongOperationFilterInput>;
+  deletedTime?: InputMaybe<DateTimeOperationFilterInput>;
+  deletedUser?: InputMaybe<UserFilterInput>;
+  deletedUserId?: InputMaybe<LongOperationFilterInput>;
+  id?: InputMaybe<LongOperationFilterInput>;
+  lastModifiedTime?: InputMaybe<DateTimeOperationFilterInput>;
+  lastModifiedUser?: InputMaybe<UserFilterInput>;
+  lastModifiedUserId?: InputMaybe<LongOperationFilterInput>;
+  notes?: InputMaybe<StringOperationFilterInput>;
+  or?: InputMaybe<Array<ClassStudentEnrollmentFilterInput>>;
+  removeReason?: InputMaybe<StringOperationFilterInput>;
+  removedTime?: InputMaybe<DateTimeOperationFilterInput>;
+  rollNo?: InputMaybe<IntOperationFilterInput>;
+  schoolStudentEnrollment?: InputMaybe<SchoolStudentEnrollmentFilterInput>;
+  schoolStudentEnrollmentId?: InputMaybe<LongOperationFilterInput>;
+  status?: InputMaybe<EnrollmentStatusOperationFilterInput>;
+  time?: InputMaybe<DateTimeOperationFilterInput>;
+};
+
 export type ClassStudentEnrollmentModel = {
   __typename?: 'ClassStudentEnrollmentModel';
-  academicYear?: Maybe<Scalars['Int']['output']>;
+  academicYear?: Maybe<AcademicYear>;
+  academicYearYear?: Maybe<Scalars['Int']['output']>;
+  class?: Maybe<ClassModel>;
   classId?: Maybe<Scalars['Long']['output']>;
   createdTime?: Maybe<Scalars['DateTime']['output']>;
   createdUser?: Maybe<UserModel>;
@@ -180,16 +320,19 @@ export type ClassStudentEnrollmentModel = {
   removeReason?: Maybe<Scalars['String']['output']>;
   removedTime?: Maybe<Scalars['DateTime']['output']>;
   rollNo?: Maybe<Scalars['Int']['output']>;
+  schoolStudentEnrollment?: Maybe<SchoolStudentEnrollmentModel>;
   schoolStudentEnrollmentId?: Maybe<Scalars['Long']['output']>;
   status?: Maybe<EnrollmentStatus>;
-  studentFullName?: Maybe<Scalars['String']['output']>;
+  student?: Maybe<StudentModel>;
   studentId?: Maybe<Scalars['Long']['output']>;
   time?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export type ClassStudentEnrollmentModelFilterInput = {
-  academicYear?: InputMaybe<IntOperationFilterInput>;
+  academicYear?: InputMaybe<AcademicYearFilterInput>;
+  academicYearYear?: InputMaybe<IntOperationFilterInput>;
   and?: InputMaybe<Array<ClassStudentEnrollmentModelFilterInput>>;
+  class?: InputMaybe<ClassModelFilterInput>;
   classId?: InputMaybe<LongOperationFilterInput>;
   createdTime?: InputMaybe<DateTimeOperationFilterInput>;
   createdUser?: InputMaybe<UserModelFilterInput>;
@@ -207,16 +350,70 @@ export type ClassStudentEnrollmentModelFilterInput = {
   removeReason?: InputMaybe<StringOperationFilterInput>;
   removedTime?: InputMaybe<DateTimeOperationFilterInput>;
   rollNo?: InputMaybe<IntOperationFilterInput>;
+  schoolStudentEnrollment?: InputMaybe<SchoolStudentEnrollmentModelFilterInput>;
   schoolStudentEnrollmentId?: InputMaybe<LongOperationFilterInput>;
   status?: InputMaybe<NullableOfEnrollmentStatusOperationFilterInput>;
-  studentFullName?: InputMaybe<StringOperationFilterInput>;
+  student?: InputMaybe<StudentModelFilterInput>;
   studentId?: InputMaybe<LongOperationFilterInput>;
+  time?: InputMaybe<DateTimeOperationFilterInput>;
+};
+
+export type ClassTeacherEnrollment = {
+  __typename?: 'ClassTeacherEnrollment';
+  academicYear: AcademicYear;
+  academicYearYear: Scalars['Int']['output'];
+  class: Class;
+  classId: Scalars['Long']['output'];
+  createdTime?: Maybe<Scalars['DateTime']['output']>;
+  createdUser?: Maybe<User>;
+  createdUserId?: Maybe<Scalars['Long']['output']>;
+  deletedTime?: Maybe<Scalars['DateTime']['output']>;
+  deletedUser?: Maybe<User>;
+  deletedUserId?: Maybe<Scalars['Long']['output']>;
+  id: Scalars['Long']['output'];
+  lastModifiedTime?: Maybe<Scalars['DateTime']['output']>;
+  lastModifiedUser?: Maybe<User>;
+  lastModifiedUserId?: Maybe<Scalars['Long']['output']>;
+  notes?: Maybe<Scalars['String']['output']>;
+  removedReason?: Maybe<Scalars['String']['output']>;
+  removedTime?: Maybe<Scalars['DateTime']['output']>;
+  schoolTeacherEnrollment: SchoolTeacherEnrollment;
+  schoolTeacherEnrollmentId: Scalars['Long']['output'];
+  status: EnrollmentStatus;
+  time?: Maybe<Scalars['DateTime']['output']>;
+};
+
+export type ClassTeacherEnrollmentFilterInput = {
+  academicYear?: InputMaybe<AcademicYearFilterInput>;
+  academicYearYear?: InputMaybe<IntOperationFilterInput>;
+  and?: InputMaybe<Array<ClassTeacherEnrollmentFilterInput>>;
+  class?: InputMaybe<ClassFilterInput>;
+  classId?: InputMaybe<LongOperationFilterInput>;
+  createdTime?: InputMaybe<DateTimeOperationFilterInput>;
+  createdUser?: InputMaybe<UserFilterInput>;
+  createdUserId?: InputMaybe<LongOperationFilterInput>;
+  deletedTime?: InputMaybe<DateTimeOperationFilterInput>;
+  deletedUser?: InputMaybe<UserFilterInput>;
+  deletedUserId?: InputMaybe<LongOperationFilterInput>;
+  id?: InputMaybe<LongOperationFilterInput>;
+  lastModifiedTime?: InputMaybe<DateTimeOperationFilterInput>;
+  lastModifiedUser?: InputMaybe<UserFilterInput>;
+  lastModifiedUserId?: InputMaybe<LongOperationFilterInput>;
+  notes?: InputMaybe<StringOperationFilterInput>;
+  or?: InputMaybe<Array<ClassTeacherEnrollmentFilterInput>>;
+  removedReason?: InputMaybe<StringOperationFilterInput>;
+  removedTime?: InputMaybe<DateTimeOperationFilterInput>;
+  schoolTeacherEnrollment?: InputMaybe<SchoolTeacherEnrollmentFilterInput>;
+  schoolTeacherEnrollmentId?: InputMaybe<LongOperationFilterInput>;
+  status?: InputMaybe<EnrollmentStatusOperationFilterInput>;
   time?: InputMaybe<DateTimeOperationFilterInput>;
 };
 
 export type ClassTeacherEnrollmentModel = {
   __typename?: 'ClassTeacherEnrollmentModel';
-  academicYear?: Maybe<Scalars['Int']['output']>;
+  academicYear?: Maybe<AcademicYearModel>;
+  academicYearYear?: Maybe<Scalars['Int']['output']>;
+  class?: Maybe<ClassModel>;
   classId?: Maybe<Scalars['Long']['output']>;
   createdTime?: Maybe<Scalars['DateTime']['output']>;
   createdUser?: Maybe<UserModel>;
@@ -232,14 +429,17 @@ export type ClassTeacherEnrollmentModel = {
   notes?: Maybe<Scalars['String']['output']>;
   removedReason?: Maybe<Scalars['String']['output']>;
   removedTime?: Maybe<Scalars['DateTime']['output']>;
+  schoolTeacherEnrollment?: Maybe<SchoolTeacherEnrollmentModel>;
   schoolTeacherEnrollmentId?: Maybe<Scalars['Long']['output']>;
   status?: Maybe<EnrollmentStatus>;
   time?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export type ClassTeacherEnrollmentModelFilterInput = {
-  academicYear?: InputMaybe<IntOperationFilterInput>;
+  academicYear?: InputMaybe<AcademicYearModelFilterInput>;
+  academicYearYear?: InputMaybe<IntOperationFilterInput>;
   and?: InputMaybe<Array<ClassTeacherEnrollmentModelFilterInput>>;
+  class?: InputMaybe<ClassModelFilterInput>;
   classId?: InputMaybe<LongOperationFilterInput>;
   createdTime?: InputMaybe<DateTimeOperationFilterInput>;
   createdUser?: InputMaybe<UserModelFilterInput>;
@@ -256,6 +456,7 @@ export type ClassTeacherEnrollmentModelFilterInput = {
   or?: InputMaybe<Array<ClassTeacherEnrollmentModelFilterInput>>;
   removedReason?: InputMaybe<StringOperationFilterInput>;
   removedTime?: InputMaybe<DateTimeOperationFilterInput>;
+  schoolTeacherEnrollment?: InputMaybe<SchoolTeacherEnrollmentModelFilterInput>;
   schoolTeacherEnrollmentId?: InputMaybe<LongOperationFilterInput>;
   status?: InputMaybe<NullableOfEnrollmentStatusOperationFilterInput>;
   time?: InputMaybe<DateTimeOperationFilterInput>;
@@ -310,6 +511,52 @@ export type DateTimeOperationFilterInput = {
   nlte?: InputMaybe<Scalars['DateTime']['input']>;
 };
 
+export type District = {
+  __typename?: 'District';
+  id: Scalars['Int']['output'];
+  name: Scalars['String']['output'];
+  province: Province;
+  provinceId: Scalars['Int']['output'];
+  sinhalaName: Scalars['String']['output'];
+  tamilName: Scalars['String']['output'];
+  zones: Array<Zone>;
+};
+
+export type DistrictFilterInput = {
+  and?: InputMaybe<Array<DistrictFilterInput>>;
+  id?: InputMaybe<IntOperationFilterInput>;
+  name?: InputMaybe<StringOperationFilterInput>;
+  or?: InputMaybe<Array<DistrictFilterInput>>;
+  province?: InputMaybe<ProvinceFilterInput>;
+  provinceId?: InputMaybe<IntOperationFilterInput>;
+  sinhalaName?: InputMaybe<StringOperationFilterInput>;
+  tamilName?: InputMaybe<StringOperationFilterInput>;
+  zones?: InputMaybe<ListFilterInputTypeOfZoneFilterInput>;
+};
+
+export type Division = {
+  __typename?: 'Division';
+  id: Scalars['Int']['output'];
+  name: Scalars['String']['output'];
+  schools: Array<School>;
+  sinhalaName: Scalars['String']['output'];
+  tamilName: Scalars['String']['output'];
+  zone: Zone;
+  zoneId: Scalars['Int']['output'];
+};
+
+export type DivisionFilterInput = {
+  and?: InputMaybe<Array<DivisionFilterInput>>;
+  id?: InputMaybe<IntOperationFilterInput>;
+  name?: InputMaybe<StringOperationFilterInput>;
+  or?: InputMaybe<Array<DivisionFilterInput>>;
+  schools?: InputMaybe<ListFilterInputTypeOfSchoolFilterInput>;
+  sinhalaName?: InputMaybe<StringOperationFilterInput>;
+  tamilName?: InputMaybe<StringOperationFilterInput>;
+  zone?: InputMaybe<ZoneFilterInput>;
+  zoneId?: InputMaybe<IntOperationFilterInput>;
+};
+
 export enum EnrollmentStatus {
   Active = 'ACTIVE',
   Cancelled = 'CANCELLED',
@@ -319,6 +566,13 @@ export enum EnrollmentStatus {
   Resigned = 'RESIGNED',
   Retired = 'RETIRED'
 }
+
+export type EnrollmentStatusOperationFilterInput = {
+  eq?: InputMaybe<EnrollmentStatus>;
+  in?: InputMaybe<Array<EnrollmentStatus>>;
+  neq?: InputMaybe<EnrollmentStatus>;
+  nin?: InputMaybe<Array<EnrollmentStatus>>;
+};
 
 export enum Grade {
   Grade1 = 'GRADE1',
@@ -373,6 +627,13 @@ export enum HumanRelationship {
   Wife = 'WIFE'
 }
 
+export type HumanRelationshipOperationFilterInput = {
+  eq?: InputMaybe<HumanRelationship>;
+  in?: InputMaybe<Array<HumanRelationship>>;
+  neq?: InputMaybe<HumanRelationship>;
+  nin?: InputMaybe<Array<HumanRelationship>>;
+};
+
 export type IntOperationFilterInput = {
   eq?: InputMaybe<Scalars['Int']['input']>;
   gt?: InputMaybe<Scalars['Int']['input']>;
@@ -388,11 +649,42 @@ export type IntOperationFilterInput = {
   nlte?: InputMaybe<Scalars['Int']['input']>;
 };
 
+export type Language = {
+  __typename?: 'Language';
+  classes: Array<Class>;
+  code: Scalars['String']['output'];
+  ietfTag?: Maybe<Scalars['String']['output']>;
+  name: Scalars['String']['output'];
+};
+
+export type LanguageFilterInput = {
+  and?: InputMaybe<Array<LanguageFilterInput>>;
+  classes?: InputMaybe<ListFilterInputTypeOfClassFilterInput>;
+  code?: InputMaybe<StringOperationFilterInput>;
+  ietfTag?: InputMaybe<StringOperationFilterInput>;
+  name?: InputMaybe<StringOperationFilterInput>;
+  or?: InputMaybe<Array<LanguageFilterInput>>;
+};
+
+export type ListFilterInputTypeOfClassFilterInput = {
+  all?: InputMaybe<ClassFilterInput>;
+  any?: InputMaybe<Scalars['Boolean']['input']>;
+  none?: InputMaybe<ClassFilterInput>;
+  some?: InputMaybe<ClassFilterInput>;
+};
+
 export type ListFilterInputTypeOfClassModelFilterInput = {
   all?: InputMaybe<ClassModelFilterInput>;
   any?: InputMaybe<Scalars['Boolean']['input']>;
   none?: InputMaybe<ClassModelFilterInput>;
   some?: InputMaybe<ClassModelFilterInput>;
+};
+
+export type ListFilterInputTypeOfClassStudentEnrollmentFilterInput = {
+  all?: InputMaybe<ClassStudentEnrollmentFilterInput>;
+  any?: InputMaybe<Scalars['Boolean']['input']>;
+  none?: InputMaybe<ClassStudentEnrollmentFilterInput>;
+  some?: InputMaybe<ClassStudentEnrollmentFilterInput>;
 };
 
 export type ListFilterInputTypeOfClassStudentEnrollmentModelFilterInput = {
@@ -402,11 +694,88 @@ export type ListFilterInputTypeOfClassStudentEnrollmentModelFilterInput = {
   some?: InputMaybe<ClassStudentEnrollmentModelFilterInput>;
 };
 
+export type ListFilterInputTypeOfClassTeacherEnrollmentFilterInput = {
+  all?: InputMaybe<ClassTeacherEnrollmentFilterInput>;
+  any?: InputMaybe<Scalars['Boolean']['input']>;
+  none?: InputMaybe<ClassTeacherEnrollmentFilterInput>;
+  some?: InputMaybe<ClassTeacherEnrollmentFilterInput>;
+};
+
 export type ListFilterInputTypeOfClassTeacherEnrollmentModelFilterInput = {
   all?: InputMaybe<ClassTeacherEnrollmentModelFilterInput>;
   any?: InputMaybe<Scalars['Boolean']['input']>;
   none?: InputMaybe<ClassTeacherEnrollmentModelFilterInput>;
   some?: InputMaybe<ClassTeacherEnrollmentModelFilterInput>;
+};
+
+export type ListFilterInputTypeOfDistrictFilterInput = {
+  all?: InputMaybe<DistrictFilterInput>;
+  any?: InputMaybe<Scalars['Boolean']['input']>;
+  none?: InputMaybe<DistrictFilterInput>;
+  some?: InputMaybe<DistrictFilterInput>;
+};
+
+export type ListFilterInputTypeOfDivisionFilterInput = {
+  all?: InputMaybe<DivisionFilterInput>;
+  any?: InputMaybe<Scalars['Boolean']['input']>;
+  none?: InputMaybe<DivisionFilterInput>;
+  some?: InputMaybe<DivisionFilterInput>;
+};
+
+export type ListFilterInputTypeOfPersonFilterInput = {
+  all?: InputMaybe<PersonFilterInput>;
+  any?: InputMaybe<Scalars['Boolean']['input']>;
+  none?: InputMaybe<PersonFilterInput>;
+  some?: InputMaybe<PersonFilterInput>;
+};
+
+export type ListFilterInputTypeOfPersonModelFilterInput = {
+  all?: InputMaybe<PersonModelFilterInput>;
+  any?: InputMaybe<Scalars['Boolean']['input']>;
+  none?: InputMaybe<PersonModelFilterInput>;
+  some?: InputMaybe<PersonModelFilterInput>;
+};
+
+export type ListFilterInputTypeOfPersonQualificationFilterInput = {
+  all?: InputMaybe<PersonQualificationFilterInput>;
+  any?: InputMaybe<Scalars['Boolean']['input']>;
+  none?: InputMaybe<PersonQualificationFilterInput>;
+  some?: InputMaybe<PersonQualificationFilterInput>;
+};
+
+export type ListFilterInputTypeOfPersonRelationshipFilterInput = {
+  all?: InputMaybe<PersonRelationshipFilterInput>;
+  any?: InputMaybe<Scalars['Boolean']['input']>;
+  none?: InputMaybe<PersonRelationshipFilterInput>;
+  some?: InputMaybe<PersonRelationshipFilterInput>;
+};
+
+export type ListFilterInputTypeOfPersonRelationshipModelFilterInput = {
+  all?: InputMaybe<PersonRelationshipModelFilterInput>;
+  any?: InputMaybe<Scalars['Boolean']['input']>;
+  none?: InputMaybe<PersonRelationshipModelFilterInput>;
+  some?: InputMaybe<PersonRelationshipModelFilterInput>;
+};
+
+export type ListFilterInputTypeOfPrincipalFilterInput = {
+  all?: InputMaybe<PrincipalFilterInput>;
+  any?: InputMaybe<Scalars['Boolean']['input']>;
+  none?: InputMaybe<PrincipalFilterInput>;
+  some?: InputMaybe<PrincipalFilterInput>;
+};
+
+export type ListFilterInputTypeOfSchoolFilterInput = {
+  all?: InputMaybe<SchoolFilterInput>;
+  any?: InputMaybe<Scalars['Boolean']['input']>;
+  none?: InputMaybe<SchoolFilterInput>;
+  some?: InputMaybe<SchoolFilterInput>;
+};
+
+export type ListFilterInputTypeOfSchoolPrincipalEnrollmentFilterInput = {
+  all?: InputMaybe<SchoolPrincipalEnrollmentFilterInput>;
+  any?: InputMaybe<Scalars['Boolean']['input']>;
+  none?: InputMaybe<SchoolPrincipalEnrollmentFilterInput>;
+  some?: InputMaybe<SchoolPrincipalEnrollmentFilterInput>;
 };
 
 export type ListFilterInputTypeOfSchoolPrincipalEnrollmentModelFilterInput = {
@@ -416,11 +785,25 @@ export type ListFilterInputTypeOfSchoolPrincipalEnrollmentModelFilterInput = {
   some?: InputMaybe<SchoolPrincipalEnrollmentModelFilterInput>;
 };
 
+export type ListFilterInputTypeOfSchoolStudentEnrollmentFilterInput = {
+  all?: InputMaybe<SchoolStudentEnrollmentFilterInput>;
+  any?: InputMaybe<Scalars['Boolean']['input']>;
+  none?: InputMaybe<SchoolStudentEnrollmentFilterInput>;
+  some?: InputMaybe<SchoolStudentEnrollmentFilterInput>;
+};
+
 export type ListFilterInputTypeOfSchoolStudentEnrollmentModelFilterInput = {
   all?: InputMaybe<SchoolStudentEnrollmentModelFilterInput>;
   any?: InputMaybe<Scalars['Boolean']['input']>;
   none?: InputMaybe<SchoolStudentEnrollmentModelFilterInput>;
   some?: InputMaybe<SchoolStudentEnrollmentModelFilterInput>;
+};
+
+export type ListFilterInputTypeOfSchoolStudentEnrollmentRequestFilterInput = {
+  all?: InputMaybe<SchoolStudentEnrollmentRequestFilterInput>;
+  any?: InputMaybe<Scalars['Boolean']['input']>;
+  none?: InputMaybe<SchoolStudentEnrollmentRequestFilterInput>;
+  some?: InputMaybe<SchoolStudentEnrollmentRequestFilterInput>;
 };
 
 export type ListFilterInputTypeOfSchoolStudentEnrollmentRequestModelFilterInput = {
@@ -430,6 +813,13 @@ export type ListFilterInputTypeOfSchoolStudentEnrollmentRequestModelFilterInput 
   some?: InputMaybe<SchoolStudentEnrollmentRequestModelFilterInput>;
 };
 
+export type ListFilterInputTypeOfSchoolTeacherEnrollmentFilterInput = {
+  all?: InputMaybe<SchoolTeacherEnrollmentFilterInput>;
+  any?: InputMaybe<Scalars['Boolean']['input']>;
+  none?: InputMaybe<SchoolTeacherEnrollmentFilterInput>;
+  some?: InputMaybe<SchoolTeacherEnrollmentFilterInput>;
+};
+
 export type ListFilterInputTypeOfSchoolTeacherEnrollmentModelFilterInput = {
   all?: InputMaybe<SchoolTeacherEnrollmentModelFilterInput>;
   any?: InputMaybe<Scalars['Boolean']['input']>;
@@ -437,11 +827,46 @@ export type ListFilterInputTypeOfSchoolTeacherEnrollmentModelFilterInput = {
   some?: InputMaybe<SchoolTeacherEnrollmentModelFilterInput>;
 };
 
+export type ListFilterInputTypeOfSchoolTeacherEnrollmentRequestFilterInput = {
+  all?: InputMaybe<SchoolTeacherEnrollmentRequestFilterInput>;
+  any?: InputMaybe<Scalars['Boolean']['input']>;
+  none?: InputMaybe<SchoolTeacherEnrollmentRequestFilterInput>;
+  some?: InputMaybe<SchoolTeacherEnrollmentRequestFilterInput>;
+};
+
 export type ListFilterInputTypeOfSchoolTeacherEnrollmentRequestModelFilterInput = {
   all?: InputMaybe<SchoolTeacherEnrollmentRequestModelFilterInput>;
   any?: InputMaybe<Scalars['Boolean']['input']>;
   none?: InputMaybe<SchoolTeacherEnrollmentRequestModelFilterInput>;
   some?: InputMaybe<SchoolTeacherEnrollmentRequestModelFilterInput>;
+};
+
+export type ListFilterInputTypeOfStudentFilterInput = {
+  all?: InputMaybe<StudentFilterInput>;
+  any?: InputMaybe<Scalars['Boolean']['input']>;
+  none?: InputMaybe<StudentFilterInput>;
+  some?: InputMaybe<StudentFilterInput>;
+};
+
+export type ListFilterInputTypeOfTeacherFilterInput = {
+  all?: InputMaybe<TeacherFilterInput>;
+  any?: InputMaybe<Scalars['Boolean']['input']>;
+  none?: InputMaybe<TeacherFilterInput>;
+  some?: InputMaybe<TeacherFilterInput>;
+};
+
+export type ListFilterInputTypeOfUserFilterInput = {
+  all?: InputMaybe<UserFilterInput>;
+  any?: InputMaybe<Scalars['Boolean']['input']>;
+  none?: InputMaybe<UserFilterInput>;
+  some?: InputMaybe<UserFilterInput>;
+};
+
+export type ListFilterInputTypeOfZoneFilterInput = {
+  all?: InputMaybe<ZoneFilterInput>;
+  any?: InputMaybe<Scalars['Boolean']['input']>;
+  none?: InputMaybe<ZoneFilterInput>;
+  some?: InputMaybe<ZoneFilterInput>;
 };
 
 export type LongOperationFilterInput = {
@@ -583,6 +1008,77 @@ export type NullableOfSexOperationFilterInput = {
   nin?: InputMaybe<Array<InputMaybe<Sex>>>;
 };
 
+export type Person = {
+  __typename?: 'Person';
+  address?: Maybe<Scalars['String']['output']>;
+  bcNo?: Maybe<Scalars['String']['output']>;
+  createdTime?: Maybe<Scalars['DateTime']['output']>;
+  createdUser?: Maybe<User>;
+  createdUserId?: Maybe<Scalars['Long']['output']>;
+  dateOfBirth?: Maybe<Scalars['Date']['output']>;
+  deletedTime?: Maybe<Scalars['DateTime']['output']>;
+  deletedUser?: Maybe<User>;
+  deletedUserId?: Maybe<Scalars['Long']['output']>;
+  email?: Maybe<Scalars['String']['output']>;
+  fullName: Scalars['String']['output'];
+  id: Scalars['Long']['output'];
+  image?: Maybe<Scalars['String']['output']>;
+  lastModifiedTime?: Maybe<Scalars['DateTime']['output']>;
+  lastModifiedUser?: Maybe<User>;
+  lastModifiedUserId?: Maybe<Scalars['Long']['output']>;
+  mobileNo?: Maybe<Scalars['String']['output']>;
+  nicNo?: Maybe<Scalars['String']['output']>;
+  nickname?: Maybe<Scalars['String']['output']>;
+  notes?: Maybe<Scalars['String']['output']>;
+  passportNo?: Maybe<Scalars['String']['output']>;
+  person1Relationships: Array<PersonRelationship>;
+  person2Relationships: Array<PersonRelationship>;
+  principal?: Maybe<Principal>;
+  schoolStudentEnrollmentRequests: Array<SchoolStudentEnrollmentRequest>;
+  schoolTeacherEnrollmentRequests: Array<SchoolTeacherEnrollmentRequest>;
+  sex: Sex;
+  shortName: Scalars['String']['output'];
+  student?: Maybe<Student>;
+  teacher?: Maybe<Teacher>;
+  user?: Maybe<User>;
+};
+
+export type PersonFilterInput = {
+  address?: InputMaybe<StringOperationFilterInput>;
+  and?: InputMaybe<Array<PersonFilterInput>>;
+  bcNo?: InputMaybe<StringOperationFilterInput>;
+  createdTime?: InputMaybe<DateTimeOperationFilterInput>;
+  createdUser?: InputMaybe<UserFilterInput>;
+  createdUserId?: InputMaybe<LongOperationFilterInput>;
+  dateOfBirth?: InputMaybe<DateOperationFilterInput>;
+  deletedTime?: InputMaybe<DateTimeOperationFilterInput>;
+  deletedUser?: InputMaybe<UserFilterInput>;
+  deletedUserId?: InputMaybe<LongOperationFilterInput>;
+  email?: InputMaybe<StringOperationFilterInput>;
+  fullName?: InputMaybe<StringOperationFilterInput>;
+  id?: InputMaybe<LongOperationFilterInput>;
+  image?: InputMaybe<StringOperationFilterInput>;
+  lastModifiedTime?: InputMaybe<DateTimeOperationFilterInput>;
+  lastModifiedUser?: InputMaybe<UserFilterInput>;
+  lastModifiedUserId?: InputMaybe<LongOperationFilterInput>;
+  mobileNo?: InputMaybe<StringOperationFilterInput>;
+  nicNo?: InputMaybe<StringOperationFilterInput>;
+  nickname?: InputMaybe<StringOperationFilterInput>;
+  notes?: InputMaybe<StringOperationFilterInput>;
+  or?: InputMaybe<Array<PersonFilterInput>>;
+  passportNo?: InputMaybe<StringOperationFilterInput>;
+  person1Relationships?: InputMaybe<ListFilterInputTypeOfPersonRelationshipFilterInput>;
+  person2Relationships?: InputMaybe<ListFilterInputTypeOfPersonRelationshipFilterInput>;
+  principal?: InputMaybe<PrincipalFilterInput>;
+  schoolStudentEnrollmentRequests?: InputMaybe<ListFilterInputTypeOfSchoolStudentEnrollmentRequestFilterInput>;
+  schoolTeacherEnrollmentRequests?: InputMaybe<ListFilterInputTypeOfSchoolTeacherEnrollmentRequestFilterInput>;
+  sex?: InputMaybe<SexOperationFilterInput>;
+  shortName?: InputMaybe<StringOperationFilterInput>;
+  student?: InputMaybe<StudentFilterInput>;
+  teacher?: InputMaybe<TeacherFilterInput>;
+  user?: InputMaybe<UserFilterInput>;
+};
+
 export type PersonInput = {
   address?: InputMaybe<Scalars['String']['input']>;
   bcNo?: InputMaybe<Scalars['String']['input']>;
@@ -623,6 +1119,10 @@ export type PersonModel = {
   nickname?: Maybe<Scalars['String']['output']>;
   notes?: Maybe<Scalars['String']['output']>;
   passportNo?: Maybe<Scalars['String']['output']>;
+  person1Relationships: Array<PersonRelationshipModel>;
+  person2Relationships: Array<PersonRelationshipModel>;
+  schoolStudentEnrollmentRequests: Array<SchoolStudentEnrollmentRequestModel>;
+  schoolTeacherEnrollmentRequests: Array<SchoolTeacherEnrollmentRequestModel>;
   sex?: Maybe<Sex>;
   shortName?: Maybe<Scalars['String']['output']>;
 };
@@ -653,6 +1153,10 @@ export type PersonModelFilterInput = {
   notes?: InputMaybe<StringOperationFilterInput>;
   or?: InputMaybe<Array<PersonModelFilterInput>>;
   passportNo?: InputMaybe<StringOperationFilterInput>;
+  person1Relationships?: InputMaybe<ListFilterInputTypeOfPersonRelationshipModelFilterInput>;
+  person2Relationships?: InputMaybe<ListFilterInputTypeOfPersonRelationshipModelFilterInput>;
+  schoolStudentEnrollmentRequests?: InputMaybe<ListFilterInputTypeOfSchoolStudentEnrollmentRequestModelFilterInput>;
+  schoolTeacherEnrollmentRequests?: InputMaybe<ListFilterInputTypeOfSchoolTeacherEnrollmentRequestModelFilterInput>;
   sex?: InputMaybe<NullableOfSexOperationFilterInput>;
   shortName?: InputMaybe<StringOperationFilterInput>;
 };
@@ -683,6 +1187,90 @@ export type PersonModelSortInput = {
   passportNo?: InputMaybe<SortEnumType>;
   sex?: InputMaybe<SortEnumType>;
   shortName?: InputMaybe<SortEnumType>;
+};
+
+export type PersonQualification = {
+  __typename?: 'PersonQualification';
+  awardedDate?: Maybe<Scalars['Date']['output']>;
+  createdTime?: Maybe<Scalars['DateTime']['output']>;
+  createdUser?: Maybe<User>;
+  createdUserId?: Maybe<Scalars['Long']['output']>;
+  deletedTime?: Maybe<Scalars['DateTime']['output']>;
+  deletedUser?: Maybe<User>;
+  deletedUserId?: Maybe<Scalars['Long']['output']>;
+  id: Scalars['Long']['output'];
+  lastModifiedTime?: Maybe<Scalars['DateTime']['output']>;
+  lastModifiedUser?: Maybe<User>;
+  lastModifiedUserId?: Maybe<Scalars['Long']['output']>;
+  notes?: Maybe<Scalars['String']['output']>;
+  person: Person;
+  personId: Scalars['Long']['output'];
+  qualification: Qualification;
+  qualificationId: Scalars['Byte']['output'];
+};
+
+export type PersonQualificationFilterInput = {
+  and?: InputMaybe<Array<PersonQualificationFilterInput>>;
+  awardedDate?: InputMaybe<DateOperationFilterInput>;
+  createdTime?: InputMaybe<DateTimeOperationFilterInput>;
+  createdUser?: InputMaybe<UserFilterInput>;
+  createdUserId?: InputMaybe<LongOperationFilterInput>;
+  deletedTime?: InputMaybe<DateTimeOperationFilterInput>;
+  deletedUser?: InputMaybe<UserFilterInput>;
+  deletedUserId?: InputMaybe<LongOperationFilterInput>;
+  id?: InputMaybe<LongOperationFilterInput>;
+  lastModifiedTime?: InputMaybe<DateTimeOperationFilterInput>;
+  lastModifiedUser?: InputMaybe<UserFilterInput>;
+  lastModifiedUserId?: InputMaybe<LongOperationFilterInput>;
+  notes?: InputMaybe<StringOperationFilterInput>;
+  or?: InputMaybe<Array<PersonQualificationFilterInput>>;
+  person?: InputMaybe<PersonFilterInput>;
+  personId?: InputMaybe<LongOperationFilterInput>;
+  qualification?: InputMaybe<QualificationFilterInput>;
+  qualificationId?: InputMaybe<ByteOperationFilterInput>;
+};
+
+export type PersonRelationship = {
+  __typename?: 'PersonRelationship';
+  createdTime?: Maybe<Scalars['DateTime']['output']>;
+  createdUser?: Maybe<User>;
+  createdUserId?: Maybe<Scalars['Long']['output']>;
+  deletedTime?: Maybe<Scalars['DateTime']['output']>;
+  deletedUser?: Maybe<User>;
+  deletedUserId?: Maybe<Scalars['Long']['output']>;
+  id: Scalars['Long']['output'];
+  lastModifiedTime?: Maybe<Scalars['DateTime']['output']>;
+  lastModifiedUser?: Maybe<User>;
+  lastModifiedUserId?: Maybe<Scalars['Long']['output']>;
+  notes?: Maybe<Scalars['String']['output']>;
+  person1: Person;
+  person1Id: Scalars['Long']['output'];
+  person1Relationship: HumanRelationship;
+  person2: Person;
+  person2Id: Scalars['Long']['output'];
+  person2Relationship: HumanRelationship;
+};
+
+export type PersonRelationshipFilterInput = {
+  and?: InputMaybe<Array<PersonRelationshipFilterInput>>;
+  createdTime?: InputMaybe<DateTimeOperationFilterInput>;
+  createdUser?: InputMaybe<UserFilterInput>;
+  createdUserId?: InputMaybe<LongOperationFilterInput>;
+  deletedTime?: InputMaybe<DateTimeOperationFilterInput>;
+  deletedUser?: InputMaybe<UserFilterInput>;
+  deletedUserId?: InputMaybe<LongOperationFilterInput>;
+  id?: InputMaybe<LongOperationFilterInput>;
+  lastModifiedTime?: InputMaybe<DateTimeOperationFilterInput>;
+  lastModifiedUser?: InputMaybe<UserFilterInput>;
+  lastModifiedUserId?: InputMaybe<LongOperationFilterInput>;
+  notes?: InputMaybe<StringOperationFilterInput>;
+  or?: InputMaybe<Array<PersonRelationshipFilterInput>>;
+  person1?: InputMaybe<PersonFilterInput>;
+  person1Id?: InputMaybe<LongOperationFilterInput>;
+  person1Relationship?: InputMaybe<HumanRelationshipOperationFilterInput>;
+  person2?: InputMaybe<PersonFilterInput>;
+  person2Id?: InputMaybe<LongOperationFilterInput>;
+  person2Relationship?: InputMaybe<HumanRelationshipOperationFilterInput>;
 };
 
 export type PersonRelationshipInput = {
@@ -779,6 +1367,79 @@ export type PersonsCollectionSegment = {
   totalCount: Scalars['Int']['output'];
 };
 
+export type Principal = {
+  __typename?: 'Principal';
+  createdTime?: Maybe<Scalars['DateTime']['output']>;
+  createdUser?: Maybe<User>;
+  createdUserId?: Maybe<Scalars['Long']['output']>;
+  deletedTime?: Maybe<Scalars['DateTime']['output']>;
+  deletedUser?: Maybe<User>;
+  deletedUserId?: Maybe<Scalars['Long']['output']>;
+  id: Scalars['Long']['output'];
+  lastModifiedTime?: Maybe<Scalars['DateTime']['output']>;
+  lastModifiedUser?: Maybe<User>;
+  lastModifiedUserId?: Maybe<Scalars['Long']['output']>;
+  notes?: Maybe<Scalars['String']['output']>;
+  person: Person;
+  personId: Scalars['Long']['output'];
+  schoolPrincipalEnrollments: Array<SchoolPrincipalEnrollment>;
+};
+
+export type PrincipalFilterInput = {
+  and?: InputMaybe<Array<PrincipalFilterInput>>;
+  createdTime?: InputMaybe<DateTimeOperationFilterInput>;
+  createdUser?: InputMaybe<UserFilterInput>;
+  createdUserId?: InputMaybe<LongOperationFilterInput>;
+  deletedTime?: InputMaybe<DateTimeOperationFilterInput>;
+  deletedUser?: InputMaybe<UserFilterInput>;
+  deletedUserId?: InputMaybe<LongOperationFilterInput>;
+  id?: InputMaybe<LongOperationFilterInput>;
+  lastModifiedTime?: InputMaybe<DateTimeOperationFilterInput>;
+  lastModifiedUser?: InputMaybe<UserFilterInput>;
+  lastModifiedUserId?: InputMaybe<LongOperationFilterInput>;
+  notes?: InputMaybe<StringOperationFilterInput>;
+  or?: InputMaybe<Array<PrincipalFilterInput>>;
+  person?: InputMaybe<PersonFilterInput>;
+  personId?: InputMaybe<LongOperationFilterInput>;
+  schoolPrincipalEnrollments?: InputMaybe<ListFilterInputTypeOfSchoolPrincipalEnrollmentFilterInput>;
+};
+
+export type Province = {
+  __typename?: 'Province';
+  districts: Array<District>;
+  id: Scalars['Int']['output'];
+  name: Scalars['String']['output'];
+  sinhalaName: Scalars['String']['output'];
+  tamilName: Scalars['String']['output'];
+};
+
+export type ProvinceFilterInput = {
+  and?: InputMaybe<Array<ProvinceFilterInput>>;
+  districts?: InputMaybe<ListFilterInputTypeOfDistrictFilterInput>;
+  id?: InputMaybe<IntOperationFilterInput>;
+  name?: InputMaybe<StringOperationFilterInput>;
+  or?: InputMaybe<Array<ProvinceFilterInput>>;
+  sinhalaName?: InputMaybe<StringOperationFilterInput>;
+  tamilName?: InputMaybe<StringOperationFilterInput>;
+};
+
+export type Qualification = {
+  __typename?: 'Qualification';
+  description?: Maybe<Scalars['String']['output']>;
+  id: Scalars['Byte']['output'];
+  personQualifications: Array<PersonQualification>;
+  title: Scalars['String']['output'];
+};
+
+export type QualificationFilterInput = {
+  and?: InputMaybe<Array<QualificationFilterInput>>;
+  description?: InputMaybe<StringOperationFilterInput>;
+  id?: InputMaybe<ByteOperationFilterInput>;
+  or?: InputMaybe<Array<QualificationFilterInput>>;
+  personQualifications?: InputMaybe<ListFilterInputTypeOfPersonQualificationFilterInput>;
+  title?: InputMaybe<StringOperationFilterInput>;
+};
+
 export type Query = {
   __typename?: 'Query';
   academicYears?: Maybe<AcademicYearsCollectionSegment>;
@@ -812,9 +1473,7 @@ export type QueryAcademicYearsArgs = {
 
 
 export type QueryClassArgs = {
-  grade: Grade;
-  schoolId: Scalars['Long']['input'];
-  section: Scalars['String']['input'];
+  id: Scalars['Long']['input'];
 };
 
 
@@ -938,6 +1597,74 @@ export enum RequestStatus {
   Rejected = 'REJECTED'
 }
 
+export type RequestStatusOperationFilterInput = {
+  eq?: InputMaybe<RequestStatus>;
+  in?: InputMaybe<Array<RequestStatus>>;
+  neq?: InputMaybe<RequestStatus>;
+  nin?: InputMaybe<Array<RequestStatus>>;
+};
+
+export type School = {
+  __typename?: 'School';
+  address?: Maybe<Scalars['String']['output']>;
+  censusNo: Scalars['String']['output'];
+  classes: Array<Class>;
+  createdTime?: Maybe<Scalars['DateTime']['output']>;
+  createdUser?: Maybe<User>;
+  createdUserId?: Maybe<Scalars['Long']['output']>;
+  deletedTime?: Maybe<Scalars['DateTime']['output']>;
+  deletedUser?: Maybe<User>;
+  deletedUserId?: Maybe<Scalars['Long']['output']>;
+  division: Division;
+  divisionId: Scalars['Int']['output'];
+  email?: Maybe<Scalars['String']['output']>;
+  id: Scalars['Long']['output'];
+  lastModifiedTime?: Maybe<Scalars['DateTime']['output']>;
+  lastModifiedUser?: Maybe<User>;
+  lastModifiedUserId?: Maybe<Scalars['Long']['output']>;
+  location: Scalars['String']['output'];
+  name: Scalars['String']['output'];
+  notes?: Maybe<Scalars['String']['output']>;
+  phoneNo?: Maybe<Scalars['String']['output']>;
+  schoolPrincipalEnrollments: Array<SchoolPrincipalEnrollment>;
+  schoolStudentEnrollmentRequests: Array<SchoolStudentEnrollmentRequest>;
+  schoolStudentEnrollments: Array<SchoolStudentEnrollment>;
+  schoolTeacherEnrollmentRequests: Array<SchoolTeacherEnrollmentRequest>;
+  schoolTeacherEnrollments: Array<SchoolTeacherEnrollment>;
+  type: SchoolType;
+};
+
+export type SchoolFilterInput = {
+  address?: InputMaybe<StringOperationFilterInput>;
+  and?: InputMaybe<Array<SchoolFilterInput>>;
+  censusNo?: InputMaybe<StringOperationFilterInput>;
+  classes?: InputMaybe<ListFilterInputTypeOfClassFilterInput>;
+  createdTime?: InputMaybe<DateTimeOperationFilterInput>;
+  createdUser?: InputMaybe<UserFilterInput>;
+  createdUserId?: InputMaybe<LongOperationFilterInput>;
+  deletedTime?: InputMaybe<DateTimeOperationFilterInput>;
+  deletedUser?: InputMaybe<UserFilterInput>;
+  deletedUserId?: InputMaybe<LongOperationFilterInput>;
+  division?: InputMaybe<DivisionFilterInput>;
+  divisionId?: InputMaybe<IntOperationFilterInput>;
+  email?: InputMaybe<StringOperationFilterInput>;
+  id?: InputMaybe<LongOperationFilterInput>;
+  lastModifiedTime?: InputMaybe<DateTimeOperationFilterInput>;
+  lastModifiedUser?: InputMaybe<UserFilterInput>;
+  lastModifiedUserId?: InputMaybe<LongOperationFilterInput>;
+  location?: InputMaybe<StringOperationFilterInput>;
+  name?: InputMaybe<StringOperationFilterInput>;
+  notes?: InputMaybe<StringOperationFilterInput>;
+  or?: InputMaybe<Array<SchoolFilterInput>>;
+  phoneNo?: InputMaybe<StringOperationFilterInput>;
+  schoolPrincipalEnrollments?: InputMaybe<ListFilterInputTypeOfSchoolPrincipalEnrollmentFilterInput>;
+  schoolStudentEnrollmentRequests?: InputMaybe<ListFilterInputTypeOfSchoolStudentEnrollmentRequestFilterInput>;
+  schoolStudentEnrollments?: InputMaybe<ListFilterInputTypeOfSchoolStudentEnrollmentFilterInput>;
+  schoolTeacherEnrollmentRequests?: InputMaybe<ListFilterInputTypeOfSchoolTeacherEnrollmentRequestFilterInput>;
+  schoolTeacherEnrollments?: InputMaybe<ListFilterInputTypeOfSchoolTeacherEnrollmentFilterInput>;
+  type?: InputMaybe<SchoolTypeOperationFilterInput>;
+};
+
 export type SchoolInput = {
   address?: InputMaybe<Scalars['String']['input']>;
   censusNo: Scalars['String']['input'];
@@ -1037,6 +1764,53 @@ export type SchoolModelSortInput = {
   type?: InputMaybe<SortEnumType>;
 };
 
+export type SchoolPrincipalEnrollment = {
+  __typename?: 'SchoolPrincipalEnrollment';
+  createdTime?: Maybe<Scalars['DateTime']['output']>;
+  createdUser?: Maybe<User>;
+  createdUserId?: Maybe<Scalars['Long']['output']>;
+  deletedTime?: Maybe<Scalars['DateTime']['output']>;
+  deletedUser?: Maybe<User>;
+  deletedUserId?: Maybe<Scalars['Long']['output']>;
+  id: Scalars['Long']['output'];
+  lastModifiedTime?: Maybe<Scalars['DateTime']['output']>;
+  lastModifiedUser?: Maybe<User>;
+  lastModifiedUserId?: Maybe<Scalars['Long']['output']>;
+  no: Scalars['Int']['output'];
+  notes?: Maybe<Scalars['String']['output']>;
+  principal: Principal;
+  principalId: Scalars['Long']['output'];
+  removedTime?: Maybe<Scalars['DateTime']['output']>;
+  school: School;
+  schoolId: Scalars['Long']['output'];
+  status: EnrollmentStatus;
+  time?: Maybe<Scalars['DateTime']['output']>;
+};
+
+export type SchoolPrincipalEnrollmentFilterInput = {
+  and?: InputMaybe<Array<SchoolPrincipalEnrollmentFilterInput>>;
+  createdTime?: InputMaybe<DateTimeOperationFilterInput>;
+  createdUser?: InputMaybe<UserFilterInput>;
+  createdUserId?: InputMaybe<LongOperationFilterInput>;
+  deletedTime?: InputMaybe<DateTimeOperationFilterInput>;
+  deletedUser?: InputMaybe<UserFilterInput>;
+  deletedUserId?: InputMaybe<LongOperationFilterInput>;
+  id?: InputMaybe<LongOperationFilterInput>;
+  lastModifiedTime?: InputMaybe<DateTimeOperationFilterInput>;
+  lastModifiedUser?: InputMaybe<UserFilterInput>;
+  lastModifiedUserId?: InputMaybe<LongOperationFilterInput>;
+  no?: InputMaybe<IntOperationFilterInput>;
+  notes?: InputMaybe<StringOperationFilterInput>;
+  or?: InputMaybe<Array<SchoolPrincipalEnrollmentFilterInput>>;
+  principal?: InputMaybe<PrincipalFilterInput>;
+  principalId?: InputMaybe<LongOperationFilterInput>;
+  removedTime?: InputMaybe<DateTimeOperationFilterInput>;
+  school?: InputMaybe<SchoolFilterInput>;
+  schoolId?: InputMaybe<LongOperationFilterInput>;
+  status?: InputMaybe<EnrollmentStatusOperationFilterInput>;
+  time?: InputMaybe<DateTimeOperationFilterInput>;
+};
+
 export type SchoolPrincipalEnrollmentModel = {
   __typename?: 'SchoolPrincipalEnrollmentModel';
   createdTime?: Maybe<Scalars['DateTime']['output']>;
@@ -1053,8 +1827,8 @@ export type SchoolPrincipalEnrollmentModel = {
   no?: Maybe<Scalars['Int']['output']>;
   notes?: Maybe<Scalars['String']['output']>;
   removedTime?: Maybe<Scalars['DateTime']['output']>;
+  school?: Maybe<SchoolModel>;
   schoolId?: Maybe<Scalars['Long']['output']>;
-  schoolName?: Maybe<Scalars['String']['output']>;
   status?: Maybe<EnrollmentStatus>;
   time?: Maybe<Scalars['DateTime']['output']>;
 };
@@ -1076,9 +1850,60 @@ export type SchoolPrincipalEnrollmentModelFilterInput = {
   notes?: InputMaybe<StringOperationFilterInput>;
   or?: InputMaybe<Array<SchoolPrincipalEnrollmentModelFilterInput>>;
   removedTime?: InputMaybe<DateTimeOperationFilterInput>;
+  school?: InputMaybe<SchoolModelFilterInput>;
   schoolId?: InputMaybe<LongOperationFilterInput>;
-  schoolName?: InputMaybe<StringOperationFilterInput>;
   status?: InputMaybe<NullableOfEnrollmentStatusOperationFilterInput>;
+  time?: InputMaybe<DateTimeOperationFilterInput>;
+};
+
+export type SchoolStudentEnrollment = {
+  __typename?: 'SchoolStudentEnrollment';
+  classStudentEnrollments: Array<ClassStudentEnrollment>;
+  createdTime?: Maybe<Scalars['DateTime']['output']>;
+  createdUser?: Maybe<User>;
+  createdUserId?: Maybe<Scalars['Long']['output']>;
+  deletedTime?: Maybe<Scalars['DateTime']['output']>;
+  deletedUser?: Maybe<User>;
+  deletedUserId?: Maybe<Scalars['Long']['output']>;
+  id: Scalars['Long']['output'];
+  lastModifiedTime?: Maybe<Scalars['DateTime']['output']>;
+  lastModifiedUser?: Maybe<User>;
+  lastModifiedUserId?: Maybe<Scalars['Long']['output']>;
+  no: Scalars['Int']['output'];
+  notes?: Maybe<Scalars['String']['output']>;
+  school: School;
+  schoolId: Scalars['Long']['output'];
+  schoolStudentEnrollmentRequest?: Maybe<SchoolStudentEnrollmentRequest>;
+  schoolStudentEnrollmentRequestId?: Maybe<Scalars['Long']['output']>;
+  status: EnrollmentStatus;
+  student: Student;
+  studentId: Scalars['Long']['output'];
+  time?: Maybe<Scalars['DateTime']['output']>;
+};
+
+export type SchoolStudentEnrollmentFilterInput = {
+  and?: InputMaybe<Array<SchoolStudentEnrollmentFilterInput>>;
+  classStudentEnrollments?: InputMaybe<ListFilterInputTypeOfClassStudentEnrollmentFilterInput>;
+  createdTime?: InputMaybe<DateTimeOperationFilterInput>;
+  createdUser?: InputMaybe<UserFilterInput>;
+  createdUserId?: InputMaybe<LongOperationFilterInput>;
+  deletedTime?: InputMaybe<DateTimeOperationFilterInput>;
+  deletedUser?: InputMaybe<UserFilterInput>;
+  deletedUserId?: InputMaybe<LongOperationFilterInput>;
+  id?: InputMaybe<LongOperationFilterInput>;
+  lastModifiedTime?: InputMaybe<DateTimeOperationFilterInput>;
+  lastModifiedUser?: InputMaybe<UserFilterInput>;
+  lastModifiedUserId?: InputMaybe<LongOperationFilterInput>;
+  no?: InputMaybe<IntOperationFilterInput>;
+  notes?: InputMaybe<StringOperationFilterInput>;
+  or?: InputMaybe<Array<SchoolStudentEnrollmentFilterInput>>;
+  school?: InputMaybe<SchoolFilterInput>;
+  schoolId?: InputMaybe<LongOperationFilterInput>;
+  schoolStudentEnrollmentRequest?: InputMaybe<SchoolStudentEnrollmentRequestFilterInput>;
+  schoolStudentEnrollmentRequestId?: InputMaybe<LongOperationFilterInput>;
+  status?: InputMaybe<EnrollmentStatusOperationFilterInput>;
+  student?: InputMaybe<StudentFilterInput>;
+  studentId?: InputMaybe<LongOperationFilterInput>;
   time?: InputMaybe<DateTimeOperationFilterInput>;
 };
 
@@ -1111,12 +1936,10 @@ export type SchoolStudentEnrollmentModel = {
   notes?: Maybe<Scalars['String']['output']>;
   school?: Maybe<SchoolModel>;
   schoolId?: Maybe<Scalars['Long']['output']>;
-  schoolName?: Maybe<Scalars['String']['output']>;
   schoolStudentEnrollmentRequest?: Maybe<SchoolStudentEnrollmentRequestModel>;
   schoolStudentEnrollmentRequestId?: Maybe<Scalars['Long']['output']>;
   status?: Maybe<EnrollmentStatus>;
   student?: Maybe<StudentModel>;
-  studentFullName?: Maybe<Scalars['String']['output']>;
   studentId?: Maybe<Scalars['Long']['output']>;
   time?: Maybe<Scalars['DateTime']['output']>;
 };
@@ -1140,12 +1963,10 @@ export type SchoolStudentEnrollmentModelFilterInput = {
   or?: InputMaybe<Array<SchoolStudentEnrollmentModelFilterInput>>;
   school?: InputMaybe<SchoolModelFilterInput>;
   schoolId?: InputMaybe<LongOperationFilterInput>;
-  schoolName?: InputMaybe<StringOperationFilterInput>;
   schoolStudentEnrollmentRequest?: InputMaybe<SchoolStudentEnrollmentRequestModelFilterInput>;
   schoolStudentEnrollmentRequestId?: InputMaybe<LongOperationFilterInput>;
   status?: InputMaybe<NullableOfEnrollmentStatusOperationFilterInput>;
   student?: InputMaybe<StudentModelFilterInput>;
-  studentFullName?: InputMaybe<StringOperationFilterInput>;
   studentId?: InputMaybe<LongOperationFilterInput>;
   time?: InputMaybe<DateTimeOperationFilterInput>;
 };
@@ -1166,14 +1987,63 @@ export type SchoolStudentEnrollmentModelSortInput = {
   notes?: InputMaybe<SortEnumType>;
   school?: InputMaybe<SchoolModelSortInput>;
   schoolId?: InputMaybe<SortEnumType>;
-  schoolName?: InputMaybe<SortEnumType>;
   schoolStudentEnrollmentRequest?: InputMaybe<SchoolStudentEnrollmentRequestModelSortInput>;
   schoolStudentEnrollmentRequestId?: InputMaybe<SortEnumType>;
   status?: InputMaybe<SortEnumType>;
   student?: InputMaybe<StudentModelSortInput>;
-  studentFullName?: InputMaybe<SortEnumType>;
   studentId?: InputMaybe<SortEnumType>;
   time?: InputMaybe<SortEnumType>;
+};
+
+export type SchoolStudentEnrollmentRequest = {
+  __typename?: 'SchoolStudentEnrollmentRequest';
+  academicYear: AcademicYear;
+  academicYearYear: Scalars['Int']['output'];
+  createdTime?: Maybe<Scalars['DateTime']['output']>;
+  createdUser?: Maybe<User>;
+  createdUserId?: Maybe<Scalars['Long']['output']>;
+  deletedTime?: Maybe<Scalars['DateTime']['output']>;
+  deletedUser?: Maybe<User>;
+  deletedUserId?: Maybe<Scalars['Long']['output']>;
+  grade: Grade;
+  id: Scalars['Long']['output'];
+  lastModifiedTime?: Maybe<Scalars['DateTime']['output']>;
+  lastModifiedUser?: Maybe<User>;
+  lastModifiedUserId?: Maybe<Scalars['Long']['output']>;
+  notes?: Maybe<Scalars['String']['output']>;
+  person: Person;
+  personId: Scalars['Long']['output'];
+  reason?: Maybe<Scalars['String']['output']>;
+  school: School;
+  schoolId: Scalars['Long']['output'];
+  schoolStudentEnrollment?: Maybe<SchoolStudentEnrollment>;
+  status: RequestStatus;
+};
+
+export type SchoolStudentEnrollmentRequestFilterInput = {
+  academicYear?: InputMaybe<AcademicYearFilterInput>;
+  academicYearYear?: InputMaybe<IntOperationFilterInput>;
+  and?: InputMaybe<Array<SchoolStudentEnrollmentRequestFilterInput>>;
+  createdTime?: InputMaybe<DateTimeOperationFilterInput>;
+  createdUser?: InputMaybe<UserFilterInput>;
+  createdUserId?: InputMaybe<LongOperationFilterInput>;
+  deletedTime?: InputMaybe<DateTimeOperationFilterInput>;
+  deletedUser?: InputMaybe<UserFilterInput>;
+  deletedUserId?: InputMaybe<LongOperationFilterInput>;
+  grade?: InputMaybe<GradeOperationFilterInput>;
+  id?: InputMaybe<LongOperationFilterInput>;
+  lastModifiedTime?: InputMaybe<DateTimeOperationFilterInput>;
+  lastModifiedUser?: InputMaybe<UserFilterInput>;
+  lastModifiedUserId?: InputMaybe<LongOperationFilterInput>;
+  notes?: InputMaybe<StringOperationFilterInput>;
+  or?: InputMaybe<Array<SchoolStudentEnrollmentRequestFilterInput>>;
+  person?: InputMaybe<PersonFilterInput>;
+  personId?: InputMaybe<LongOperationFilterInput>;
+  reason?: InputMaybe<StringOperationFilterInput>;
+  school?: InputMaybe<SchoolFilterInput>;
+  schoolId?: InputMaybe<LongOperationFilterInput>;
+  schoolStudentEnrollment?: InputMaybe<SchoolStudentEnrollmentFilterInput>;
+  status?: InputMaybe<RequestStatusOperationFilterInput>;
 };
 
 export type SchoolStudentEnrollmentRequestInput = {
@@ -1202,12 +2072,10 @@ export type SchoolStudentEnrollmentRequestModel = {
   lastModifiedUserId?: Maybe<Scalars['Long']['output']>;
   notes?: Maybe<Scalars['String']['output']>;
   person?: Maybe<PersonModel>;
-  personFullName?: Maybe<Scalars['String']['output']>;
   personId?: Maybe<Scalars['Long']['output']>;
   reason?: Maybe<Scalars['String']['output']>;
   school?: Maybe<SchoolModel>;
   schoolId?: Maybe<Scalars['Long']['output']>;
-  schoolName?: Maybe<Scalars['String']['output']>;
   schoolStudentEnrollment?: Maybe<SchoolStudentEnrollmentModel>;
   status?: Maybe<RequestStatus>;
 };
@@ -1231,12 +2099,10 @@ export type SchoolStudentEnrollmentRequestModelFilterInput = {
   notes?: InputMaybe<StringOperationFilterInput>;
   or?: InputMaybe<Array<SchoolStudentEnrollmentRequestModelFilterInput>>;
   person?: InputMaybe<PersonModelFilterInput>;
-  personFullName?: InputMaybe<StringOperationFilterInput>;
   personId?: InputMaybe<LongOperationFilterInput>;
   reason?: InputMaybe<StringOperationFilterInput>;
   school?: InputMaybe<SchoolModelFilterInput>;
   schoolId?: InputMaybe<LongOperationFilterInput>;
-  schoolName?: InputMaybe<StringOperationFilterInput>;
   schoolStudentEnrollment?: InputMaybe<SchoolStudentEnrollmentModelFilterInput>;
   status?: InputMaybe<NullableOfRequestStatusOperationFilterInput>;
 };
@@ -1258,12 +2124,10 @@ export type SchoolStudentEnrollmentRequestModelSortInput = {
   lastModifiedUserId?: InputMaybe<SortEnumType>;
   notes?: InputMaybe<SortEnumType>;
   person?: InputMaybe<PersonModelSortInput>;
-  personFullName?: InputMaybe<SortEnumType>;
   personId?: InputMaybe<SortEnumType>;
   reason?: InputMaybe<SortEnumType>;
   school?: InputMaybe<SchoolModelSortInput>;
   schoolId?: InputMaybe<SortEnumType>;
-  schoolName?: InputMaybe<SortEnumType>;
   schoolStudentEnrollment?: InputMaybe<SchoolStudentEnrollmentModelSortInput>;
   status?: InputMaybe<SortEnumType>;
 };
@@ -1299,6 +2163,55 @@ export type SchoolSubscription = {
   schoolStudentEnrollmentCreated: SchoolStudentEnrollmentModel;
 };
 
+export type SchoolTeacherEnrollment = {
+  __typename?: 'SchoolTeacherEnrollment';
+  createdTime?: Maybe<Scalars['DateTime']['output']>;
+  createdUser?: Maybe<User>;
+  createdUserId?: Maybe<Scalars['Long']['output']>;
+  deletedTime?: Maybe<Scalars['DateTime']['output']>;
+  deletedUser?: Maybe<User>;
+  deletedUserId?: Maybe<Scalars['Long']['output']>;
+  id: Scalars['Long']['output'];
+  lastModifiedTime?: Maybe<Scalars['DateTime']['output']>;
+  lastModifiedUser?: Maybe<User>;
+  lastModifiedUserId?: Maybe<Scalars['Long']['output']>;
+  no: Scalars['Int']['output'];
+  notes?: Maybe<Scalars['String']['output']>;
+  removedTime?: Maybe<Scalars['DateTime']['output']>;
+  school: School;
+  schoolId: Scalars['Long']['output'];
+  status: EnrollmentStatus;
+  teacher: Teacher;
+  teacherClassEnrollments: Array<ClassTeacherEnrollment>;
+  teacherId: Scalars['Long']['output'];
+  time?: Maybe<Scalars['DateTime']['output']>;
+};
+
+export type SchoolTeacherEnrollmentFilterInput = {
+  and?: InputMaybe<Array<SchoolTeacherEnrollmentFilterInput>>;
+  createdTime?: InputMaybe<DateTimeOperationFilterInput>;
+  createdUser?: InputMaybe<UserFilterInput>;
+  createdUserId?: InputMaybe<LongOperationFilterInput>;
+  deletedTime?: InputMaybe<DateTimeOperationFilterInput>;
+  deletedUser?: InputMaybe<UserFilterInput>;
+  deletedUserId?: InputMaybe<LongOperationFilterInput>;
+  id?: InputMaybe<LongOperationFilterInput>;
+  lastModifiedTime?: InputMaybe<DateTimeOperationFilterInput>;
+  lastModifiedUser?: InputMaybe<UserFilterInput>;
+  lastModifiedUserId?: InputMaybe<LongOperationFilterInput>;
+  no?: InputMaybe<IntOperationFilterInput>;
+  notes?: InputMaybe<StringOperationFilterInput>;
+  or?: InputMaybe<Array<SchoolTeacherEnrollmentFilterInput>>;
+  removedTime?: InputMaybe<DateTimeOperationFilterInput>;
+  school?: InputMaybe<SchoolFilterInput>;
+  schoolId?: InputMaybe<LongOperationFilterInput>;
+  status?: InputMaybe<EnrollmentStatusOperationFilterInput>;
+  teacher?: InputMaybe<TeacherFilterInput>;
+  teacherClassEnrollments?: InputMaybe<ListFilterInputTypeOfClassTeacherEnrollmentFilterInput>;
+  teacherId?: InputMaybe<LongOperationFilterInput>;
+  time?: InputMaybe<DateTimeOperationFilterInput>;
+};
+
 export type SchoolTeacherEnrollmentModel = {
   __typename?: 'SchoolTeacherEnrollmentModel';
   createdTime?: Maybe<Scalars['DateTime']['output']>;
@@ -1315,9 +2228,10 @@ export type SchoolTeacherEnrollmentModel = {
   no?: Maybe<Scalars['Int']['output']>;
   notes?: Maybe<Scalars['String']['output']>;
   removedTime?: Maybe<Scalars['DateTime']['output']>;
+  school?: Maybe<SchoolModel>;
   schoolId?: Maybe<Scalars['Long']['output']>;
-  schoolName?: Maybe<Scalars['String']['output']>;
   status?: Maybe<EnrollmentStatus>;
+  teacher?: Maybe<TeacherModel>;
   teacherClassEnrollments: Array<ClassTeacherEnrollmentModel>;
   teacherId?: Maybe<Scalars['Long']['output']>;
   time?: Maybe<Scalars['DateTime']['output']>;
@@ -1340,12 +2254,56 @@ export type SchoolTeacherEnrollmentModelFilterInput = {
   notes?: InputMaybe<StringOperationFilterInput>;
   or?: InputMaybe<Array<SchoolTeacherEnrollmentModelFilterInput>>;
   removedTime?: InputMaybe<DateTimeOperationFilterInput>;
+  school?: InputMaybe<SchoolModelFilterInput>;
   schoolId?: InputMaybe<LongOperationFilterInput>;
-  schoolName?: InputMaybe<StringOperationFilterInput>;
   status?: InputMaybe<NullableOfEnrollmentStatusOperationFilterInput>;
+  teacher?: InputMaybe<TeacherModelFilterInput>;
   teacherClassEnrollments?: InputMaybe<ListFilterInputTypeOfClassTeacherEnrollmentModelFilterInput>;
   teacherId?: InputMaybe<LongOperationFilterInput>;
   time?: InputMaybe<DateTimeOperationFilterInput>;
+};
+
+export type SchoolTeacherEnrollmentRequest = {
+  __typename?: 'SchoolTeacherEnrollmentRequest';
+  createdTime?: Maybe<Scalars['DateTime']['output']>;
+  createdUser?: Maybe<User>;
+  createdUserId?: Maybe<Scalars['Long']['output']>;
+  deletedTime?: Maybe<Scalars['DateTime']['output']>;
+  deletedUser?: Maybe<User>;
+  deletedUserId?: Maybe<Scalars['Long']['output']>;
+  id: Scalars['Long']['output'];
+  lastModifiedTime?: Maybe<Scalars['DateTime']['output']>;
+  lastModifiedUser?: Maybe<User>;
+  lastModifiedUserId?: Maybe<Scalars['Long']['output']>;
+  notes?: Maybe<Scalars['String']['output']>;
+  person: Person;
+  personId: Scalars['Long']['output'];
+  reason?: Maybe<Scalars['String']['output']>;
+  school: School;
+  schoolId: Scalars['Long']['output'];
+  status: RequestStatus;
+};
+
+export type SchoolTeacherEnrollmentRequestFilterInput = {
+  and?: InputMaybe<Array<SchoolTeacherEnrollmentRequestFilterInput>>;
+  createdTime?: InputMaybe<DateTimeOperationFilterInput>;
+  createdUser?: InputMaybe<UserFilterInput>;
+  createdUserId?: InputMaybe<LongOperationFilterInput>;
+  deletedTime?: InputMaybe<DateTimeOperationFilterInput>;
+  deletedUser?: InputMaybe<UserFilterInput>;
+  deletedUserId?: InputMaybe<LongOperationFilterInput>;
+  id?: InputMaybe<LongOperationFilterInput>;
+  lastModifiedTime?: InputMaybe<DateTimeOperationFilterInput>;
+  lastModifiedUser?: InputMaybe<UserFilterInput>;
+  lastModifiedUserId?: InputMaybe<LongOperationFilterInput>;
+  notes?: InputMaybe<StringOperationFilterInput>;
+  or?: InputMaybe<Array<SchoolTeacherEnrollmentRequestFilterInput>>;
+  person?: InputMaybe<PersonFilterInput>;
+  personId?: InputMaybe<LongOperationFilterInput>;
+  reason?: InputMaybe<StringOperationFilterInput>;
+  school?: InputMaybe<SchoolFilterInput>;
+  schoolId?: InputMaybe<LongOperationFilterInput>;
+  status?: InputMaybe<RequestStatusOperationFilterInput>;
 };
 
 export type SchoolTeacherEnrollmentRequestModel = {
@@ -1363,10 +2321,14 @@ export type SchoolTeacherEnrollmentRequestModel = {
   lastModifiedUser?: Maybe<UserModel>;
   lastModifiedUserId?: Maybe<Scalars['Long']['output']>;
   notes?: Maybe<Scalars['String']['output']>;
+  person?: Maybe<PersonModel>;
   personId?: Maybe<Scalars['Long']['output']>;
   reason?: Maybe<Scalars['String']['output']>;
+  school?: Maybe<SchoolModel>;
   schoolId?: Maybe<Scalars['Long']['output']>;
   status?: Maybe<RequestStatus>;
+  teacher?: Maybe<TeacherModel>;
+  teacherId?: Maybe<Scalars['Long']['output']>;
 };
 
 export type SchoolTeacherEnrollmentRequestModelFilterInput = {
@@ -1385,10 +2347,14 @@ export type SchoolTeacherEnrollmentRequestModelFilterInput = {
   lastModifiedUserId?: InputMaybe<LongOperationFilterInput>;
   notes?: InputMaybe<StringOperationFilterInput>;
   or?: InputMaybe<Array<SchoolTeacherEnrollmentRequestModelFilterInput>>;
+  person?: InputMaybe<PersonModelFilterInput>;
   personId?: InputMaybe<LongOperationFilterInput>;
   reason?: InputMaybe<StringOperationFilterInput>;
+  school?: InputMaybe<SchoolModelFilterInput>;
   schoolId?: InputMaybe<LongOperationFilterInput>;
   status?: InputMaybe<NullableOfRequestStatusOperationFilterInput>;
+  teacher?: InputMaybe<TeacherModelFilterInput>;
+  teacherId?: InputMaybe<LongOperationFilterInput>;
 };
 
 export enum SchoolType {
@@ -1398,6 +2364,13 @@ export enum SchoolType {
   Type3I = 'TYPE3I',
   Type3Ii = 'TYPE3II'
 }
+
+export type SchoolTypeOperationFilterInput = {
+  eq?: InputMaybe<SchoolType>;
+  in?: InputMaybe<Array<SchoolType>>;
+  neq?: InputMaybe<SchoolType>;
+  nin?: InputMaybe<Array<SchoolType>>;
+};
 
 /** A segment of a collection. */
 export type SchoolsCollectionSegment = {
@@ -1414,6 +2387,13 @@ export enum Sex {
   Male = 'MALE',
   NotApplicable = 'NOT_APPLICABLE'
 }
+
+export type SexOperationFilterInput = {
+  eq?: InputMaybe<Sex>;
+  in?: InputMaybe<Array<Sex>>;
+  neq?: InputMaybe<Sex>;
+  nin?: InputMaybe<Array<Sex>>;
+};
 
 export enum SortEnumType {
   Asc = 'ASC',
@@ -1433,6 +2413,43 @@ export type StringOperationFilterInput = {
   nstartsWith?: InputMaybe<Scalars['String']['input']>;
   or?: InputMaybe<Array<StringOperationFilterInput>>;
   startsWith?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type Student = {
+  __typename?: 'Student';
+  createdTime?: Maybe<Scalars['DateTime']['output']>;
+  createdUser?: Maybe<User>;
+  createdUserId?: Maybe<Scalars['Long']['output']>;
+  deletedTime?: Maybe<Scalars['DateTime']['output']>;
+  deletedUser?: Maybe<User>;
+  deletedUserId?: Maybe<Scalars['Long']['output']>;
+  id: Scalars['Long']['output'];
+  lastModifiedTime?: Maybe<Scalars['DateTime']['output']>;
+  lastModifiedUser?: Maybe<User>;
+  lastModifiedUserId?: Maybe<Scalars['Long']['output']>;
+  notes?: Maybe<Scalars['String']['output']>;
+  person: Person;
+  personId: Scalars['Long']['output'];
+  schoolStudentEnrollments: Array<SchoolStudentEnrollment>;
+};
+
+export type StudentFilterInput = {
+  and?: InputMaybe<Array<StudentFilterInput>>;
+  createdTime?: InputMaybe<DateTimeOperationFilterInput>;
+  createdUser?: InputMaybe<UserFilterInput>;
+  createdUserId?: InputMaybe<LongOperationFilterInput>;
+  deletedTime?: InputMaybe<DateTimeOperationFilterInput>;
+  deletedUser?: InputMaybe<UserFilterInput>;
+  deletedUserId?: InputMaybe<LongOperationFilterInput>;
+  id?: InputMaybe<LongOperationFilterInput>;
+  lastModifiedTime?: InputMaybe<DateTimeOperationFilterInput>;
+  lastModifiedUser?: InputMaybe<UserFilterInput>;
+  lastModifiedUserId?: InputMaybe<LongOperationFilterInput>;
+  notes?: InputMaybe<StringOperationFilterInput>;
+  or?: InputMaybe<Array<StudentFilterInput>>;
+  person?: InputMaybe<PersonFilterInput>;
+  personId?: InputMaybe<LongOperationFilterInput>;
+  schoolStudentEnrollments?: InputMaybe<ListFilterInputTypeOfSchoolStudentEnrollmentFilterInput>;
 };
 
 export type StudentInput = {
@@ -1475,7 +2492,11 @@ export type StudentModel = {
   nickname?: Maybe<Scalars['String']['output']>;
   notes?: Maybe<Scalars['String']['output']>;
   passportNo?: Maybe<Scalars['String']['output']>;
+  person1Relationships: Array<PersonRelationshipModel>;
+  person2Relationships: Array<PersonRelationshipModel>;
+  schoolStudentEnrollmentRequests: Array<SchoolStudentEnrollmentRequestModel>;
   schoolStudentEnrollments: Array<SchoolStudentEnrollmentModel>;
+  schoolTeacherEnrollmentRequests: Array<SchoolTeacherEnrollmentRequestModel>;
   sex?: Maybe<Sex>;
   shortName?: Maybe<Scalars['String']['output']>;
 };
@@ -1506,7 +2527,11 @@ export type StudentModelFilterInput = {
   notes?: InputMaybe<StringOperationFilterInput>;
   or?: InputMaybe<Array<StudentModelFilterInput>>;
   passportNo?: InputMaybe<StringOperationFilterInput>;
+  person1Relationships?: InputMaybe<ListFilterInputTypeOfPersonRelationshipModelFilterInput>;
+  person2Relationships?: InputMaybe<ListFilterInputTypeOfPersonRelationshipModelFilterInput>;
+  schoolStudentEnrollmentRequests?: InputMaybe<ListFilterInputTypeOfSchoolStudentEnrollmentRequestModelFilterInput>;
   schoolStudentEnrollments?: InputMaybe<ListFilterInputTypeOfSchoolStudentEnrollmentModelFilterInput>;
+  schoolTeacherEnrollmentRequests?: InputMaybe<ListFilterInputTypeOfSchoolTeacherEnrollmentRequestModelFilterInput>;
   sex?: InputMaybe<NullableOfSexOperationFilterInput>;
   shortName?: InputMaybe<StringOperationFilterInput>;
 };
@@ -1549,6 +2574,47 @@ export type StudentsCollectionSegment = {
   totalCount: Scalars['Int']['output'];
 };
 
+export type Teacher = {
+  __typename?: 'Teacher';
+  createdTime?: Maybe<Scalars['DateTime']['output']>;
+  createdUser?: Maybe<User>;
+  createdUserId?: Maybe<Scalars['Long']['output']>;
+  deletedTime?: Maybe<Scalars['DateTime']['output']>;
+  deletedUser?: Maybe<User>;
+  deletedUserId?: Maybe<Scalars['Long']['output']>;
+  id: Scalars['Long']['output'];
+  lastModifiedTime?: Maybe<Scalars['DateTime']['output']>;
+  lastModifiedUser?: Maybe<User>;
+  lastModifiedUserId?: Maybe<Scalars['Long']['output']>;
+  notes?: Maybe<Scalars['String']['output']>;
+  person: Person;
+  personId: Scalars['Long']['output'];
+  registrationNo?: Maybe<Scalars['String']['output']>;
+  schoolTeacherEnrollments: Array<SchoolTeacherEnrollment>;
+  serviceGrade?: Maybe<Scalars['String']['output']>;
+};
+
+export type TeacherFilterInput = {
+  and?: InputMaybe<Array<TeacherFilterInput>>;
+  createdTime?: InputMaybe<DateTimeOperationFilterInput>;
+  createdUser?: InputMaybe<UserFilterInput>;
+  createdUserId?: InputMaybe<LongOperationFilterInput>;
+  deletedTime?: InputMaybe<DateTimeOperationFilterInput>;
+  deletedUser?: InputMaybe<UserFilterInput>;
+  deletedUserId?: InputMaybe<LongOperationFilterInput>;
+  id?: InputMaybe<LongOperationFilterInput>;
+  lastModifiedTime?: InputMaybe<DateTimeOperationFilterInput>;
+  lastModifiedUser?: InputMaybe<UserFilterInput>;
+  lastModifiedUserId?: InputMaybe<LongOperationFilterInput>;
+  notes?: InputMaybe<StringOperationFilterInput>;
+  or?: InputMaybe<Array<TeacherFilterInput>>;
+  person?: InputMaybe<PersonFilterInput>;
+  personId?: InputMaybe<LongOperationFilterInput>;
+  registrationNo?: InputMaybe<StringOperationFilterInput>;
+  schoolTeacherEnrollments?: InputMaybe<ListFilterInputTypeOfSchoolTeacherEnrollmentFilterInput>;
+  serviceGrade?: InputMaybe<StringOperationFilterInput>;
+};
+
 export type TeacherInput = {
   address?: InputMaybe<Scalars['String']['input']>;
   bcNo?: InputMaybe<Scalars['String']['input']>;
@@ -1589,6 +2655,10 @@ export type TeacherModel = {
   nickname?: Maybe<Scalars['String']['output']>;
   notes?: Maybe<Scalars['String']['output']>;
   passportNo?: Maybe<Scalars['String']['output']>;
+  person1Relationships: Array<PersonRelationshipModel>;
+  person2Relationships: Array<PersonRelationshipModel>;
+  schoolStudentEnrollmentRequests: Array<SchoolStudentEnrollmentRequestModel>;
+  schoolTeacherEnrollmentRequests: Array<SchoolTeacherEnrollmentRequestModel>;
   schoolTeacherEnrollments: Array<SchoolTeacherEnrollmentModel>;
   sex?: Maybe<Sex>;
   shortName?: Maybe<Scalars['String']['output']>;
@@ -1620,6 +2690,10 @@ export type TeacherModelFilterInput = {
   notes?: InputMaybe<StringOperationFilterInput>;
   or?: InputMaybe<Array<TeacherModelFilterInput>>;
   passportNo?: InputMaybe<StringOperationFilterInput>;
+  person1Relationships?: InputMaybe<ListFilterInputTypeOfPersonRelationshipModelFilterInput>;
+  person2Relationships?: InputMaybe<ListFilterInputTypeOfPersonRelationshipModelFilterInput>;
+  schoolStudentEnrollmentRequests?: InputMaybe<ListFilterInputTypeOfSchoolStudentEnrollmentRequestModelFilterInput>;
+  schoolTeacherEnrollmentRequests?: InputMaybe<ListFilterInputTypeOfSchoolTeacherEnrollmentRequestModelFilterInput>;
   schoolTeacherEnrollments?: InputMaybe<ListFilterInputTypeOfSchoolTeacherEnrollmentModelFilterInput>;
   sex?: InputMaybe<NullableOfSexOperationFilterInput>;
   shortName?: InputMaybe<StringOperationFilterInput>;
@@ -1663,8 +2737,162 @@ export type TeachersCollectionSegment = {
   totalCount: Scalars['Int']['output'];
 };
 
+export type User = {
+  __typename?: 'User';
+  createdClassStudentEnrollments: Array<ClassStudentEnrollment>;
+  createdClassTeacherClassEnrollments: Array<ClassTeacherEnrollment>;
+  createdClasses: Array<Class>;
+  createdPersonQualifications: Array<PersonQualification>;
+  createdPersonRelationships: Array<PersonRelationship>;
+  createdPersons: Array<Person>;
+  createdPrincipals: Array<Principal>;
+  createdSchoolPrincipalEnrollments: Array<SchoolPrincipalEnrollment>;
+  createdSchoolStudentEnrollmentRequests: Array<SchoolStudentEnrollmentRequest>;
+  createdSchoolStudentEnrollments: Array<SchoolStudentEnrollment>;
+  createdSchoolTeacherEnrollmentRequests: Array<SchoolTeacherEnrollmentRequest>;
+  createdSchoolTeacherEnrollments: Array<SchoolTeacherEnrollment>;
+  createdSchools: Array<School>;
+  createdStudents: Array<Student>;
+  createdTeachers: Array<Teacher>;
+  createdTime?: Maybe<Scalars['DateTime']['output']>;
+  createdUser?: Maybe<User>;
+  createdUserId?: Maybe<Scalars['Long']['output']>;
+  createdUsers: Array<User>;
+  deletedClassStudentEnrollments: Array<ClassStudentEnrollment>;
+  deletedClassTeacherClassEnrollments: Array<ClassTeacherEnrollment>;
+  deletedClasses: Array<Class>;
+  deletedPersonQualifications: Array<PersonQualification>;
+  deletedPersonRelationships: Array<PersonRelationship>;
+  deletedPersons: Array<Person>;
+  deletedPrincipals: Array<Principal>;
+  deletedSchoolPrincipalEnrollments: Array<SchoolPrincipalEnrollment>;
+  deletedSchoolStudentEnrollmentRequests: Array<SchoolStudentEnrollmentRequest>;
+  deletedSchoolStudentEnrollments: Array<SchoolStudentEnrollment>;
+  deletedSchoolTeacherEnrollmentRequests: Array<SchoolTeacherEnrollmentRequest>;
+  deletedSchoolTeacherEnrollments: Array<SchoolTeacherEnrollment>;
+  deletedSchools: Array<School>;
+  deletedStudents: Array<Student>;
+  deletedTeachers: Array<Teacher>;
+  deletedTime?: Maybe<Scalars['DateTime']['output']>;
+  deletedUser?: Maybe<User>;
+  deletedUserId?: Maybe<Scalars['Long']['output']>;
+  deletedUsers: Array<User>;
+  emailOtp?: Maybe<Scalars['String']['output']>;
+  emailOtpExpiration?: Maybe<Scalars['DateTime']['output']>;
+  emailToken?: Maybe<Scalars['String']['output']>;
+  emailTokenExpiration?: Maybe<Scalars['DateTime']['output']>;
+  id: Scalars['Long']['output'];
+  isEmailVerified: Scalars['Boolean']['output'];
+  isMobileNoVerified: Scalars['Boolean']['output'];
+  lastModifiedClassStudentEnrollments: Array<ClassStudentEnrollment>;
+  lastModifiedClassTeacherClassEnrollments: Array<ClassTeacherEnrollment>;
+  lastModifiedClasses: Array<Class>;
+  lastModifiedPersonQualifications: Array<PersonQualification>;
+  lastModifiedPersonRelationships: Array<PersonRelationship>;
+  lastModifiedPersons: Array<Person>;
+  lastModifiedPrincipals: Array<Principal>;
+  lastModifiedSchoolPrincipalEnrollments: Array<SchoolPrincipalEnrollment>;
+  lastModifiedSchoolStudentEnrollmentRequests: Array<SchoolStudentEnrollmentRequest>;
+  lastModifiedSchoolStudentEnrollments: Array<SchoolStudentEnrollment>;
+  lastModifiedSchoolTeacherEnrollmentRequests: Array<SchoolTeacherEnrollmentRequest>;
+  lastModifiedSchoolTeacherEnrollments: Array<SchoolTeacherEnrollment>;
+  lastModifiedSchools: Array<School>;
+  lastModifiedStudents: Array<Student>;
+  lastModifiedTeachers: Array<Teacher>;
+  lastModifiedTime?: Maybe<Scalars['DateTime']['output']>;
+  lastModifiedUser?: Maybe<User>;
+  lastModifiedUserId?: Maybe<Scalars['Long']['output']>;
+  lastModifiedUsers: Array<User>;
+  mobileNoOtp?: Maybe<Scalars['String']['output']>;
+  mobileNoOtpExpiration?: Maybe<Scalars['DateTime']['output']>;
+  mobileNoToken?: Maybe<Scalars['String']['output']>;
+  mobileNoTokenExpiration?: Maybe<Scalars['DateTime']['output']>;
+  notes?: Maybe<Scalars['String']['output']>;
+  password: Scalars['String']['output'];
+  person: Person;
+  personId: Scalars['Long']['output'];
+};
+
+export type UserFilterInput = {
+  and?: InputMaybe<Array<UserFilterInput>>;
+  createdClassStudentEnrollments?: InputMaybe<ListFilterInputTypeOfClassStudentEnrollmentFilterInput>;
+  createdClassTeacherClassEnrollments?: InputMaybe<ListFilterInputTypeOfClassTeacherEnrollmentFilterInput>;
+  createdClasses?: InputMaybe<ListFilterInputTypeOfClassFilterInput>;
+  createdPersonQualifications?: InputMaybe<ListFilterInputTypeOfPersonQualificationFilterInput>;
+  createdPersonRelationships?: InputMaybe<ListFilterInputTypeOfPersonRelationshipFilterInput>;
+  createdPersons?: InputMaybe<ListFilterInputTypeOfPersonFilterInput>;
+  createdPrincipals?: InputMaybe<ListFilterInputTypeOfPrincipalFilterInput>;
+  createdSchoolPrincipalEnrollments?: InputMaybe<ListFilterInputTypeOfSchoolPrincipalEnrollmentFilterInput>;
+  createdSchoolStudentEnrollmentRequests?: InputMaybe<ListFilterInputTypeOfSchoolStudentEnrollmentRequestFilterInput>;
+  createdSchoolStudentEnrollments?: InputMaybe<ListFilterInputTypeOfSchoolStudentEnrollmentFilterInput>;
+  createdSchoolTeacherEnrollmentRequests?: InputMaybe<ListFilterInputTypeOfSchoolTeacherEnrollmentRequestFilterInput>;
+  createdSchoolTeacherEnrollments?: InputMaybe<ListFilterInputTypeOfSchoolTeacherEnrollmentFilterInput>;
+  createdSchools?: InputMaybe<ListFilterInputTypeOfSchoolFilterInput>;
+  createdStudents?: InputMaybe<ListFilterInputTypeOfStudentFilterInput>;
+  createdTeachers?: InputMaybe<ListFilterInputTypeOfTeacherFilterInput>;
+  createdTime?: InputMaybe<DateTimeOperationFilterInput>;
+  createdUser?: InputMaybe<UserFilterInput>;
+  createdUserId?: InputMaybe<LongOperationFilterInput>;
+  createdUsers?: InputMaybe<ListFilterInputTypeOfUserFilterInput>;
+  deletedClassStudentEnrollments?: InputMaybe<ListFilterInputTypeOfClassStudentEnrollmentFilterInput>;
+  deletedClassTeacherClassEnrollments?: InputMaybe<ListFilterInputTypeOfClassTeacherEnrollmentFilterInput>;
+  deletedClasses?: InputMaybe<ListFilterInputTypeOfClassFilterInput>;
+  deletedPersonQualifications?: InputMaybe<ListFilterInputTypeOfPersonQualificationFilterInput>;
+  deletedPersonRelationships?: InputMaybe<ListFilterInputTypeOfPersonRelationshipFilterInput>;
+  deletedPersons?: InputMaybe<ListFilterInputTypeOfPersonFilterInput>;
+  deletedPrincipals?: InputMaybe<ListFilterInputTypeOfPrincipalFilterInput>;
+  deletedSchoolPrincipalEnrollments?: InputMaybe<ListFilterInputTypeOfSchoolPrincipalEnrollmentFilterInput>;
+  deletedSchoolStudentEnrollmentRequests?: InputMaybe<ListFilterInputTypeOfSchoolStudentEnrollmentRequestFilterInput>;
+  deletedSchoolStudentEnrollments?: InputMaybe<ListFilterInputTypeOfSchoolStudentEnrollmentFilterInput>;
+  deletedSchoolTeacherEnrollmentRequests?: InputMaybe<ListFilterInputTypeOfSchoolTeacherEnrollmentRequestFilterInput>;
+  deletedSchoolTeacherEnrollments?: InputMaybe<ListFilterInputTypeOfSchoolTeacherEnrollmentFilterInput>;
+  deletedSchools?: InputMaybe<ListFilterInputTypeOfSchoolFilterInput>;
+  deletedStudents?: InputMaybe<ListFilterInputTypeOfStudentFilterInput>;
+  deletedTeachers?: InputMaybe<ListFilterInputTypeOfTeacherFilterInput>;
+  deletedTime?: InputMaybe<DateTimeOperationFilterInput>;
+  deletedUser?: InputMaybe<UserFilterInput>;
+  deletedUserId?: InputMaybe<LongOperationFilterInput>;
+  deletedUsers?: InputMaybe<ListFilterInputTypeOfUserFilterInput>;
+  emailOtp?: InputMaybe<StringOperationFilterInput>;
+  emailOtpExpiration?: InputMaybe<DateTimeOperationFilterInput>;
+  emailToken?: InputMaybe<StringOperationFilterInput>;
+  emailTokenExpiration?: InputMaybe<DateTimeOperationFilterInput>;
+  id?: InputMaybe<LongOperationFilterInput>;
+  isEmailVerified?: InputMaybe<BooleanOperationFilterInput>;
+  isMobileNoVerified?: InputMaybe<BooleanOperationFilterInput>;
+  lastModifiedClassStudentEnrollments?: InputMaybe<ListFilterInputTypeOfClassStudentEnrollmentFilterInput>;
+  lastModifiedClassTeacherClassEnrollments?: InputMaybe<ListFilterInputTypeOfClassTeacherEnrollmentFilterInput>;
+  lastModifiedClasses?: InputMaybe<ListFilterInputTypeOfClassFilterInput>;
+  lastModifiedPersonQualifications?: InputMaybe<ListFilterInputTypeOfPersonQualificationFilterInput>;
+  lastModifiedPersonRelationships?: InputMaybe<ListFilterInputTypeOfPersonRelationshipFilterInput>;
+  lastModifiedPersons?: InputMaybe<ListFilterInputTypeOfPersonFilterInput>;
+  lastModifiedPrincipals?: InputMaybe<ListFilterInputTypeOfPrincipalFilterInput>;
+  lastModifiedSchoolPrincipalEnrollments?: InputMaybe<ListFilterInputTypeOfSchoolPrincipalEnrollmentFilterInput>;
+  lastModifiedSchoolStudentEnrollmentRequests?: InputMaybe<ListFilterInputTypeOfSchoolStudentEnrollmentRequestFilterInput>;
+  lastModifiedSchoolStudentEnrollments?: InputMaybe<ListFilterInputTypeOfSchoolStudentEnrollmentFilterInput>;
+  lastModifiedSchoolTeacherEnrollmentRequests?: InputMaybe<ListFilterInputTypeOfSchoolTeacherEnrollmentRequestFilterInput>;
+  lastModifiedSchoolTeacherEnrollments?: InputMaybe<ListFilterInputTypeOfSchoolTeacherEnrollmentFilterInput>;
+  lastModifiedSchools?: InputMaybe<ListFilterInputTypeOfSchoolFilterInput>;
+  lastModifiedStudents?: InputMaybe<ListFilterInputTypeOfStudentFilterInput>;
+  lastModifiedTeachers?: InputMaybe<ListFilterInputTypeOfTeacherFilterInput>;
+  lastModifiedTime?: InputMaybe<DateTimeOperationFilterInput>;
+  lastModifiedUser?: InputMaybe<UserFilterInput>;
+  lastModifiedUserId?: InputMaybe<LongOperationFilterInput>;
+  lastModifiedUsers?: InputMaybe<ListFilterInputTypeOfUserFilterInput>;
+  mobileNoOtp?: InputMaybe<StringOperationFilterInput>;
+  mobileNoOtpExpiration?: InputMaybe<DateTimeOperationFilterInput>;
+  mobileNoToken?: InputMaybe<StringOperationFilterInput>;
+  mobileNoTokenExpiration?: InputMaybe<DateTimeOperationFilterInput>;
+  notes?: InputMaybe<StringOperationFilterInput>;
+  or?: InputMaybe<Array<UserFilterInput>>;
+  password?: InputMaybe<StringOperationFilterInput>;
+  person?: InputMaybe<PersonFilterInput>;
+  personId?: InputMaybe<LongOperationFilterInput>;
+};
+
 export type UserModel = {
   __typename?: 'UserModel';
+  createdPersons: Array<PersonModel>;
   createdSchoolStudentEnrollmentRequests: Array<SchoolStudentEnrollmentRequestModel>;
   createdTime?: Maybe<Scalars['DateTime']['output']>;
   createdUser?: Maybe<UserModel>;
@@ -1694,6 +2922,7 @@ export type UserModel = {
 
 export type UserModelFilterInput = {
   and?: InputMaybe<Array<UserModelFilterInput>>;
+  createdPersons?: InputMaybe<ListFilterInputTypeOfPersonModelFilterInput>;
   createdSchoolStudentEnrollmentRequests?: InputMaybe<ListFilterInputTypeOfSchoolStudentEnrollmentRequestModelFilterInput>;
   createdTime?: InputMaybe<DateTimeOperationFilterInput>;
   createdUser?: InputMaybe<UserModelFilterInput>;
@@ -1755,4 +2984,27 @@ export type UsersCollectionSegment = {
   /** Information to aid in pagination. */
   pageInfo: CollectionSegmentInfo;
   totalCount: Scalars['Int']['output'];
+};
+
+export type Zone = {
+  __typename?: 'Zone';
+  district: District;
+  districtId: Scalars['Int']['output'];
+  divisions: Array<Division>;
+  id: Scalars['Int']['output'];
+  name: Scalars['String']['output'];
+  sinhalaName: Scalars['String']['output'];
+  tamilName: Scalars['String']['output'];
+};
+
+export type ZoneFilterInput = {
+  and?: InputMaybe<Array<ZoneFilterInput>>;
+  district?: InputMaybe<DistrictFilterInput>;
+  districtId?: InputMaybe<IntOperationFilterInput>;
+  divisions?: InputMaybe<ListFilterInputTypeOfDivisionFilterInput>;
+  id?: InputMaybe<IntOperationFilterInput>;
+  name?: InputMaybe<StringOperationFilterInput>;
+  or?: InputMaybe<Array<ZoneFilterInput>>;
+  sinhalaName?: InputMaybe<StringOperationFilterInput>;
+  tamilName?: InputMaybe<StringOperationFilterInput>;
 };

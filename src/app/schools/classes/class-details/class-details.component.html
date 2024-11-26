@@ -87,23 +87,40 @@
                         </div>
                         <div>
                             @if (authService.loggedInUser?.principalId) {
-                                <button class="btn btn-sm btn-primary" (click)="addClass()">
+                                <button type="button" title="New" class="btn btn-sm btn-primary" (click)="addClass()">
                                     <i class="bi bi-plus"></i>
-                                    New
                                 </button>
                             }
                         </div>
                     </div>
                 </div>
                 <div class="card-body">
-                    <div *ngFor="let enrollment of record.classStudentEnrollments" [ngClass]="{'bg-light': enrollment.status == EnrollmentStatus.Active}">
-                        <p>
-                            <i class="bi bi-card-text"></i>&nbsp;
-                            <a [routerLink]="['/students', enrollment.studentId]">{{ enrollment.studentFullName }}</a>&nbsp;
-                            (#{{ enrollment.rollNo }})&nbsp;
-                            | {{ enrollment.academicYear }} ({{ enrollment.time | date }})
-                        </p>
-                        </div>
+                    @if (record.classStudentEnrollments.length) {
+                        <p>Showing latest 10 records (<a [routerLink]="['/schools', record.schoolId, 'classes', record.id, 'student-enrollments']">View all</a>)</p>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Student</th>
+                                    <th scope="col">Roll No</th>
+                                    <th scope="col">Year</th>
+                                    <th scope="col">Details</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (item of record.classStudentEnrollments; track $index) {
+                                    <tr>
+                                        <th scope="row"><a [routerLink]="['/students', item.studentId]">{{ item.student?.fullName }}</a></th>
+                                        <td>{{ item.rollNo }}</td>
+                                        <td>{{ item.academicYear }}</td>
+                                        <td><a [routerLink]="['/schools', record.schoolId, 'classes', record.id, 'student-enrollments', item.id]">View</a></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    @else {
+                        <p>No records found.</p>
+                    }
                 </div>
                 </div>
             </div>
