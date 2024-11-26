@@ -343,6 +343,36 @@ export type GradeOperationFilterInput = {
   nin?: InputMaybe<Array<Grade>>;
 };
 
+export enum HumanRelationship {
+  Aunt = 'AUNT',
+  Brother = 'BROTHER',
+  BrotherInLaw = 'BROTHER_IN_LAW',
+  Cousin = 'COUSIN',
+  Daughter = 'DAUGHTER',
+  DaughterInLaw = 'DAUGHTER_IN_LAW',
+  Father = 'FATHER',
+  FatherInLaw = 'FATHER_IN_LAW',
+  Granddaughter = 'GRANDDAUGHTER',
+  Grandfather = 'GRANDFATHER',
+  Grandmother = 'GRANDMOTHER',
+  Grandson = 'GRANDSON',
+  Husband = 'HUSBAND',
+  Mother = 'MOTHER',
+  MotherInLaw = 'MOTHER_IN_LAW',
+  Nephew = 'NEPHEW',
+  Niece = 'NIECE',
+  Sister = 'SISTER',
+  SisterInLaw = 'SISTER_IN_LAW',
+  Son = 'SON',
+  SonInLaw = 'SON_IN_LAW',
+  Stepdaughter = 'STEPDAUGHTER',
+  Stepfather = 'STEPFATHER',
+  Stepmother = 'STEPMOTHER',
+  Stepson = 'STEPSON',
+  Uncle = 'UNCLE',
+  Wife = 'WIFE'
+}
+
 export type IntOperationFilterInput = {
   eq?: InputMaybe<Scalars['Int']['input']>;
   gt?: InputMaybe<Scalars['Int']['input']>;
@@ -431,12 +461,34 @@ export type LongOperationFilterInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  createPerson: PersonModel;
+  createPersonRelationship: PersonRelationshipModel;
+  createSchool: SchoolModel;
   createSchoolStudentEnrollment: SchoolStudentEnrollmentModel;
   createSchoolStudentEnrollmentRequest: SchoolStudentEnrollmentRequestModel;
   createStudent: StudentModel;
+  createTeacher: TeacherModel;
+  updatePerson: PersonModel;
+  updateSchool: SchoolModel;
   updateSchoolStudentEnrollmentRequest: SchoolStudentEnrollmentRequestModel;
   updateSchoolStudentEnrollmentRequestStatus: SchoolStudentEnrollmentRequestModel;
   updateStudent: StudentModel;
+  updateTeacher: TeacherModel;
+};
+
+
+export type MutationCreatePersonArgs = {
+  input: PersonInput;
+};
+
+
+export type MutationCreatePersonRelationshipArgs = {
+  input: PersonRelationshipInput;
+};
+
+
+export type MutationCreateSchoolArgs = {
+  input: SchoolInput;
 };
 
 
@@ -455,21 +507,38 @@ export type MutationCreateStudentArgs = {
 };
 
 
+export type MutationCreateTeacherArgs = {
+  input: TeacherInput;
+};
+
+
+export type MutationUpdatePersonArgs = {
+  input: PersonInput;
+};
+
+
+export type MutationUpdateSchoolArgs = {
+  input: SchoolInput;
+};
+
+
 export type MutationUpdateSchoolStudentEnrollmentRequestArgs = {
-  id: Scalars['Long']['input'];
   input: SchoolStudentEnrollmentRequestInput;
 };
 
 
 export type MutationUpdateSchoolStudentEnrollmentRequestStatusArgs = {
-  id: Scalars['Long']['input'];
   input: SchoolStudentEnrollmentRequestStatusUpdateInput;
 };
 
 
 export type MutationUpdateStudentArgs = {
-  id: Scalars['Long']['input'];
   input: StudentInput;
+};
+
+
+export type MutationUpdateTeacherArgs = {
+  input: TeacherInput;
 };
 
 export type NullableOfEnrollmentStatusOperationFilterInput = {
@@ -484,6 +553,13 @@ export type NullableOfGradeOperationFilterInput = {
   in?: InputMaybe<Array<InputMaybe<Grade>>>;
   neq?: InputMaybe<Grade>;
   nin?: InputMaybe<Array<InputMaybe<Grade>>>;
+};
+
+export type NullableOfHumanRelationshipOperationFilterInput = {
+  eq?: InputMaybe<HumanRelationship>;
+  in?: InputMaybe<Array<InputMaybe<HumanRelationship>>>;
+  neq?: InputMaybe<HumanRelationship>;
+  nin?: InputMaybe<Array<InputMaybe<HumanRelationship>>>;
 };
 
 export type NullableOfRequestStatusOperationFilterInput = {
@@ -505,6 +581,21 @@ export type NullableOfSexOperationFilterInput = {
   in?: InputMaybe<Array<InputMaybe<Sex>>>;
   neq?: InputMaybe<Sex>;
   nin?: InputMaybe<Array<InputMaybe<Sex>>>;
+};
+
+export type PersonInput = {
+  address?: InputMaybe<Scalars['String']['input']>;
+  bcNo?: InputMaybe<Scalars['String']['input']>;
+  dateOfBirth?: InputMaybe<Scalars['Date']['input']>;
+  email?: InputMaybe<Scalars['String']['input']>;
+  fullName: Scalars['String']['input'];
+  id?: InputMaybe<Scalars['Long']['input']>;
+  mobileNo?: InputMaybe<Scalars['String']['input']>;
+  nicNo?: InputMaybe<Scalars['String']['input']>;
+  nickname?: InputMaybe<Scalars['String']['input']>;
+  passportNo?: InputMaybe<Scalars['String']['input']>;
+  sex: Sex;
+  shortName: Scalars['String']['input'];
 };
 
 export type PersonModel = {
@@ -594,11 +685,109 @@ export type PersonModelSortInput = {
   shortName?: InputMaybe<SortEnumType>;
 };
 
+export type PersonRelationshipInput = {
+  id?: InputMaybe<Scalars['Long']['input']>;
+  person1Id: Scalars['Long']['input'];
+  person1Relationship: HumanRelationship;
+  person2Id: Scalars['Long']['input'];
+  person2Relationship: HumanRelationship;
+};
+
+export type PersonRelationshipModel = {
+  __typename?: 'PersonRelationshipModel';
+  createdTime?: Maybe<Scalars['DateTime']['output']>;
+  createdUser?: Maybe<UserModel>;
+  createdUserId?: Maybe<Scalars['Long']['output']>;
+  deletedTime?: Maybe<Scalars['DateTime']['output']>;
+  deletedUser?: Maybe<UserModel>;
+  deletedUserId?: Maybe<Scalars['Long']['output']>;
+  id?: Maybe<Scalars['Long']['output']>;
+  label?: Maybe<Scalars['String']['output']>;
+  lastModifiedTime?: Maybe<Scalars['DateTime']['output']>;
+  lastModifiedUser?: Maybe<UserModel>;
+  lastModifiedUserId?: Maybe<Scalars['Long']['output']>;
+  notes?: Maybe<Scalars['String']['output']>;
+  person1?: Maybe<PersonModel>;
+  person1Id?: Maybe<Scalars['Long']['output']>;
+  person1Relationship?: Maybe<HumanRelationship>;
+  person2?: Maybe<PersonModel>;
+  person2Id?: Maybe<Scalars['Long']['output']>;
+  person2Relationship?: Maybe<HumanRelationship>;
+};
+
+export type PersonRelationshipModelFilterInput = {
+  and?: InputMaybe<Array<PersonRelationshipModelFilterInput>>;
+  createdTime?: InputMaybe<DateTimeOperationFilterInput>;
+  createdUser?: InputMaybe<UserModelFilterInput>;
+  createdUserId?: InputMaybe<LongOperationFilterInput>;
+  deletedTime?: InputMaybe<DateTimeOperationFilterInput>;
+  deletedUser?: InputMaybe<UserModelFilterInput>;
+  deletedUserId?: InputMaybe<LongOperationFilterInput>;
+  id?: InputMaybe<LongOperationFilterInput>;
+  label?: InputMaybe<StringOperationFilterInput>;
+  lastModifiedTime?: InputMaybe<DateTimeOperationFilterInput>;
+  lastModifiedUser?: InputMaybe<UserModelFilterInput>;
+  lastModifiedUserId?: InputMaybe<LongOperationFilterInput>;
+  notes?: InputMaybe<StringOperationFilterInput>;
+  or?: InputMaybe<Array<PersonRelationshipModelFilterInput>>;
+  person1?: InputMaybe<PersonModelFilterInput>;
+  person1Id?: InputMaybe<LongOperationFilterInput>;
+  person1Relationship?: InputMaybe<NullableOfHumanRelationshipOperationFilterInput>;
+  person2?: InputMaybe<PersonModelFilterInput>;
+  person2Id?: InputMaybe<LongOperationFilterInput>;
+  person2Relationship?: InputMaybe<NullableOfHumanRelationshipOperationFilterInput>;
+};
+
+export type PersonRelationshipModelSortInput = {
+  createdTime?: InputMaybe<SortEnumType>;
+  createdUser?: InputMaybe<UserModelSortInput>;
+  createdUserId?: InputMaybe<SortEnumType>;
+  deletedTime?: InputMaybe<SortEnumType>;
+  deletedUser?: InputMaybe<UserModelSortInput>;
+  deletedUserId?: InputMaybe<SortEnumType>;
+  id?: InputMaybe<SortEnumType>;
+  label?: InputMaybe<SortEnumType>;
+  lastModifiedTime?: InputMaybe<SortEnumType>;
+  lastModifiedUser?: InputMaybe<UserModelSortInput>;
+  lastModifiedUserId?: InputMaybe<SortEnumType>;
+  notes?: InputMaybe<SortEnumType>;
+  person1?: InputMaybe<PersonModelSortInput>;
+  person1Id?: InputMaybe<SortEnumType>;
+  person1Relationship?: InputMaybe<SortEnumType>;
+  person2?: InputMaybe<PersonModelSortInput>;
+  person2Id?: InputMaybe<SortEnumType>;
+  person2Relationship?: InputMaybe<SortEnumType>;
+};
+
+/** A segment of a collection. */
+export type PersonRelationshipsCollectionSegment = {
+  __typename?: 'PersonRelationshipsCollectionSegment';
+  /** A flattened list of the items. */
+  items?: Maybe<Array<PersonRelationshipModel>>;
+  /** Information to aid in pagination. */
+  pageInfo: CollectionSegmentInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
+/** A segment of a collection. */
+export type PersonsCollectionSegment = {
+  __typename?: 'PersonsCollectionSegment';
+  /** A flattened list of the items. */
+  items?: Maybe<Array<PersonModel>>;
+  /** Information to aid in pagination. */
+  pageInfo: CollectionSegmentInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
 export type Query = {
   __typename?: 'Query';
   academicYears?: Maybe<AcademicYearsCollectionSegment>;
   class?: Maybe<ClassModel>;
   classes?: Maybe<ClassesCollectionSegment>;
+  person?: Maybe<PersonModel>;
+  personRelationship?: Maybe<PersonRelationshipModel>;
+  personRelationships?: Maybe<PersonRelationshipsCollectionSegment>;
+  persons?: Maybe<PersonsCollectionSegment>;
   school?: Maybe<SchoolModel>;
   schoolStudentEnrollment?: Maybe<SchoolStudentEnrollmentModel>;
   schoolStudentEnrollmentRequest?: Maybe<SchoolStudentEnrollmentRequestModel>;
@@ -634,6 +823,32 @@ export type QueryClassesArgs = {
   skip?: InputMaybe<Scalars['Int']['input']>;
   take?: InputMaybe<Scalars['Int']['input']>;
   where?: InputMaybe<ClassModelFilterInput>;
+};
+
+
+export type QueryPersonArgs = {
+  id: Scalars['Long']['input'];
+};
+
+
+export type QueryPersonRelationshipArgs = {
+  id: Scalars['Long']['input'];
+};
+
+
+export type QueryPersonRelationshipsArgs = {
+  order?: InputMaybe<Array<PersonRelationshipModelSortInput>>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  take?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<PersonRelationshipModelFilterInput>;
+};
+
+
+export type QueryPersonsArgs = {
+  order?: InputMaybe<Array<PersonModelSortInput>>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  take?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<PersonModelFilterInput>;
 };
 
 
@@ -722,6 +937,18 @@ export enum RequestStatus {
   Processing = 'PROCESSING',
   Rejected = 'REJECTED'
 }
+
+export type SchoolInput = {
+  address?: InputMaybe<Scalars['String']['input']>;
+  censusNo: Scalars['String']['input'];
+  divisionId: Scalars['Int']['input'];
+  email?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['Long']['input']>;
+  location: Scalars['String']['input'];
+  name: Scalars['String']['input'];
+  phoneNo?: InputMaybe<Scalars['String']['input']>;
+  type: SchoolType;
+};
 
 export type SchoolModel = {
   __typename?: 'SchoolModel';
@@ -1320,6 +1547,21 @@ export type StudentsCollectionSegment = {
   /** Information to aid in pagination. */
   pageInfo: CollectionSegmentInfo;
   totalCount: Scalars['Int']['output'];
+};
+
+export type TeacherInput = {
+  address?: InputMaybe<Scalars['String']['input']>;
+  bcNo?: InputMaybe<Scalars['String']['input']>;
+  dateOfBirth?: InputMaybe<Scalars['Date']['input']>;
+  email?: InputMaybe<Scalars['String']['input']>;
+  fullName: Scalars['String']['input'];
+  id?: InputMaybe<Scalars['Long']['input']>;
+  mobileNo?: InputMaybe<Scalars['String']['input']>;
+  nicNo?: InputMaybe<Scalars['String']['input']>;
+  nickname?: InputMaybe<Scalars['String']['input']>;
+  passportNo?: InputMaybe<Scalars['String']['input']>;
+  sex: Sex;
+  shortName: Scalars['String']['input'];
 };
 
 export type TeacherModel = {

@@ -37,15 +37,12 @@ import { DataComponent } from '../components/data/data.component';
   templateUrl: './graphql-record-form.component.html',
   styleUrl: './graphql-record-form.component.scss'
 })
-export class GraphqlRecordFormComponent<M, I> extends FormComponent<M> implements OnInit, OnChanges, OnDestroy {
+export class GraphqlRecordFormComponent<I> extends FormComponent<I> implements OnInit, OnChanges, OnDestroy {
   override loadData(): void {
     throw new Error('Method not implemented.');
   }
 
   type: string = '';
-
-  @Input() model!: I;
-  @Input() fields: FormlyFieldConfig[] = [];
   
   enableMultipleCreate: boolean = false;
 
@@ -54,17 +51,13 @@ export class GraphqlRecordFormComponent<M, I> extends FormComponent<M> implement
   recordUpdateMutation!: DocumentNode | TypedDocumentNode<any, any>;
   constructor(
     private graphqlService: GraphqlService,
-    private dialogRef: MatDialogRef<GraphqlRecordFormComponent<M, I>>,
+    private dialogRef: MatDialogRef<GraphqlRecordFormComponent<I>>,
     private toastr: ToastrService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     super();
     // this.formGroup?.setValue({});
     dialogRef.disableClose = true;
-  }
-  ngOnDestroy(): void {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
   }
 
   ngOnInit(): void {
@@ -83,26 +76,26 @@ export class GraphqlRecordFormComponent<M, I> extends FormComponent<M> implement
     }
     // this.updateControls();
 
-    if (this.isEditMode) {
-      this.isLoading = true;
-      this.form.disable();
-      const variables = {
-        id: this.id,
-      }
-      this.graphqlService.getGqlQueryObservable(this.recordFetchQuery, variables).subscribe({
-        next: (res: GraphqlCollectionResponse<M>) => {
-          this.isLoading = false;
-          const model = res.data[this.type];
-          this.form.patchValue(model);
-          this.oldRecord = this.form.value;
-          this.form.enable();
-        },
-        error: err => {
-          this.isLoading = false;
-          this.toastr.error(`Could not load details`, this.type);
-        }
-      });
-    }
+    // if (this.isEditMode) {
+    //   this.isLoading = true;
+    //   this.form.disable();
+    //   const variables = {
+    //     id: this.id,
+    //   }
+    //   this.graphqlService.getGqlQueryObservable(this.recordFetchQuery, variables).subscribe({
+    //     next: (res: GraphqlCollectionResponse<M>) => {
+    //       this.isLoading = false;
+    //       const model = res.data[this.type];
+    //       this.form.patchValue(model);
+    //       this.oldRecord = this.form.value;
+    //       this.form.enable();
+    //     },
+    //     error: err => {
+    //       this.isLoading = false;
+    //       this.toastr.error(`Could not load details`, this.type);
+    //     }
+    //   });
+    // }
 
     this.dialogRef.beforeClosed().pipe(takeUntil(this.unsubscribe$)).subscribe(() => {
       
@@ -148,9 +141,12 @@ export class GraphqlRecordFormComponent<M, I> extends FormComponent<M> implement
     };
 
     // const refetchQueries = [this.collectionKey, this.typeKey];
-    
+    this.isSaving = true;
+    this.error = null;
     this.graphqlService.getGqlMutationObservable(mutation, variables).subscribe({
       next: ({ data, errors, loading }) => {
+        this.isSaving = false;
+        this.error = null;
         if (errors) {
           this.toastr.error(`Could not ${this.isEditMode ? 'update' : 'create'} record`, this.type);
         }
@@ -165,8 +161,9 @@ export class GraphqlRecordFormComponent<M, I> extends FormComponent<M> implement
         }
       },
       error: err => {
+        this.isSaving = false;
+        this.error = err;
         this.toastr.error(`Error occured`, this.type);
-        console.log(err);
       }
     });
   }

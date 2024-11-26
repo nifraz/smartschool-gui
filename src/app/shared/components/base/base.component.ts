@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 
 @Component({
@@ -8,7 +8,7 @@ import { Subject } from 'rxjs';
   templateUrl: './base.component.html',
   styleUrl: './base.component.scss'
 })
-export abstract class BaseComponent {
+export abstract class BaseComponent implements OnDestroy {
   title: string = '';
 
   @Input() languageCode: string = 'en';
@@ -23,5 +23,10 @@ export abstract class BaseComponent {
   protected unsubscribe$ = new Subject<void>();
 
   constructor() { }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
 
 }

@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { ToastrService } from 'ngx-toastr';
 import { NotFoundComponent } from '../../../shared/not-found/not-found.component';
-import { StudentModel, EnrollmentStatus, SchoolStudentEnrollmentRequestModel, RequestStatus, SchoolStudentEnrollmentModel, AcademicYearModel, ClassModel, SchoolStudentEnrollmentInput, SchoolStudentEnrollmentRequestInput } from '../../../../../graphql/generated';
+import { StudentModel, EnrollmentStatus, SchoolStudentEnrollmentRequestModel, RequestStatus, SchoolStudentEnrollmentModel, AcademicYearModel, ClassModel, SchoolStudentEnrollmentInput, SchoolStudentEnrollmentRequestInput, SchoolStudentEnrollmentRequestStatusUpdateInput } from '../../../../../graphql/generated';
 import { AuthService } from '../../../auth/auth.service';
 import { RecordComponent } from '../../../shared/components/record/record.component';
 import { GraphqlRecordFormComponent } from '../../../shared/graphql-record-form/graphql-record-form.component';
@@ -15,12 +15,12 @@ import { StudentsService } from '../../../students/students.service';
 import { TitleCaseWithSpacePipe } from "../../../shared/pipes/title-case-with-space.pipe";
 import { LaddaModule } from 'angular2-ladda';
 import { CREATE_SCHOOL_STUDENT_ENROLLMENT, CREATE_SCHOOL_STUDENT_ENROLLMENT_REQUEST, UPDATE_SCHOOL_STUDENT_ENROLLMENT_REQUEST_STATUS } from '../../../shared/mutations';
-import { CreateSchoolStudentEnrollmentComponent } from '../../school-student-enrollments/create-school-student-enrollment/create-school-student-enrollment.component';
 import { SCHOOL_STUDENT_ENROLLMENT_CREATED } from '../../../shared/subscriptions';
 import { MutationResult } from 'apollo-angular';
 import { GraphqlTypes, GraphqlCollections } from '../../../shared/enums';
 import { AbstractControl } from '@angular/forms';
-import { map } from 'rxjs';
+import { map, of, switchMap, takeUntil } from 'rxjs';
+import { RecordFormComponent } from '../../../shared/components/record-form/record-form.component';
 
 @Component({
   selector: 'app-school-student-enrollment-request-details',
@@ -197,7 +197,7 @@ export class SchoolStudentEnrollmentRequestDetailsComponent extends RecordCompon
         personId: this.record?.person?.id,
       };
   
-      const dialogRef = this.matDialog.open(GraphqlRecordFormComponent<SchoolStudentEnrollmentModel, SchoolStudentEnrollmentInput>, {
+      const dialogRef = this.matDialog.open(GraphqlRecordFormComponent<SchoolStudentEnrollmentInput>, {
         width: '1200px',
         data: {
           title: 'School Student Enrollment',
@@ -207,13 +207,6 @@ export class SchoolStudentEnrollmentRequestDetailsComponent extends RecordCompon
           recordCreateMutation: CREATE_SCHOOL_STUDENT_ENROLLMENT,
         }
       });
-
-      // const dialogRef = this.matDialog.open(ApproveSchoolStudentEnrollmentComponent, {
-      //   width: '1200px',
-      //   data: {
-      //     schoolStudentEnrollmentRequest: this.record,
-      //   }
-      // });
   
       dialogRef.afterClosed().subscribe(result => {
         this.loadData();
@@ -223,41 +216,86 @@ export class SchoolStudentEnrollmentRequestDetailsComponent extends RecordCompon
       this.isLoading = true;
       this.error = null;
 
-
-
-      const mutation = UPDATE_SCHOOL_STUDENT_ENROLLMENT_REQUEST_STATUS;
-      const variables = {
-        id: this.id ? +this.id : 0,
-        input: {
-          status,
-          reason: null,
+      const fields = [
+        {
+          fieldGroupClassName: 'row',
+          fieldGroup: [
+            {
+              className: 'col-12 col-md-12',
+              key: 'reason',
+              type: 'textarea',
+              props: {
+                label: 'Reason',
+                type: 'textarea',
+                placeholder: 'Enter Reason',
+                options: [
+                  {
+                    value: this.authService.loggedInUser?.person?.id,
+                    label: `${this.authService.loggedInUser?.person?.fullName} (${this.authService.loggedInUser?.person?.age?.shortString})`
+                  }
+                ],
+                required: true,
+              },
+            },
+          ],
         },
+        // {
+        //   className: 'section-label',
+        //   template: '<hr /><div><strong>Address:</strong></div>',
+        // },
+    
+      ];
+  
+      const model: SchoolStudentEnrollmentRequestStatusUpdateInput = {
+        id: this.record?.id,
+        status,
+        reason: '',
       };
-      const refetchQueries: string[] = [];
-
-      this.graphqlService.getGqlMutationObservable(mutation, variables, refetchQueries).subscribe({
+  
+      const dialogRef = this.matDialog.open(RecordFormComponent<SchoolStudentEnrollmentRequestStatusUpdateInput>, {
+        width: '1200px',
+        data: {
+          title: `School Student Enrollment Request`,
+          model,
+          fields,
+          submitLabel: 'Continue'
+        }
+      });
+  
+      dialogRef.afterClosed().pipe(
+        takeUntil(this.unsubscribe$),
+        switchMap((res: SchoolStudentEnrollmentRequestStatusUpdateInput) => {
+          if(!res?.reason) {
+            this.toastr.warning('Reason is required.', 'School Student Enrollment Request');
+            return of({ data: null, errors: null, loading: false });
+          }
+          
+          const mutation = UPDATE_SCHOOL_STUDENT_ENROLLMENT_REQUEST_STATUS;
+          const variables = {
+            input: res,
+          };
+          const refetchQueries: string[] = [];
+          return this.graphqlService.getGqlMutationObservable(mutation, variables, refetchQueries);
+        })
+      ).subscribe({
         next: ({ data, errors, loading }) => {
           this.isLoading = false;
           if (errors) {
             this.error = errors;
-            this.toastr.error(`Could not update record`, this.title);
+            this.toastr.error(`Could not update the status`, this.title);
           }
           if (data) {
-            this.toastr.success(`Record updated`, this.title);
-            // if (this.addAnother) {
-            //   this.formGroup.reset();
-            //   return;
-            // }
-            // this.oldRecord = input;
+            this.toastr.success(`Status updated`, this.title);
             this.loadData();
           }
         },
         error: err => {
           this.isLoading = false;
+          this.error = err;
           this.toastr.error(`Error occured`, this.title);
-          console.log(err);
         }
       });
+
     }
   }
 

@@ -53,9 +53,7 @@ export const routes: Routes = [
 
     //schools
     { path: 'schools', title: 'Schools | SmartSchool', component: SchoolsComponent, canActivate: [authGuard] },
-    { path: 'schools/create', title: 'New School | SmartSchool', component: SchoolsComponent, canActivate: [authGuard], data: { isCreate: true } },
     { path: 'schools/:schoolId', title: 'School Details | SmartSchool', component: SchoolDetailsComponent, canActivate: [authGuard] },
-    { path: 'schools/:schoolId/edit', title: 'Edit School | SmartSchool', component: SchoolDetailsComponent, canActivate: [authGuard], data: { isEdit: true } },
     { path: 'schools/:schoolId/student-enrollment-requests', title: 'School Student Enrollment Requests | SmartSchool', component: SchoolStudentEnrollmentRequestsComponent, canActivate: [authGuard] },
     { path: 'schools/:schoolId/student-enrollment-requests/:schoolStudentEnrollmentRequestId', title: 'School Student Enrollment Request Details | SmartSchool', component: SchoolStudentEnrollmentRequestDetailsComponent, canActivate: [authGuard] },
     { path: 'schools/:schoolId/student-enrollments', title: 'School Student Enrollments | SmartSchool', component: SchoolStudentEnrollmentsComponent, canActivate: [authGuard] },
@@ -71,16 +69,13 @@ export const routes: Routes = [
 
     //students
     { path: 'students', title: 'Students | SmartSchool', component: StudentsComponent, canActivate: [authGuard] },
-    { path: 'students/create', title: 'New Student | SmartSchool', component: StudentsComponent, canActivate: [authGuard], data: { isCreate: true } },
     { path: 'students/:studentId', title: 'Student Details | SmartSchool', component: StudentDetailsComponent, canActivate: [authGuard] },
-    { path: 'students/:studentId/edit', title: 'Edit Student | SmartSchool', component: StudentDetailsComponent, canActivate: [authGuard], data: { isEdit: true } },
 
     //teachers
     { path: 'teachers', title: 'Teachers | SmartSchool', component: TeachersComponent, canActivate: [authGuard] },
-    { path: 'teachers/create', title: 'New Teacher | SmartSchool', component: TeachersComponent, canActivate: [authGuard], data: { isCreate: true } },
     { path: 'teachers/:teacherId', title: 'Teacher Details | SmartSchool', component: TeacherDetailsComponent, canActivate: [authGuard] },
-    { path: 'teachers/:teacherId/edit', title: 'Edit Teacher | SmartSchool', component: TeacherDetailsComponent, canActivate: [authGuard], data: { isEdit: true } },
 
+    
 
     //Wild Card Route for 404 request 
     { path: '**', pathMatch: 'full',   title: '404 | SmartSchool', component: NotFoundComponent },

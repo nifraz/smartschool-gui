@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { GraphqlRecordFormComponent } from '../shared/graphql-record-form/graphql-record-form.component';
 import { GraphqlService } from '../shared/services/graphql.service';
-import { Sex, TeacherModel } from '../../../graphql/generated';
+import { Sex, TeacherInput, TeacherModel } from '../../../graphql/generated';
 import { MultiSelectFilterComponent } from '../shared/components/multi-select-filter/multi-select-filter.component';
 import { CustomFloatingFilterComponent } from '../shared/components/custom-floating-filter/custom-floating-filter.component';
 import { BaseComponent } from '../shared/components/base/base.component';
@@ -56,7 +56,7 @@ export class TeachersComponent extends GridComponent<TeacherModel> implements On
   }
 
   openCreateModal(): void {
-    const dialogRef = this.matDialog.open(GraphqlRecordFormComponent<TeacherModel, any>, {
+    const dialogRef = this.matDialog.open(GraphqlRecordFormComponent<TeacherInput>, {
       width: '1200px',
       data: {
         collection: GraphqlCollections.TEACHERS,

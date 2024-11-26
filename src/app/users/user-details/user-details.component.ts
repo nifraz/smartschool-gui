@@ -226,7 +226,7 @@ export class UserDetailsComponent extends RecordComponent<UserModel> implements 
       grade: Grade.Grade1,
     };
 
-    const dialogRef = this.matDialog.open(GraphqlRecordFormComponent<SchoolStudentEnrollmentRequestModel, SchoolStudentEnrollmentRequestInput>, {
+    const dialogRef = this.matDialog.open(GraphqlRecordFormComponent<SchoolStudentEnrollmentRequestInput>, {
       width: '1200px',
       data: {
         title: 'School Student Enrollment Request',

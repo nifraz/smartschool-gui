@@ -48,11 +48,6 @@ export class NavbarComponent extends BaseComponent implements OnInit, OnDestroy 
     });
   }
   
-  ngOnDestroy(): void {
-    this.unsubscribe$.next();
-    this.unsubscribe$.unsubscribe();
-  }
-  
   onLogout() {
     this.authService.logout();
     this.router.navigate(['/auth', 'login']);

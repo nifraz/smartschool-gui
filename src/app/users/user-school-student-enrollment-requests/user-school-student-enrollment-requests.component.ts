@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { GraphqlRecordFormComponent } from '../../shared/graphql-record-form/graphql-record-form.component';
 import { GraphqlService } from '../../shared/services/graphql.service';
-import { Grade, RequestStatus, SchoolStudentEnrollmentRequestModel, Sex, TeacherModel } from '../../../../graphql/generated';
+import { Grade, RequestStatus, SchoolStudentEnrollmentRequestInput, SchoolStudentEnrollmentRequestModel, Sex, TeacherModel } from '../../../../graphql/generated';
 import { MultiSelectFilterComponent } from '../../shared/components/multi-select-filter/multi-select-filter.component';
 import { CustomFloatingFilterComponent } from '../../shared/components/custom-floating-filter/custom-floating-filter.component';
 import { AgGridFilterType, GraphqlCollections, GraphqlTypes } from '../../shared/enums';
@@ -67,7 +67,7 @@ export class UserSchoolStudentEnrollmentRequestsComponent extends GridComponent<
   }
 
   openCreateModal(): void {
-    const dialogRef = this.matDialog.open(GraphqlRecordFormComponent<SchoolStudentEnrollmentRequestModel, any>, {
+    const dialogRef = this.matDialog.open(GraphqlRecordFormComponent<SchoolStudentEnrollmentRequestInput>, {
       width: '1200px',
       data: {
         collection: GraphqlCollections.TEACHERS,

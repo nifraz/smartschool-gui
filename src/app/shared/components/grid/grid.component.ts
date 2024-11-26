@@ -14,6 +14,7 @@ import { DataComponent } from '../data/data.component';
 export abstract class GridComponent<T> extends DataComponent {
   abstract onRecordClicked(record: T): void;
   abstract onNewClicked(): void;
+  // abstract openRecordModal(): void;
 
   constructor(
   ) {

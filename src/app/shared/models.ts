@@ -74,5 +74,5 @@ export interface Age {
 
 export interface FormlyOption {
   value: any | undefined;
-  label: any | undefined;
+  label?: any | undefined;
 }

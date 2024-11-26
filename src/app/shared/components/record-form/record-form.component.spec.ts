@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GridHolderComponent } from './grid.component';
+import { RecordFormComponent } from './record-form.component';
 
-describe('GridComponent', () => {
-  let component: GridHolderComponent;
-  let fixture: ComponentFixture<GridHolderComponent>;
+describe('RecordFormComponent', () => {
+  let component: RecordFormComponent;
+  let fixture: ComponentFixture<RecordFormComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [GridHolderComponent]
+      imports: [RecordFormComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(GridHolderComponent);
+    fixture = TestBed.createComponent(RecordFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

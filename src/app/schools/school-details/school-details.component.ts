@@ -229,7 +229,7 @@ export class SchoolDetailsComponent extends RecordComponent<SchoolModel> impleme
       grade: Grade.Grade1,
     };
 
-    const dialogRef = this.matDialog.open(GraphqlRecordFormComponent<SchoolStudentEnrollmentRequestModel, SchoolStudentEnrollmentRequestInput>, {
+    const dialogRef = this.matDialog.open(GraphqlRecordFormComponent<SchoolStudentEnrollmentRequestInput>, {
       width: '1200px',
       data: {
         title: 'School Student Enrollment Request',

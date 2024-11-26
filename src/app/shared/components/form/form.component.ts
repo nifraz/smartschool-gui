@@ -13,12 +13,14 @@ import { DataComponent } from '../data/data.component';
   templateUrl: './form.component.html',
   styleUrl: './form.component.scss'
 })
-export abstract class FormComponent<M> extends DataComponent {
+export abstract class FormComponent<I> extends DataComponent {
   id?: number;
-  record?: M;
+  record?: I;
   isEditMode?: boolean;
-  oldRecord?: M;
+  oldRecord?: I;
   isAddAnother?: boolean;
 
   @Input() form: FormGroup = new FormGroup({});
+  @Input() model!: I;
+  @Input() fields: FormlyFieldConfig[] = [];
 }

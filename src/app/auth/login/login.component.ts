@@ -4,7 +4,7 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { CommonModule } from '@angular/common';
 import { FormlyFieldConfig, FormlyModule } from '@ngx-formly/core';
-import { UserLoginRequest } from '../../shared/models';
+import { AuthenticateResponse, UserLoginRequest } from '../../shared/models';
 import { ErrorAlertComponent } from "../../shared/components/error-alert/error-alert.component";
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 
@@ -97,9 +97,10 @@ export class LoginComponent {
     this.error = null;
     this.authService.login(this.model)
       .subscribe({
-        next: () => {
+        next: (res: AuthenticateResponse) => {
           this.loading = false;
           this.error = null;
+          // if()
         },
         error: error => {
           this.loading = false;

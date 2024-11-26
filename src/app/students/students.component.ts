@@ -57,7 +57,7 @@ export class StudentsComponent extends GridComponent<StudentModel> implements On
   }
 
   openCreateModal(): void {
-    const dialogRef = this.matDialog.open(GraphqlRecordFormComponent<StudentModel, StudentInput>, {
+    const dialogRef = this.matDialog.open(GraphqlRecordFormComponent<StudentInput>, {
       width: '1200px',
       data: {
         collection: GraphqlCollections.STUDENTS,
