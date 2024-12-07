@@ -33,10 +33,10 @@ import { DocumentNode } from 'graphql';
   styleUrl: './graphql-data-grid.component.scss'
 })
 export class GraphqlDataGridComponent<T extends object> implements OnInit, RemoteGridApi<T> {
-  @Input()title?: string;
+  themeClass: string = "ag-theme-quartz";
   
+  @Input()title?: string;
   @Input()collection: string = '';
-  @Input()themeClass: string = "ag-theme-quartz-dark";
   @Input()colDefs: ColDef<T>[] = [];
   
   @Input()initialFilterModel?: {[key: string]: AgGridFilter};
@@ -290,7 +290,7 @@ export class GraphqlDataGridComponent<T extends object> implements OnInit, Remot
       ) {
         items {
           id
-          ${visibleColumns.join(' ')}
+          ${this.buildProjectionFields(this.buildProjectionHierarchy(visibleColumns))}
         }
         totalCount
       }
@@ -298,6 +298,35 @@ export class GraphqlDataGridComponent<T extends object> implements OnInit, Remot
     
     console.log(query);
     return gql`${query}`;
+  }
+
+  private buildProjectionHierarchy(fieldArray: string[]): any {
+    const hierarchy: any = {};
+  
+    fieldArray.forEach(field => {
+      const parts = field.split('.');
+      let currentLevel = hierarchy;
+  
+      parts.forEach((part, index) => {
+        if (!currentLevel[part]) {
+          currentLevel[part] = index === parts.length - 1 ? null : {}; // Leaf node is null
+        }
+        currentLevel = currentLevel[part];
+      });
+    });
+  
+    return hierarchy;
+  }
+  
+  private buildProjectionFields(hierarchy: any): string {
+    return Object.entries(hierarchy)
+      .map(([key, value]) => {
+        if (value === null) {
+          return key; // Leaf node
+        }
+        return `${key} { ${this.buildProjectionFields(value)} }`; // Recursive for nested fields
+      })
+      .join(' ');
   }
 
   private convertToGqlFilterInput(filterModelType: ISimpleFilterModelType): string {

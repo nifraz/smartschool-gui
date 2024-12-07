@@ -10,7 +10,7 @@
                 <img src="assets/images/icons8_classroom_200px.png" alt="{{ record.grade | titleCaseWithSpace }} {{ record.section }}" class="rounded-circle" width="200" height="200">
                 <h2 class="mt-3">{{ record.grade | titleCaseWithSpace }} {{ record.section }}</h2>
                 <p class="text-muted">
-                    {{ record.languageName }} | {{ record.location }}
+                    {{ record.language?.label }} | {{ record.location }}
                 </p>
                 <div class="">
                     @if (authService.loggedInUser?.principalId || authService.loggedInUser?.teacherId || authService.loggedInUser?.id == record.createdUserId) {
@@ -95,7 +95,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    @if (record.classStudentEnrollments.length) {
+                    @if (record.recentClassStudentEnrollments.length) {
                         <p>Showing latest 10 records (<a [routerLink]="['/schools', record.schoolId, 'classes', record.id, 'student-enrollments']">View all</a>)</p>
                         <table class="table">
                             <thead>
@@ -107,11 +107,11 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @for (item of record.classStudentEnrollments; track $index) {
+                                @for (item of record.recentClassStudentEnrollments; track $index) {
                                     <tr>
                                         <th scope="row"><a [routerLink]="['/students', item.studentId]">{{ item.student?.fullName }}</a></th>
                                         <td>{{ item.rollNo }}</td>
-                                        <td>{{ item.academicYear }}</td>
+                                        <td>{{ item.academicYearYear }}</td>
                                         <td><a [routerLink]="['/schools', record.schoolId, 'classes', record.id, 'student-enrollments', item.id]">View</a></td>
                                     </tr>
                                 }

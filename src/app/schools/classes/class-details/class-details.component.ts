@@ -12,7 +12,7 @@ import { TitleCaseWithSpacePipe } from '../../../shared/pipes/title-case-with-sp
 import { AuthService } from '../../../auth/auth.service';
 import { groupByToArrays } from '../../../shared/functions';
 import { GraphqlRecordFormComponent } from '../../../shared/graphql-record-form/graphql-record-form.component';
-import { GET_CLASS_BY_SCHOOL_GRADE_SECTION, GET_SCHOOL } from '../../../shared/queries';
+import { GET_CLASS } from '../../../shared/queries';
 import { GraphqlService } from '../../../shared/services/graphql.service';
 import { SchoolsService } from '../../schools.service';
 import { GraphqlTypes, GraphqlCollections } from '../../../shared/enums';
@@ -36,8 +36,6 @@ export class ClassDetailsComponent extends RecordComponent<ClassModel> implement
   groupByToArrays = groupByToArrays;
 
   schoolId?: string | null;
-  grade?: string | null;
-  section?: string | null;
 
   constructor(
     private schoolsService: SchoolsService,
@@ -55,18 +53,15 @@ export class ClassDetailsComponent extends RecordComponent<ClassModel> implement
   }
 
   ngOnInit(): void {
+    this.id = this.activatedRoute.snapshot.paramMap.get('classId');
     this.schoolId = this.activatedRoute.snapshot.paramMap.get('schoolId');
-    this.grade = this.activatedRoute.snapshot.paramMap.get('grade');
-    this.section = this.activatedRoute.snapshot.paramMap.get('section');
 
-    if (this.schoolId && this.grade && this.section) {
+    if (this.id && this.schoolId) {
       this.isLoading = true;
       const variables = {
-        schoolId: +this.schoolId,
-        grade: this.grade,
-        section: this.section,
+        id: +this.id,
       }
-      this.graphqlService.getGqlQueryObservable(GET_CLASS_BY_SCHOOL_GRADE_SECTION, variables).subscribe({
+      this.graphqlService.getGqlQueryObservable(GET_CLASS, variables).subscribe({
         next: res => {
           this.isLoading = false;
           this.record = res.data[GraphqlTypes.CLASS];

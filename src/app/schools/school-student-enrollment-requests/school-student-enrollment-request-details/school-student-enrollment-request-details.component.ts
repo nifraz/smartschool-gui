@@ -142,7 +142,7 @@ export class SchoolStudentEnrollmentRequestDetailsComponent extends RecordCompon
       const getClassesBySchool$ = this.graphqlService.getGqlQueryObservable(GET_CLASSES_BY_SCHOOL, { schoolId: this.record?.school?.id }).pipe(
         map(res => {
           if (res && res.data && res.data.classes && res.data.classes.items) {
-            return res.data.classes.items.map((x: ClassModel) => ({ value: x.id, label: `${this.titleCaseWithSpacePipe.transform(x.grade)} ${x.section} (${x.languageName})` }))
+            return res.data.classes.items.map((x: ClassModel) => ({ value: x.id, label: `${this.titleCaseWithSpacePipe.transform(x.grade)} ${x.section} (${x.language?.name})` }))
           }
         })
       );

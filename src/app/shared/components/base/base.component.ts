@@ -12,7 +12,6 @@ export abstract class BaseComponent implements OnDestroy {
   title: string = '';
 
   @Input() languageCode: string = 'en';
-  @Input() themeClass: string = "ag-theme-quartz";
 
   isLoading: boolean = false;
   isError: boolean = false;

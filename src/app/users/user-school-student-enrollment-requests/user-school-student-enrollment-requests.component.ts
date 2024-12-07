@@ -108,12 +108,12 @@ export class UserSchoolStudentEnrollmentRequestsComponent extends GridComponent<
       floatingFilterComponent: CustomFloatingFilterComponent,
     },
     { 
-      field: "schoolName",
+      field: "school.name",
       headerName: "School",
       filter: 'agTextColumnFilter',
     },
     { 
-      field: "personFullName",
+      field: "person.fullName",
       headerName: "Candidate",
       filter: 'agTextColumnFilter',
     },

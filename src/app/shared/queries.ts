@@ -35,17 +35,32 @@ export const GET_USER = gql`
       teacherId
       principalId
 
-      createdSchoolStudentEnrollmentRequests {
+      recentCreatedSchoolStudentEnrollmentRequests {
         id
         grade
         status
         schoolId
         school {
+          id
           name
         }
         personId
         person {
+          id
           fullName
+        }
+      }
+
+      recentCreatedPersons {
+        id
+        fullName
+        sex
+        age {
+          years
+          months
+          days
+          shortString
+          longString
         }
       }
     }
@@ -74,13 +89,12 @@ export const GET_SCHOOL_STUDENT_ENROLLMENT_REQUEST = gql`
         sex
         shortName
         age {
-            years
-            months
-            days
+          years
+          months
+          days
+          shortString
+          longString
         }
-      }
-      person {
-        fullName
       }
       schoolId
       school {
@@ -95,9 +109,6 @@ export const GET_SCHOOL_STUDENT_ENROLLMENT_REQUEST = gql`
       schoolStudentEnrollment {
         id
         no
-      }
-      school {
-        name
       }
       academicYearYear
       createdUserId
@@ -120,9 +131,6 @@ export const GET_SCHOOL_STUDENT_ENROLLMENT = gql`
         phoneNo
         type
       }
-      school {
-        name
-      }
       status
       studentId
       student {
@@ -139,20 +147,21 @@ export const GET_SCHOOL_STUDENT_ENROLLMENT = gql`
         sex
         shortName
         age {
-            years
-            months
-            days
+          years
+          months
+          days
+          shortString
+          longString
         }
       }
-      studentFullName
       time
       schoolStudentEnrollmentRequest {
         id
       }
-      classStudentEnrollments {
+      recentClassStudentEnrollments {
         id
         rollNo
-        academicYear
+        academicYearYear
         classId
         removeReason
         removedTime
@@ -196,19 +205,24 @@ export const GET_SCHOOL = gql`
       email
       phoneNo
       type
-      classes {
+      allClasses {
         id
         grade
         section
-        languageName
+        language {
+          code
+          name
+          label
+        }
         schoolId
       }
-      schoolStudentEnrollmentRequests {
+      recentSchoolStudentEnrollmentRequests {
         id
         grade
         status
         personId
         person {
+          id
           fullName
         }
         createdUserId
@@ -232,14 +246,18 @@ export const GET_SCHOOL = gql`
 //   }
 // `;
 
-export const GET_CLASS_BY_SCHOOL_GRADE_SECTION = gql`
-  query getClassBySchoolGradeSection($schoolId: Long!, $grade: Grade!, $section: String!) {
-    class(schoolId: $schoolId, grade: $grade, section: $section) {
+export const GET_CLASS = gql`
+  query getClass($id: Long!) {
+    class(id: $id) {
       id
       grade
       section
       languageCode
-      languageName
+      language {
+        name
+        code
+        label
+      }
       location
       schoolId
       school {
@@ -251,15 +269,18 @@ export const GET_CLASS_BY_SCHOOL_GRADE_SECTION = gql`
         phoneNo
         type
       }
-      classStudentEnrollments {
+      recentClassStudentEnrollments {
         id
         rollNo
-        academicYear
+        academicYearYear
         removeReason
         removedTime
         schoolStudentEnrollmentId
         status
-        studentFullName
+        student {
+          id
+          label
+        }
         studentId
         time
       }
@@ -286,15 +307,18 @@ export const GET_STUDENT = gql`
         years
         months
         days
+        shortString
+        longString
       }
-      schoolStudentEnrollments {
+      recentSchoolStudentEnrollments {
         id
         no
         time
         status
         schoolId
         school {
-          name
+          id
+          label
         }
       }
     }
@@ -320,14 +344,18 @@ export const GET_TEACHER = gql`
         years
         months
         days
+        shortString
+        longString
       }
-      schoolTeacherEnrollments {
+      recentSchoolTeacherEnrollments {
+        id
         no
         time
         status
         schoolId
         school {
-          name
+          id
+          label
         }
       }
     }
@@ -356,7 +384,11 @@ export const GET_CLASSES_BY_SCHOOL = gql`
         grade
         section
         languageCode
-        languageName
+        language {
+          code
+          name
+          label
+        }
         location
         schoolId
       }

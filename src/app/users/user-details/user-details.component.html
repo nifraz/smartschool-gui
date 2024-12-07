@@ -125,7 +125,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    @if (record.createdSchoolStudentEnrollmentRequests.length) {
+                    @if (record.recentCreatedSchoolStudentEnrollmentRequests.length) {
                         <p>Showing latest 10 records (<a [routerLink]="['/users', record.id, 'school-student-enrollment-requests' ]">View all</a>)</p>
                         <table class="table">
                             <thead>
@@ -138,13 +138,13 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @for (item of record.createdSchoolStudentEnrollmentRequests; track $index) {
+                                @for (item of record.recentCreatedSchoolStudentEnrollmentRequests; track $index) {
                                     <tr>
                                         <th scope="row"><a [routerLink]="['/schools', item.schoolId]">{{ item.school?.name }}</a></th>
                                         <td><a [routerLink]="['/persons', item.person?.id]">{{ item.person?.fullName }}</a></td>
                                         <td>{{ item.grade | titleCaseWithSpace }}</td>
                                         <td>{{ item.status | titleCaseWithSpace }}</td>
-                                        <td><a [routerLink]="['/users', record.id, 'student-enrollment-requests', item.id ]">View</a></td>
+                                        <td><a [routerLink]="['/users', record.id, 'school-student-enrollment-requests', item.id ]">View</a></td>
                                     </tr>
                                 }
                             </tbody>
@@ -175,7 +175,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    @if (record.createdPersons.length) {
+                    @if (record.recentCreatedPersons.length) {
                         <p>Showing latest 10 records (<a [routerLink]="['/users', record.id, 'persons' ]">View all</a>)</p>
                         <table class="table">
                             <thead>
@@ -187,7 +187,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @for (item of record.createdPersons; track $index) {
+                                @for (item of record.recentCreatedPersons; track $index) {
                                     <tr>
                                         <th scope="row"><a [routerLink]="['/persons', item.id]">{{ item.fullName }}</a></th>
                                         <td>{{ item.age?.shortString }}</td>
