@@ -6,10 +6,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { GraphqlRecordFormComponent } from '../../shared/graphql-record-form/graphql-record-form.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { enumToArray, GraphqlCollectionResponse, GraphqlService } from '../../shared/services/graphql.service';
-import { AcademicYearModel, ClassModel, EnrollmentStatus, Grade, RequestStatus, SchoolModel, SchoolStudentEnrollmentInput, SchoolStudentEnrollmentModel, SchoolStudentEnrollmentRequestInput, SchoolStudentEnrollmentRequestModel, StudentInput, StudentModel, UserModel } from '../../../../graphql/generated';
+import { AcademicYearModel, ClassModel, EnrollmentStatus, Grade, PersonInput, PersonModel, RequestStatus, SchoolModel, SchoolStudentEnrollmentInput, SchoolStudentEnrollmentModel, SchoolStudentEnrollmentRequestInput, SchoolStudentEnrollmentRequestModel, Sex, StudentInput, StudentModel, UserModel } from '../../../../graphql/generated';
 import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from '../../shared/components/base/base.component';
-import { GET_ACADEMIC_YEARS, GET_CLASSES_BY_SCHOOL, GET_SCHOOLS_FILTERED_BY_NAME, GET_STUDENT, GET_USER } from '../../shared/queries';
+import { GET_ACADEMIC_YEARS, GET_CLASSES_BY_SCHOOL, GET_PERSONS_CREATED_BY_USER, GET_SCHOOLS_FILTERED_BY_NAME, GET_STUDENT, GET_USER } from '../../shared/queries';
 import { AuthService } from '../../auth/auth.service';
 import { RecordComponent } from '../../shared/components/record/record.component';
 import { TitleCaseWithSpacePipe } from "../../shared/pipes/title-case-with-space.pipe";
@@ -17,7 +17,10 @@ import { GraphqlTypes, GraphqlCollections } from '../../shared/enums';
 import { AbstractControl } from '@angular/forms';
 import { debounceTime, map } from 'rxjs';
 import { groupByToArrays } from '../../shared/functions';
-import { CREATE_SCHOOL_STUDENT_ENROLLMENT_REQUEST } from '../../shared/mutations';
+import { CREATE_PERSON, CREATE_SCHOOL_STUDENT_ENROLLMENT_REQUEST } from '../../shared/mutations';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { FormlyMatDatepickerModule } from '@ngx-formly/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @Component({
   selector: 'app-user-details',
@@ -27,7 +30,7 @@ import { CREATE_SCHOOL_STUDENT_ENROLLMENT_REQUEST } from '../../shared/mutations
     NotFoundComponent,
     MatProgressBarModule,
     RouterLink,
-    TitleCaseWithSpacePipe
+    TitleCaseWithSpacePipe,
   ],
   providers: [
     TitleCaseWithSpacePipe
@@ -127,6 +130,17 @@ export class UserDetailsComponent extends RecordComponent<UserModel> implements 
       })
     );
 
+    const getPersonsCreatedByUser$ = this.graphqlService.getGqlQueryObservable(GET_PERSONS_CREATED_BY_USER, { filter: this.authService.loggedInUser?.id }).pipe(
+      map((res: GraphqlCollectionResponse<PersonModel>) => {
+        const items = res.data[GraphqlCollections.PERSONS].items;
+        if (this.authService.loggedInUser && this.authService.loggedInUser.person) {
+          items.unshift(this.authService.loggedInUser.person);
+        }
+        return items
+          .map((x: PersonModel) => ({ value: x.id, label: `${x.label}` }));
+      })
+    );
+
     const getGradesBySchool$ = this.graphqlService.getGqlQueryObservable(GET_CLASSES_BY_SCHOOL, { schoolId: this.record?.id }).pipe(
       map((res: GraphqlCollectionResponse<ClassModel>) => {
           return groupByToArrays(res.data['classes'].items, 'grade').map((x: ClassModel[]) => ({ value: x[0].grade, label: `${this.titleCaseWithSpacePipe.transform(x[0].grade)}` }));
@@ -153,14 +167,8 @@ export class UserDetailsComponent extends RecordComponent<UserModel> implements 
               label: 'Candidate',
               type: 'select',
               placeholder: 'Select Candidate',
-              options: [
-                {
-                  value: this.record?.person?.id,
-                  label: `${this.record?.person?.fullName} (${this.record?.person?.age?.shortString})`
-                }
-              ],
+              options: getPersonsCreatedByUser$,
               required: true,
-              disabled: true,
             },
           },
           {
@@ -242,8 +250,135 @@ export class UserDetailsComponent extends RecordComponent<UserModel> implements 
     });
   }
 
-  createPersonRelationship(): void {
-    
+  createCandidate(): void {
+
+    const fields = [
+      {
+        fieldGroupClassName: 'row',
+        fieldGroup: [
+          {
+            className: 'col-12 col-md-6',
+            key: 'fullName',
+            type: 'input',
+            props: {
+              label: 'Full Name',
+              type: 'text',
+              placeholder: 'Enter Full Name',
+              required: true,
+            },
+          },
+          {
+            className: 'col-12 col-md-6',
+            key: 'shortName',
+            type: 'input',
+            props: {
+              label: 'Short Name',
+              type: 'text',
+              placeholder: 'Enter Short Name',
+              required: true,
+            },
+          },
+          {
+            className: 'col-12 col-md-6',
+            key: 'dateOfBirth',
+            type: 'datepicker',
+            props: {
+              label: 'Date of Birth',
+              type: 'datepicker',
+              placeholder: 'Enter Date of Birth',
+              required: true,
+            },
+          },
+          {
+            className: 'col-12 col-md-6',
+            key: 'sex',
+            type: 'select',
+            props: {
+              label: 'Sex',
+              type: 'select',
+              placeholder: 'Select Sex',
+              options: enumToArray(Sex).map(x => ({ label: x.caption, value: x.value })),
+              required: true,
+            },
+          },
+          {
+            className: 'col-12 col-md-6',
+            key: 'address',
+            type: 'input',
+            props: {
+              label: 'address',
+              type: 'textarea',
+              placeholder: 'Enter Address',
+              required: true,
+            },
+          },
+          {
+            className: 'col-12 col-md-6',
+            key: 'mobileNo',
+            type: 'input',
+            props: {
+              label: 'Mobile No',
+              type: 'phone',
+              placeholder: 'Enter Mobile No',
+              required: false,
+            },
+          },
+          {
+            className: 'col-12 col-md-6',
+            key: 'bcNo',
+            type: 'input',
+            props: {
+              label: 'Birth Certificate No',
+              type: 'text',
+              placeholder: 'Enter Birth Certificate No',
+              required: false,
+            },
+          },
+          {
+            className: 'col-12 col-md-6',
+            key: 'nicNo',
+            type: 'input',
+            props: {
+              label: 'National Identity Card No',
+              type: 'text',
+              placeholder: 'Enter National Identity Card No',
+              required: false,
+            },
+          },
+        ],
+      },
+      // {
+      //   className: 'section-label',
+      //   template: '<hr /><div><strong>Address:</strong></div>',
+      // },
+  
+    ];
+
+    const model: PersonInput = {
+      fullName: '',
+      shortName: '',
+      dateOfBirth: '',
+      sex: Sex.Male,
+      address: '',
+      mobileNo: '',
+      bcNo: '',
+      nicNo: '',
+    };
+
+    const dialogRef = this.matDialog.open(GraphqlRecordFormComponent<PersonInput>, {
+      width: '1200px',
+      data: {
+        title: 'Student Candidate',
+        type: 'PersonModel',
+        model,
+        fields,
+        recordCreateMutation: CREATE_PERSON,
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.loadData();
+    });
   }
 
 }

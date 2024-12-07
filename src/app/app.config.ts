@@ -17,6 +17,7 @@ import { Kind } from 'graphql';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { createClient } from 'graphql-ws';
 import { AutocompleteTypeComponent } from './shared/components/autocomplete-type/autocomplete-type.component';
+import { provideNativeDateAdapter } from '@angular/material/core';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -24,6 +25,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes), 
     provideClientHydration(), 
     provideAnimationsAsync(),
+    provideNativeDateAdapter(),
     importProvidersFrom(
       HttpClientModule,
       ToastrModule.forRoot(

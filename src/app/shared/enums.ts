@@ -17,6 +17,7 @@ export enum GraphqlCollections {
   SCHOOL_STUDENT_ENROLLMENTS = 'schoolStudentEnrollments',
   CLASSES = 'classes',
   STUDENTS = 'students',
+  PERSONS = 'persons',
   TEACHERS = 'teachers',
 }
 

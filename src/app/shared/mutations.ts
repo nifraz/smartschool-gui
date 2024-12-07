@@ -23,3 +23,11 @@ export const CREATE_SCHOOL_STUDENT_ENROLLMENT = gql`
     }
   }
 `;
+
+export const CREATE_PERSON = gql`
+  mutation createPerson($input: PersonInput!) {
+    createPerson(input: $input) {
+      id
+    }
+  }
+`;

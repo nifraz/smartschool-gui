@@ -6,10 +6,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { GraphqlRecordFormComponent } from '../../shared/graphql-record-form/graphql-record-form.component';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { enumToArray, GraphqlCollectionResponse, GraphqlService } from '../../shared/services/graphql.service';
-import { AcademicYearModel, ClassModel, EnrollmentStatus, Grade, RequestStatus, SchoolModel, SchoolStudentEnrollmentInput, SchoolStudentEnrollmentModel, SchoolStudentEnrollmentRequestInput, SchoolStudentEnrollmentRequestModel, StudentInput, StudentModel } from '../../../../graphql/generated';
+import { AcademicYearModel, ClassModel, EnrollmentStatus, Grade, PersonModel, RequestStatus, SchoolModel, SchoolStudentEnrollmentInput, SchoolStudentEnrollmentModel, SchoolStudentEnrollmentRequestInput, SchoolStudentEnrollmentRequestModel, StudentInput, StudentModel } from '../../../../graphql/generated';
 import { ToastrService } from 'ngx-toastr';
 import { BaseComponent } from '../../shared/components/base/base.component';
-import { GET_ACADEMIC_YEARS, GET_CLASSES_BY_SCHOOL, GET_SCHOOL, GET_STUDENT } from '../../shared/queries';
+import { GET_ACADEMIC_YEARS, GET_CLASSES_BY_SCHOOL, GET_PERSONS_CREATED_BY_USER, GET_SCHOOL, GET_STUDENT } from '../../shared/queries';
 import { AuthService } from '../../auth/auth.service';
 import { RecordComponent } from '../../shared/components/record/record.component';
 import { SchoolsService } from '../schools.service';
@@ -126,7 +126,17 @@ export class SchoolDetailsComponent extends RecordComponent<SchoolModel> impleme
     //   return;
     // }
     
-    // this.model = model;
+    const getPersonsCreatedByUser$ = this.graphqlService.getGqlQueryObservable(GET_PERSONS_CREATED_BY_USER, { filter: this.authService.loggedInUser?.id }).pipe(
+      map((res: GraphqlCollectionResponse<PersonModel>) => {
+        const items = res.data[GraphqlCollections.PERSONS].items;
+        if (this.authService.loggedInUser && this.authService.loggedInUser.person) {
+          items.unshift(this.authService.loggedInUser.person);
+        }
+        return items
+          .map((x: PersonModel) => ({ value: x.id, label: `${x.label}` }));
+      })
+    );
+    
     const getAcademicYears$ = this.graphqlService.getGqlQueryObservable(GET_ACADEMIC_YEARS).pipe(
       map((res: GraphqlCollectionResponse<AcademicYearModel>) => {
           return res.data['academicYears'].items
@@ -153,14 +163,8 @@ export class SchoolDetailsComponent extends RecordComponent<SchoolModel> impleme
               label: 'Candidate',
               type: 'select',
               placeholder: 'Select Candidate',
-              options: [
-                {
-                  value: this.authService.loggedInUser?.person?.id,
-                  label: `${this.authService.loggedInUser?.person?.label}`
-                }
-              ],
+              options: getPersonsCreatedByUser$,
               required: true,
-              disabled: true,
             },
           },
           {

@@ -58,6 +58,35 @@ export const GET_USER = gql`
   ${AGE_FIELDS}
 `;
 
+export const GET_PERSONS_CREATED_BY_USER = gql`
+  query getPersons($filter: Long!) {
+    persons(
+      skip: 0
+      take: 20
+      where: { and: [{createdUserId: {eq: $filter}}] }
+    ) {
+      items {
+        id
+        label
+        address
+        bcNo
+        mobileNo
+        dateOfBirth
+        email
+        fullName
+        nickname
+        nicNo
+        passportNo
+        sex
+        shortName
+        image
+        ...age
+      }
+    }
+  }
+  ${AGE_FIELDS}
+`;
+
 export const GET_SCHOOL_STUDENT_ENROLLMENT_REQUEST = gql`
   query getSchoolStudentEnrollmentRequest($id: Long!) {
     schoolStudentEnrollmentRequest(id: $id) {

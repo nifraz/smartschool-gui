@@ -107,6 +107,54 @@
                 </div>
             </div>
 
+            <!-- Candidate Profiles Section -->
+            <div class="col-12 col-md-6 mb-4">
+                <div class="card">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between">
+                        <div class="card-title">
+                            <i class="bi bi-journal"></i> Candidate Profiles
+                        </div>
+                        <div>
+                            @if (authService.loggedInUser) {
+                                <button type="button" title="New" class="btn btn-sm btn-primary" (click)="createCandidate()">
+                                    <i class="bi bi-plus"></i>
+                                </button>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    @if (record.recentCreatedPersons.length) {
+                        <p>Showing latest 10 records (<a [routerLink]="['/users', record.id, 'persons' ]">View all</a>)</p>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">Age</th>
+                                <th scope="col">Sex</th>
+                                <th scope="col">Details</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (item of record.recentCreatedPersons; track $index) {
+                                    <tr>
+                                        <th scope="row"><a [routerLink]="['/persons', item.id]">{{ item.fullName }}</a></th>
+                                        <td>{{ item.age?.shortString }}</td>
+                                        <td>{{ item.sex| titleCaseWithSpace }}</td>
+                                        <td><a [routerLink]="['/users', record.id, 'persons', item.id ]">View</a></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    @else {
+                        <p>No records found.</p>
+                    }
+                </div>
+                </div>
+            </div>
+
             <!-- Admission Details Section -->
             <div class="col-12 col-md-6 mb-4">
                 <div class="card">
@@ -157,54 +205,6 @@
                 </div>
             </div>
 
-            <!-- Candidate Profiles Section -->
-            <div class="col-12 col-md-6 mb-4">
-                <div class="card">
-                <div class="card-header">
-                    <div class="d-flex justify-content-between">
-                        <div class="card-title">
-                            <i class="bi bi-journal"></i> Candidate Profiles
-                        </div>
-                        <div>
-                            @if (authService.loggedInUser) {
-                                <button type="button" title="New" class="btn btn-sm btn-primary" (click)="createPersonRelationship()">
-                                    <i class="bi bi-plus"></i>
-                                </button>
-                            }
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    @if (record.recentCreatedPersons.length) {
-                        <p>Showing latest 10 records (<a [routerLink]="['/users', record.id, 'persons' ]">View all</a>)</p>
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                <th scope="col">Name</th>
-                                <th scope="col">Age</th>
-                                <th scope="col">Sex</th>
-                                <th scope="col">Details</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @for (item of record.recentCreatedPersons; track $index) {
-                                    <tr>
-                                        <th scope="row"><a [routerLink]="['/persons', item.id]">{{ item.fullName }}</a></th>
-                                        <td>{{ item.age?.shortString }}</td>
-                                        <td>{{ item.sex| titleCaseWithSpace }}</td>
-                                        <td><a [routerLink]="['/users', record.id, 'persons', item.id ]">View</a></td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    }
-                    @else {
-                        <p>No records found.</p>
-                    }
-                </div>
-                </div>
-            </div>
-  
         </div>
     </div>
 </ng-template>

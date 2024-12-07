@@ -148,10 +148,10 @@ export class GraphqlRecordFormComponent<I> extends FormComponent<I> implements O
         this.isSaving = false;
         this.error = null;
         if (errors) {
-          this.toastr.error(`Could not ${this.isEditMode ? 'update' : 'create'} record`, this.type);
+          this.toastr.error(`Could not ${this.isEditMode ? 'update' : 'create'} record`, this.title);
         }
         if (data) {
-          this.toastr.success(`Record ${this.isEditMode ? 'updated' : 'created'}`, this.type);
+          this.toastr.success(`Record ${this.isEditMode ? 'updated' : 'created'}`, this.title);
           if (this.isAddAnother) {
             this.form.reset();
             return;
@@ -163,7 +163,7 @@ export class GraphqlRecordFormComponent<I> extends FormComponent<I> implements O
       error: err => {
         this.isSaving = false;
         this.error = err;
-        this.toastr.error(`Error occured`, this.type);
+        this.toastr.error(`Error occured`, this.title);
       }
     });
   }

@@ -1,0 +1,8 @@
+      fullName: '',
+      shortName: '',
+      dateOfBirth: '',
+      sex: Sex.Male,
+      address: '',
+      mobileNo: '',
+      bcNo: '',
+      nicNo: '',
