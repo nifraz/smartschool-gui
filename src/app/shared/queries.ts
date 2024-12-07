@@ -1,4 +1,5 @@
 import { gql } from "apollo-angular";
+import { AGE_FIELDS } from "./fragments";
 
 export const GET_USER = gql`
   query getUser($id: Long!) {
@@ -19,13 +20,7 @@ export const GET_USER = gql`
         sex
         shortName
         image
-        age {
-          years
-          months
-          days
-          shortString
-          longString
-        }
+        ...age
       }
       currentSchoolId
   
@@ -48,6 +43,7 @@ export const GET_USER = gql`
         person {
           id
           fullName
+          ...age
         }
       }
 
@@ -55,16 +51,11 @@ export const GET_USER = gql`
         id
         fullName
         sex
-        age {
-          years
-          months
-          days
-          shortString
-          longString
-        }
+        ...age
       }
     }
   }
+  ${AGE_FIELDS}
 `;
 
 export const GET_SCHOOL_STUDENT_ENROLLMENT_REQUEST = gql`
@@ -88,13 +79,7 @@ export const GET_SCHOOL_STUDENT_ENROLLMENT_REQUEST = gql`
         passportNo
         sex
         shortName
-        age {
-          years
-          months
-          days
-          shortString
-          longString
-        }
+        ...age
       }
       schoolId
       school {
@@ -114,6 +99,7 @@ export const GET_SCHOOL_STUDENT_ENROLLMENT_REQUEST = gql`
       createdUserId
     }
   }
+  ${AGE_FIELDS}
 `;
 
 export const GET_SCHOOL_STUDENT_ENROLLMENT = gql`
@@ -224,11 +210,13 @@ export const GET_SCHOOL = gql`
         person {
           id
           fullName
+          ...age
         }
         createdUserId
       }
     }
   }
+  ${AGE_FIELDS}
 `;
 
 // export const GET_CLASS = gql`
