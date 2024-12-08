@@ -33,7 +33,7 @@ import { DocumentNode } from 'graphql';
   styleUrl: './graphql-data-grid.component.scss'
 })
 export class GraphqlDataGridComponent<T extends object> implements OnInit, RemoteGridApi<T> {
-  themeClass: string = "ag-theme-quartz";
+  themeClass: string = "ag-theme-material";
   
   @Input()title?: string;
   @Input()collection: string = '';
