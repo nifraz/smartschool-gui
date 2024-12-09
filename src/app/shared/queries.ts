@@ -243,6 +243,24 @@ export const GET_SCHOOL = gql`
         }
         createdUserId
       }
+      recentSchoolStudentEnrollments {
+        id
+        status
+        studentId
+        student {
+          id
+          id
+          fullName
+          age {
+            years
+            months
+            days
+            shortString
+            longString
+          }
+        }
+        createdUserId
+      }
     }
   }
   ${AGE_FIELDS}

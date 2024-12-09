@@ -15,7 +15,7 @@ import { StudentsService } from '../../../students/students.service';
 import { TitleCaseWithSpacePipe } from "../../../shared/pipes/title-case-with-space.pipe";
 import { LaddaModule } from 'angular2-ladda';
 import { CREATE_SCHOOL_STUDENT_ENROLLMENT, CREATE_SCHOOL_STUDENT_ENROLLMENT_REQUEST, UPDATE_SCHOOL_STUDENT_ENROLLMENT_REQUEST_STATUS } from '../../../shared/mutations';
-import { SCHOOL_STUDENT_ENROLLMENT_CREATED } from '../../../shared/subscriptions';
+import { SCHOOL_STUDENT_ENROLLMENT_PROCESSED, SCHOOL_STUDENT_ENROLLMENT_REQUEST_PROCESSED } from '../../../shared/subscriptions';
 import { MutationResult } from 'apollo-angular';
 import { GraphqlTypes, GraphqlCollections } from '../../../shared/enums';
 import { AbstractControl } from '@angular/forms';
@@ -71,10 +71,26 @@ export class SchoolStudentEnrollmentRequestDetailsComponent extends RecordCompon
       }
     });
 
-    this.graphqlService.getGqlSubscriptionObservable(SCHOOL_STUDENT_ENROLLMENT_CREATED).subscribe(
+    this.graphqlService.getGqlSubscriptionObservable(SCHOOL_STUDENT_ENROLLMENT_REQUEST_PROCESSED)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(
       (res: MutationResult<any>) => {
-        if (res.data['schoolStudentEnrollmentCreated']?.schoolStudentEnrollmentRequestId == this.record?.id) {
-          this.toastr.success(`This request has been approved by the school.`, this.title)
+        const item: SchoolStudentEnrollmentRequestModel = res.data['schoolStudentEnrollmentRequestProcessed'];
+        if (item?.id == this.record?.id) {
+          switch (item.status) {
+            case RequestStatus.Approved:
+              this.toastr.success(`This request has been approved by the school.`, this.title);
+              break;
+            case RequestStatus.Cancelled:
+              this.toastr.warning(`This request has been cancelled by the user.`, this.title);
+              break;
+            case RequestStatus.Rejected:
+              this.toastr.warning(`This request has been rejected by the school.`, this.title);
+              break;
+            default:
+              this.toastr.warning(`This request has been modified.`, this.title);
+              break;
+          }
           this.loadData();
         }
       }

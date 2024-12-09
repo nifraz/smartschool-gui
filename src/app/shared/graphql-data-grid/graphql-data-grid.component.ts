@@ -40,6 +40,7 @@ export class GraphqlDataGridComponent<T extends object> implements OnInit, Remot
   @Input()colDefs: ColDef<T>[] = [];
   
   @Input()initialFilterModel?: {[key: string]: AgGridFilter};
+  @Input()initialSortModel?: {sortModel: SortModelItem[]};
 
   @Output()recordClicked: EventEmitter<T> = new EventEmitter<T>();
   @Output()addNewClicked: EventEmitter<void> = new EventEmitter<void>();
