@@ -7,6 +7,7 @@ import { FormlyFieldConfig, FormlyModule } from '@ngx-formly/core';
 import { AuthenticateResponse, UserLoginRequest } from '../../shared/models';
 import { ErrorAlertComponent } from "../../shared/components/error-alert/error-alert.component";
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -76,7 +77,8 @@ export class LoginComponent {
 
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private toastr: ToastrService,
   ) {
     // if (this.authService.currentUserValue) {
     //   this.router.navigate(['/']);
@@ -100,7 +102,10 @@ export class LoginComponent {
         next: (res: AuthenticateResponse) => {
           this.loading = false;
           this.error = null;
-          // if()
+          if (!res.isEmailVerified) {
+            this.toastr.warning(`Email not verified.`, 'Login');
+            this.router.navigate(['/auth', 'verify'], { queryParams: { email: res.email }});
+          }
         },
         error: error => {
           this.loading = false;

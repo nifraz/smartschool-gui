@@ -58,6 +58,9 @@ export class RegisterComponent extends BaseComponent implements OnInit {
             type: 'email',
             placeholder: 'Enter Email',
             required: true,
+            attributes: {
+              autocomplete: 'off'
+            },
           },
         },
         {

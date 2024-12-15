@@ -15,7 +15,7 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav me-auto mb-2 mb-md-0">
 
-                @if (authService.loggedInUser && (authService.loggedInUser.studentId || authService.loggedInUser.guardianId || authService.loggedInUser.staffId || authService.loggedInUser.teacherId || authService.loggedInUser.principalId)) {
+                @if (authService.loggedInUser) {
                   <li class="nav-item">
                     <div class="btn-group">
                       <a class="nav-link" routerLink="/schools" routerLinkActive="active">Schools</a>
