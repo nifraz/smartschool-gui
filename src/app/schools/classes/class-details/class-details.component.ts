@@ -14,7 +14,6 @@ import { groupByToArrays } from '../../../shared/functions';
 import { GraphqlRecordFormComponent } from '../../../shared/graphql-record-form/graphql-record-form.component';
 import { GET_CLASS } from '../../../shared/queries';
 import { GraphqlService } from '../../../shared/services/graphql.service';
-import { SchoolsService } from '../../schools.service';
 import { GraphqlTypes, GraphqlCollections } from '../../../shared/enums';
 
 @Component({
@@ -38,7 +37,6 @@ export class ClassDetailsComponent extends RecordComponent<ClassModel> implement
   schoolId?: string | null;
 
   constructor(
-    private schoolsService: SchoolsService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private matDialog: MatDialog,

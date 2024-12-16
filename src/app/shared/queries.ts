@@ -190,6 +190,22 @@ export const GET_SCHOOL_STUDENT_ENROLLMENT = gql`
   }
 `;
 
+export const GET_DIVISIONS_FILTERED_BY_NAME = gql`
+  query getDivisions($filter: String!) {
+    divisions(
+      skip: 0
+      take: 20
+      where: { and: [{label: {contains: $filter}}] }
+    ) {
+      items {
+        id
+        label
+        name
+      }
+    }
+  }
+`;
+
 export const GET_SCHOOLS_FILTERED_BY_NAME = gql`
   query getSchools($filter: String!) {
     schools(

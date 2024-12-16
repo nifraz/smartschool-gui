@@ -12,7 +12,6 @@ import { BaseComponent } from '../../shared/components/base/base.component';
 import { GET_STUDENT, GET_TEACHER } from '../../shared/queries';
 import { AuthService } from '../../auth/auth.service';
 import { RecordComponent } from '../../shared/components/record/record.component';
-import { TeachersService } from '../teachers.service';
 import { GraphqlTypes, GraphqlCollections } from '../../shared/enums';
 
 @Component({
@@ -31,7 +30,6 @@ export class TeacherDetailsComponent extends RecordComponent<TeacherModel> imple
   EnrollmentStatus = EnrollmentStatus;
 
   constructor(
-    private teachersService: TeachersService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private matDialog: MatDialog,

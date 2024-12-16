@@ -9,7 +9,6 @@ import { Sex, TeacherInput, TeacherModel } from '../../../graphql/generated';
 import { MultiSelectFilterComponent } from '../shared/components/multi-select-filter/multi-select-filter.component';
 import { CustomFloatingFilterComponent } from '../shared/components/custom-floating-filter/custom-floating-filter.component';
 import { BaseComponent } from '../shared/components/base/base.component';
-import { TeachersService } from './teachers.service';
 import { GraphqlCollections, GraphqlTypes } from '../shared/enums';
 import { GridComponent } from '../shared/components/grid/grid.component';
 
@@ -29,7 +28,6 @@ export class TeachersComponent extends GridComponent<TeacherModel> implements On
   collectionKey: string = GraphqlCollections.TEACHERS;
 
   constructor(
-    private teachersService: TeachersService,
     private graphqlService: GraphqlService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -42,7 +40,7 @@ export class TeachersComponent extends GridComponent<TeacherModel> implements On
     this.router.navigate(['/teachers', $event.id]);
   }
 
-  onNewClicked() {
+  onAddNewClicked() {
     this.navigateToCreateRecord();
   }
 

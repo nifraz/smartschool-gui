@@ -11,6 +11,7 @@ export enum ConditionalOperator {
 }
 
 export enum GraphqlCollections {
+  DIVISIONS = 'divisions',
   USERS = 'users',
   SCHOOLS = 'schools',
   SCHOOL_STUDENT_ENROLLMENT_REQUESTS = 'schoolStudentEnrollmentRequests',
@@ -18,6 +19,7 @@ export enum GraphqlCollections {
   CLASSES = 'classes',
   STUDENTS = 'students',
   PERSONS = 'persons',
+  PRINCIPALS = 'principals',
   TEACHERS = 'teachers',
 }
 
@@ -28,5 +30,6 @@ export enum GraphqlTypes {
   SCHOOL_STUDENT_ENROLLMENT = 'schoolStudentEnrollment',
   CLASS = 'class',
   STUDENT = 'student',
+  PRINCIPAL = 'principal',
   TEACHER = 'teacher',
 }

@@ -30,6 +30,8 @@ import { UsersComponent } from './users/users.component';
 import { VerifyComponent } from './auth/verify/verify.component';
 import { ClassStudentEnrollmentDetailsComponent } from './schools/classes/class-student-enrollments/class-student-enrollment-details/class-student-enrollment-details.component';
 import { ClassTeacherEnrollmentDetailsComponent } from './schools/classes/class-teacher-enrollments/class-teacher-enrollment-details/class-teacher-enrollment-details.component';
+import { PrincipalsComponent } from './principals/principals.component';
+import { PrincipalDetailsComponent } from './principals/principal-details/principal-details.component';
 
 export const routes: Routes = [
     //main
@@ -79,7 +81,10 @@ export const routes: Routes = [
     { path: 'teachers', title: 'Teachers | SmartSchool', component: TeachersComponent, canActivate: [authGuard] },
     { path: 'teachers/:teacherId', title: 'Teacher Details | SmartSchool', component: TeacherDetailsComponent, canActivate: [authGuard] },
 
-    
+    //principals
+    { path: 'principals', title: 'Principals | SmartSchool', component: PrincipalsComponent, canActivate: [authGuard] },
+    { path: 'principals/:principalId', title: 'Principal Details | SmartSchool', component: PrincipalDetailsComponent, canActivate: [authGuard] },
+
 
     //Wild Card Route for 404 request 
     { path: '**', pathMatch: 'full',   title: '404 | SmartSchool', component: NotFoundComponent },

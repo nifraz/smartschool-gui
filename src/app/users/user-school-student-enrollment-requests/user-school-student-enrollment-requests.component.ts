@@ -43,7 +43,7 @@ export class UserSchoolStudentEnrollmentRequestsComponent extends GridComponent<
     this.router.navigate(['/users', this.userId, 'school-student-enrollment-requests', $event.id]);
   }
 
-  onNewClicked() {
+  onAddNewClicked() {
     this.navigateToCreateRecord();
   }
 

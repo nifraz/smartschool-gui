@@ -12,7 +12,6 @@ import { BaseComponent } from '../../shared/components/base/base.component';
 import { GET_ACADEMIC_YEARS, GET_CLASSES_BY_SCHOOL, GET_PERSONS_CREATED_BY_USER, GET_SCHOOL, GET_STUDENT } from '../../shared/queries';
 import { AuthService } from '../../auth/auth.service';
 import { RecordComponent } from '../../shared/components/record/record.component';
-import { SchoolsService } from '../schools.service';
 import { AddSpacesPipe } from "../../shared/pipes/add-spaces.pipe";
 import { TitleCaseWithSpacePipe } from "../../shared/pipes/title-case-with-space.pipe";
 import { groupBy, groupByToArrays } from '../../shared/functions';
@@ -42,7 +41,6 @@ export class SchoolDetailsComponent extends RecordComponent<SchoolModel> impleme
   groupByToArrays = groupByToArrays;
 
   constructor(
-    private schoolsService: SchoolsService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private matDialog: MatDialog,

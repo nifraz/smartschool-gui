@@ -4,14 +4,19 @@ import { GraphqlDataGridComponent } from '../shared/graphql-data-grid/graphql-da
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { GraphqlRecordFormComponent } from '../shared/graphql-record-form/graphql-record-form.component';
-import { GraphqlService } from '../shared/services/graphql.service';
-import { Sex, SchoolModel, SchoolType, SchoolInput } from '../../../graphql/generated';
+import { enumToArray, GraphqlCollectionResponse, GraphqlService } from '../shared/services/graphql.service';
+import { Sex, SchoolModel, SchoolType, SchoolInput, DivisionModel } from '../../../graphql/generated';
 import { MultiSelectFilterComponent } from '../shared/components/multi-select-filter/multi-select-filter.component';
 import { CustomFloatingFilterComponent } from '../shared/components/custom-floating-filter/custom-floating-filter.component';
-import { SchoolsService } from './schools.service';
 import { BaseComponent } from '../shared/components/base/base.component';
 import { GraphqlCollections, GraphqlTypes } from '../shared/enums';
 import { GridComponent } from '../shared/components/grid/grid.component';
+import { CREATE_SCHOOL } from '../shared/mutations';
+import { GET_DIVISIONS_FILTERED_BY_NAME } from '../shared/queries';
+import { debounceTime, map } from 'rxjs';
+import { AbstractControl } from '@angular/forms';
+import { SCHOOL_PROCESSED } from '../shared/subscriptions';
+import { TypedDocumentNode } from 'apollo-angular';
 
 @Component({
   selector: 'app-schools',
@@ -24,12 +29,11 @@ import { GridComponent } from '../shared/components/grid/grid.component';
 })
 export class SchoolsComponent extends GridComponent<SchoolModel> implements OnInit {
   override loadData(): void {
-    throw new Error('Method not implemented.');
+    this.router.navigate(['/schools']);
   }
   collectionKey: string = GraphqlCollections.SCHOOLS;
-
+  
   constructor(
-    private schoolsService: SchoolsService,
     private graphqlService: GraphqlService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -42,125 +46,12 @@ export class SchoolsComponent extends GridComponent<SchoolModel> implements OnIn
     this.router.navigate([ 'schools', $event.id ]);
   }
 
-  onNewClicked() {
-    // const getDivisions$ = this.graphqlService.getGqlQueryObservable(GET_ACADEMIC_YEARS).pipe(
-    //   map((res: GraphqlCollectionResponse<AcademicYearModel>) => {
-    //       return res.data['academicYears'].items
-    //         .filter(x => x.year && x.year >= new Date().getFullYear())
-    //         .map((x: AcademicYearModel) => ({ value: x.year, label: x.year }));
-    //   })
-    // );
-
-    // const fields = [
-    //   {
-    //     fieldGroupClassName: 'row',
-    //     fieldGroup: [
-    //       {
-    //         className: 'col-12 col-md-12',
-    //         key: 'personId',
-    //         type: 'select',
-    //         props: {
-    //           label: 'Candidate',
-    //           type: 'select',
-    //           placeholder: 'Select Candidate',
-    //           options: [
-    //             {
-    //               value: this.authService.loggedInUser?.person?.id,
-    //               label: `${this.authService.loggedInUser?.person?.fullName} (${this.authService.loggedInUser?.person?.age?.shortString})`
-    //             }
-    //           ],
-    //           required: true,
-    //           disabled: true,
-    //         },
-    //       },
-    //       {
-    //         className: 'col-12 col-md-12',
-    //         key: 'schoolId',
-    //         type: 'select',
-    //         props: {
-    //           label: 'School',
-    //           type: 'select',
-    //           placeholder: 'Select School',
-    //           options: [
-    //             {
-    //               value: this.record?.id,
-    //               label: `${this.record?.name} (${this.record?.address})`
-    //             }
-    //           ],
-    //           required: true,
-    //           disabled: true,
-    //         },
-    //       },
-    //       {
-    //         className: 'col-12 col-md-6',
-    //         key: 'academicYearYear',
-    //         type: 'select',
-    //         props: {
-    //           label: 'Academic Year',
-    //           type: 'select',
-    //           placeholder: 'Select Academic Year',
-    //           options: getAcademicYears$,
-    //           required: true,
-    //         },
-    //         validators: {
-    //           validation: [(x: AbstractControl) => x && x.value ? null : { 'academicYearYear': true }],
-    //         },
-    //       },
-    //       {
-    //         className: 'col-12 col-md-6',
-    //         key: 'grade',
-    //         type: 'select',
-    //         props: {
-    //           label: 'Grade',
-    //           type: 'select',
-    //           placeholder: 'Select Grade',
-    //           options: enumToArray(Grade).map(x => ({ label: x.caption, value: x.value })),
-    //           // options: getGradesBySchool$,
-    //           required: true,
-    //         },
-    //         validators: {
-    //           validation: [(x: AbstractControl) => x && x.value && x.value != 'NONE' ? null : { 'grade': true }],
-    //         },
-    //       },
-          
-    //     ],
-    //   },
-    //   // {
-    //   //   className: 'section-label',
-    //   //   template: '<hr /><div><strong>Address:</strong></div>',
-    //   // },
-  
-    // ];
-
-    // const model: SchoolStudentEnrollmentRequestInput = {
-    //   schoolId: this.record?.id,
-    //   personId: this.authService.loggedInUser?.person?.id,
-    //   academicYearYear: new Date().getFullYear(),
-    //   grade: Grade.Grade1,
-    // };
-
-    // const dialogRef = this.matDialog.open(GraphqlRecordFormComponent<SchoolStudentEnrollmentRequestModel, SchoolStudentEnrollmentRequestInput>, {
-    //   width: '1200px',
-    //   data: {
-    //     title: 'School Student Enrollment Request',
-    //     type: 'SchoolStudentEnrollment',
-    //     model,
-    //     fields,
-    //     recordCreateMutation: CREATE_SCHOOL_STUDENT_ENROLLMENT_REQUEST,
-    //   }
-    // });
-
-    // dialogRef.afterClosed().subscribe(result => {
-    //   // this.router.navigate(['/teachers', this.id]);
-    //   this.loadData();
-    //   //reload data
-    //   console.log(result);
-    // });
-
-    // this.navigateToCreateRecord();
+  onAddNewClicked() {
+    this.openCreateModal();
   }
 
   ngOnInit(): void {
+    this.subscriptions.push(SCHOOL_PROCESSED);
     console.log('schools');
     this.activatedRoute.data.subscribe(data => {
       if (data['isCreate']) {
@@ -170,18 +61,154 @@ export class SchoolsComponent extends GridComponent<SchoolModel> implements OnIn
   }
 
   openCreateModal(): void {
+    const getDivisionsFilteredByName$ = (filter: string) => this.graphqlService.getGqlQueryObservable(GET_DIVISIONS_FILTERED_BY_NAME, { filter }).pipe(
+      debounceTime(300),
+      map((res: GraphqlCollectionResponse<DivisionModel>) => {
+        return res.data[GraphqlCollections.DIVISIONS].items
+        .map((x: DivisionModel) => ({ value: x.id, label: `${x.label}` }));
+      })
+    );
+
+    const fields = [
+      {
+        fieldGroupClassName: 'row',
+        fieldGroup: [
+          {
+            className: 'col-12 col-md-12',
+            key: 'divisionId',
+            type: 'autocomplete',
+            props: {
+              label: 'Division',
+              type: 'autocomplete',
+              placeholder: 'Enter Division',
+              filter: (search: string) => getDivisionsFilteredByName$(search),
+              required: true,
+            },
+            validators: {
+              validation: [(x: AbstractControl) => x && x.value && x.value.value ? null : { 'divisionId': true }],
+            },
+          },
+          {
+            className: 'col-12 col-md-12',
+            key: 'name',
+            type: 'input',
+            props: {
+              label: 'Name',
+              type: 'text',
+              placeholder: 'Enter Name',
+              required: true,
+            },
+          },
+          {
+            className: 'col-12 col-md-6',
+            key: 'censusNo',
+            type: 'input',
+            props: {
+              label: 'Census No',
+              type: 'text',
+              placeholder: 'Enter Census No',
+              required: true,
+            },
+          },
+          {
+            className: 'col-12 col-md-6',
+            key: 'type',
+            type: 'select',
+            props: {
+              label: 'Type',
+              type: 'select',
+              placeholder: 'Select Type',
+              options: enumToArray(SchoolType).map(x => ({ label: x.caption, value: x.value })),
+              required: true,
+            },
+          },
+          {
+            className: 'col-12 col-md-6',
+            key: 'location',
+            type: 'input',
+            props: {
+              label: 'Location',
+              type: 'text',
+              placeholder: 'Enter Location',
+              required: true,
+            },
+          },
+          // {
+          //   className: 'col-12 col-md-6',
+          //   key: 'dateOfBirth',
+          //   type: 'datepicker',
+          //   props: {
+          //     label: 'Date of Birth',
+          //     type: 'datepicker',
+          //     placeholder: 'Enter Date of Birth',
+          //     required: true,
+          //   },
+          // },
+          {
+            className: 'col-12 col-md-6',
+            key: 'phoneNo',
+            type: 'input',
+            props: {
+              label: 'Phone No',
+              type: 'phone',
+              placeholder: 'Enter Phone No',
+              required: false,
+            },
+          },
+          {
+            className: 'col-12 col-md-12',
+            key: 'address',
+            type: 'input',
+            props: {
+              label: 'address',
+              type: 'textarea',
+              placeholder: 'Enter Address',
+              required: false,
+            },
+          },
+          {
+            className: 'col-12 col-md-6',
+            key: 'email',
+            type: 'input',
+            props: {
+              label: 'Email',
+              type: 'email',
+              placeholder: 'Enter Email',
+              required: false,
+            },
+          },
+        ],
+      },
+      // {
+      //   className: 'section-label',
+      //   template: '<hr /><div><strong>Address:</strong></div>',
+      // },
+  
+    ];
+
+    const model: SchoolInput = {
+      censusNo: '',
+      name: '',
+      location: '',
+      address: '',
+      email: '',
+      phoneNo: '',
+      type: SchoolType.Type1Ab,
+      divisionId: 0,
+    };
+
     const dialogRef = this.matDialog.open(GraphqlRecordFormComponent<SchoolInput>, {
       width: '1200px',
       data: {
-        collection: GraphqlCollections.SCHOOLS,
-        type: GraphqlTypes.SCHOOL,
-      },
+        title: 'School',
+        model,
+        fields,
+        recordCreateMutation: CREATE_SCHOOL,
+      }
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      //reload data
-      this.router.navigate(['/schools']);
-      console.log(result);
+      this.loadData();
     });
   }
   
@@ -211,12 +238,12 @@ export class SchoolsComponent extends GridComponent<SchoolModel> implements OnIn
     { 
       field: "email",
       headerName: "Email",
-      filter: "agDateColumnFilter",
+      filter: "agTextColumnFilter",
     },
     { 
       field: "phoneNo",
       headerName: "Phone No",
-      filter: "agDateColumnFilter",
+      filter: "agTextColumnFilter",
     },
     { 
       field: "type",

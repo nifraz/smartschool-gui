@@ -31,3 +31,19 @@ export const CREATE_PERSON = gql`
     }
   }
 `;
+
+export const CREATE_PRINCIPAL = gql`
+  mutation createPrincipal($input: PrincipalInput!) {
+    createPrincipal(input: $input) {
+      id
+    }
+  }
+`;
+
+export const CREATE_SCHOOL = gql`
+  mutation createSchool($input: SchoolInput!) {
+    createSchool(input: $input) {
+      id
+    }
+  }
+`;

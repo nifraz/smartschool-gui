@@ -9,7 +9,7 @@ import { Subject } from 'rxjs';
   styleUrl: './base.component.scss'
 })
 export abstract class BaseComponent implements OnDestroy {
-  title: string = '';
+  title?: string;
 
   @Input() languageCode: string = 'en';
 

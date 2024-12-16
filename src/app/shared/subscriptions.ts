@@ -1,5 +1,14 @@
 import { gql } from "apollo-angular";
 
+export const SCHOOL_PROCESSED = gql`
+    subscription schoolProcessed {
+        schoolProcessed {
+            id
+            name
+        }
+    }
+`;
+
 export const SCHOOL_STUDENT_ENROLLMENT_REQUEST_PROCESSED = gql`
     subscription schoolStudentEnrollmentRequestProcessed {
         schoolStudentEnrollmentRequestProcessed {
@@ -31,6 +40,15 @@ export const CLASS_STUDENT_ENROLLMENT_PROCESSED = gql`
             schoolId
             studentId
             schoolStudentEnrollmentRequestId
+        }
+    }
+`;
+
+export const PRINCIPAL_PROCESSED = gql`
+    subscription principalProcessed {
+        principalProcessed {
+            id
+            fullName
         }
     }
 `;

@@ -11,14 +11,16 @@ import {
   RowClickedEvent,
   SortModelItem,
 } from 'ag-grid-community'; // Column Definition Type Interface
-import { Observable, catchError, map, of } from 'rxjs';
+import { Observable, catchError, map, of, takeUntil } from 'rxjs';
 import { GraphqlService, RemoteGridApi, capitalizeFirstLetter, formatCamelCaseText } from '../services/graphql.service';
 import { RemoteGridBindingDirective } from '../directives/remote-grid-binding.directive';
 import { ISimpleFilterModelType } from 'ag-grid-community/dist/types/core/filter/provided/simpleFilter';
-import { gql, TypedDocumentNode } from 'apollo-angular';
+import { gql, MutationResult, TypedDocumentNode } from 'apollo-angular';
 import { ConditionalOperator, AgGridFilterType } from '../enums';
 import { AgGridFilter } from '../models';
 import { DocumentNode } from 'graphql';
+import { BaseComponent } from '../components/base/base.component';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-graphql-data-grid',
@@ -32,12 +34,12 @@ import { DocumentNode } from 'graphql';
   templateUrl: './graphql-data-grid.component.html',
   styleUrl: './graphql-data-grid.component.scss'
 })
-export class GraphqlDataGridComponent<T extends object> implements OnInit, RemoteGridApi<T> {
+export class GraphqlDataGridComponent<T extends object> extends BaseComponent implements OnInit, RemoteGridApi<T> {
   themeClass: string = "ag-theme-material";
   
-  @Input()title?: string;
   @Input()collection: string = '';
   @Input()colDefs: ColDef<T>[] = [];
+  @Input()subscriptions: TypedDocumentNode<any, any>[] = [];
   
   @Input()initialFilterModel?: {[key: string]: AgGridFilter};
   @Input()initialSortModel?: {sortModel: SortModelItem[]};
@@ -75,10 +77,23 @@ export class GraphqlDataGridComponent<T extends object> implements OnInit, Remot
 
   constructor(
     private graphqlService: GraphqlService,
-  ) {}
+    private toastr: ToastrService,
+  ) {
+    super();
+  }
   
   ngOnInit(): void {
     this.title = this.title ?? `${formatCamelCaseText(this.collection)} Data`;
+    this.subscriptions.forEach(x => {
+      this.graphqlService.getGqlSubscriptionObservable(x)
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe(
+        (res: MutationResult<any>) => {
+          this.toastr.warning(`Grid data updated.`, this.title);
+          this.onRefresh();
+        }
+      );
+    });
   }
 
   saveGridState(): void {
@@ -115,7 +130,7 @@ export class GraphqlDataGridComponent<T extends object> implements OnInit, Remot
     this.gridApi?.resetColumnState();
   }
 
-  onNew(): void {
+  onAddNewClicked(): void {
     this.addNewClicked.emit();
   }
 

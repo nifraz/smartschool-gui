@@ -68,6 +68,23 @@
                     </div>
                   </li>
                 }
+
+                @if (authService.loggedInUser && (authService.loggedInUser.staffId || authService.loggedInUser.teacherId || authService.loggedInUser.principalId)) {
+                  <li class="nav-item">
+                    <div class="btn-group">
+                      <a class="nav-link" routerLink="/principals" routerLinkActive="active">Principals</a>
+                      <a class="nav-link dropdown-toggle dropdown-toggle-split ps-1 pe-2" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span class="visually-hidden">Toggle Dropdown</span>
+                      </a>
+                      <ul class="dropdown-menu bg-dark border-0 mt-3 py-0 shadow">
+                        <li><a class="dropdown-item nav-link disabled" aria-disabled="true" href="#">Registration</a></li>
+                        <li><a class="dropdown-item nav-link" href="#">Enrollments</a></li>
+                        <li><a class="dropdown-item nav-link" href="#">Attendance</a></li>
+                        <li><a class="dropdown-item nav-link" href="#">Paysheet</a></li>
+                      </ul>
+                    </div>
+                  </li>
+                }
             </ul>
 
             <!-- <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">

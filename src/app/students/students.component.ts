@@ -43,7 +43,7 @@ export class StudentsComponent extends GridComponent<StudentModel> implements On
     // this.router.navigateByUrl('/students/1');
   }
 
-  onNewClicked() {
+  onAddNewClicked() {
     this.navigateToCreateStudent();
   }
 
