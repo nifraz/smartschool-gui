@@ -19,6 +19,7 @@ import { AbstractControl } from '@angular/forms';
 import { map } from 'rxjs';
 import { GraphqlCollections, GraphqlTypes } from '../../shared/enums';
 import { CREATE_SCHOOL_STUDENT_ENROLLMENT_REQUEST } from '../../shared/mutations';
+import { SchoolReportComponent } from '../school-report/school-report.component';
 
 @Component({
   selector: 'app-school-details',
@@ -107,6 +108,25 @@ export class SchoolDetailsComponent extends RecordComponent<SchoolModel> impleme
   editRecord() {
     this.router.navigate(['/schools', this.id, 'edit']);
     // this.openRecordFormModal();
+  }
+
+  viewReport() {
+    const inputDefs = {};
+    const dialogRef = this.matDialog.open(SchoolReportComponent, {
+      width: '1200px',
+      data: {
+        collection: GraphqlCollections.SCHOOLS,
+        type: GraphqlTypes.SCHOOL,
+        inputDefs,
+        id: this.id,
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.router.navigate(['/schools', this.id]);
+      //reload data
+      console.log(result);
+    });
   }
 
   deleteRecord() {

@@ -19,6 +19,12 @@
                             Edit
                         </button>
                     }
+                    @if (authService.loggedInUser) {
+                        <button class="btn btn-sm btn-primary me-2" (click)="viewReport()">
+                            <i class="bi bi-file-earmark-text"></i>
+                            School Report
+                        </button>
+                    }
                     <!-- @if (authService.loggedInUser?.principalId) {
                         <button class="btn btn-sm btn-danger me-2" (click)="deleteRecord()">
                             <i class="bi bi-trash"></i>

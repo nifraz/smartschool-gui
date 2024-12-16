@@ -1,0 +1,227 @@
+<mat-progress-bar *ngIf="isLoading" mode="query"></mat-progress-bar>
+
+<div class="m-3">
+    <div class="modal-header p-2 d-flex justify-content-between">
+        <h2 class="modal-title">School Report</h2>
+        <button type="button" class="btn btn-secondary" aria-label="Close" (click)="closeModal()">
+            <span>&times;</span>
+        </button>
+    </div>
+    <mat-dialog-content>
+
+      <mat-form-field>
+        <mat-label>Enter a date range</mat-label>
+        <mat-date-range-input [rangePicker]="picker">
+          <input matStartDate placeholder="Start date" #startDate>
+          <input matEndDate placeholder="End date" #endDate (dateChange)="onDateRangeChange(startDate.value, endDate.value)">
+        </mat-date-range-input>
+        <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+      </mat-form-field>
+      
+      <div class="container mt-5" id="schoolReport" *ngIf="report">
+            <!-- Report Header -->
+            <div class="d-flex justify-content-between align-items-center border-bottom pb-3 mb-4">
+              <div>
+                <h1 class="h4">School Report</h1>
+                <p class="mb-0">Generated on: {{ currentDate }}</p>
+              </div>
+              <img src="https://via.placeholder.com/100x100" alt="School Logo" class="img-fluid">
+            </div>
+          
+            <!-- General Information -->
+            <div class="mb-4">
+              <h2 class="h5">General Information</h2>
+              <table class="table table-bordered">
+                <tbody>
+                  <tr>
+                    <th>Name</th>
+                    <td>{{ report.school?.name }}</td>
+                  </tr>
+                  <tr>
+                    <th>Census No</th>
+                    <td>{{ report.school?.censusNo }}</td>
+                  </tr>
+                  <tr>
+                    <th>Phone No</th>
+                    <td>{{ report.school?.phoneNo }}</td>
+                  </tr>
+                  <tr>
+                    <th>Email</th>
+                    <td>{{ report.school?.email }}</td>
+                  </tr>
+                  <tr>
+                    <th>Address</th>
+                    <td>{{ report.school?.location }}</td>
+                  </tr>
+                  <tr>
+                    <th>Division</th>
+                    <td>{{ report.school?.division?.label }}</td>
+                  </tr>
+                  <tr>
+                    <th>Principal</th>
+                    <td>{{ report.principal?.fullName }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          
+            <!-- Key Metrics -->
+            <div class="mb-4">
+              <h2 class="h5">Key Metrics
+                @if (startTime && endTime) {
+                  ({{startDate.value}} - {{endDate.value}})
+                }
+              </h2>
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>Metric</th>
+                    <th>Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Total No of Student Enrollment Requests</td>
+                    <td>{{ report.noOfStudentEnrollmentRequests }}</td>
+                  </tr>
+                  <tr>
+                    <td>No of Approved Student Enrollment Requests</td>
+                    <td>{{ report.noOfApprovedStudentEnrollmentRequests }}</td>
+                  </tr>
+                  <tr>
+                    <td>No of Rejected Student Enrollment Requests</td>
+                    <td>{{ report.noOfRejectedStudentEnrollmentRequests }}</td>
+                  </tr>
+                  <tr>
+                    <td>No of Cancelled Student Enrollment Requests</td>
+                    <td>{{ report.noOfCancelledStudentEnrollmentRequests }}</td>
+                  </tr>
+
+                  <tr>
+                    <td>Total No of Student Enrollments</td>
+                    <td>{{ report.noOfStudentEnrollments }}</td>
+                  </tr>
+                  <tr>
+                    <td>No of Active Student Enrollments</td>
+                    <td>{{ report.noOfActiveStudentEnrollments }}</td>
+                  </tr>
+                  <tr>
+                    <td>No of Left Student Enrollments</td>
+                    <td>{{ report.noOfLeftStudentEnrollments }}</td>
+                  </tr>
+                  <tr>
+                    <td>No of Completed Student Enrollments</td>
+                    <td>{{ report.noOfCompletedStudentEnrollments }}</td>
+                  </tr>
+                  <tr>
+                    <td>No of Cancelled Student Enrollments</td>
+                    <td>{{ report.noOfCancelledStudentEnrollments }}</td>
+                  </tr>
+
+                  <tr>
+                    <td>Total No of Teacher Enrollments</td>
+                    <td>{{ report.noOfTeacherEnrollments }}</td>
+                  </tr>
+                  <tr>
+                    <td>No of Active Teacher Enrollments</td>
+                    <td>{{ report.noOfActiveTeacherEnrollments }}</td>
+                  </tr>
+                  <tr>
+                    <td>No of Retired Teacher Enrollments</td>
+                    <td>{{ report.noOfRetiredTeacherEnrollments }}</td>
+                  </tr>
+                  <tr>
+                    <td>No of Resigned Teacher Enrollments</td>
+                    <td>{{ report.noOfResignedTeacherEnrollments }}</td>
+                  </tr>
+                  <tr>
+                    <td>No of Cancelled Teacher Enrollments</td>
+                    <td>{{ report.noOfCancelledTeacherEnrollments }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          
+            <!-- Performance Overview -->
+            <div class="mb-4">
+              <h2 class="h5">Performance Overview</h2>
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>Year</th>
+                    <th>Performance Index</th>
+                    <th>Average Score</th>
+                    <th>Grade</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let performance of school.performance">
+                    <td>{{ performance.year }}</td>
+                    <td>{{ performance.index }}</td>
+                    <td>{{ performance.averageScore }}</td>
+                    <td>{{ performance.grade }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          
+            <!-- Financial Overview -->
+            <div class="mb-4">
+              <h2 class="h5">Financial Overview</h2>
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>Category</th>
+                    <th>Amount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Total Funds</td>
+                    <td>${{ school.financials.totalFunds | number }}</td>
+                  </tr>
+                  <tr>
+                    <td>Grants</td>
+                    <td>${{ school.financials.grants | number }}</td>
+                  </tr>
+                  <tr>
+                    <td>Expenditures</td>
+                    <td>${{ school.financials.expenditures | number }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          
+            <!-- Events Summary -->
+            <div class="mb-4">
+              <h2 class="h5">Events Summary</h2>
+              <ul>
+                <li *ngFor="let event of school.events">
+                  <strong>{{ event.name }}</strong> - {{ event.date | date }} ({{ event.description }})
+                </li>
+              </ul>
+            </div>
+          
+            <!-- Notable Achievements -->
+            <div class="mb-4">
+              <h2 class="h5">Notable Achievements</h2>
+              <ul>
+                <li *ngFor="let achievement of school.achievements">
+                  {{ achievement }}
+                </li>
+              </ul>
+            </div>
+        </div>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+      <!-- Print Button -->
+      <button mat-button class="btn btn-primary" (click)="printReport('schoolReport')">
+        <i class="bi bi-printer"></i> Print Report
+      </button>
+      <!-- <button mat-dialog-close>Cancel</button> -->
+      <!-- The mat-dialog-close directive optionally accepts a value as a result for the dialog. -->
+      <!-- <button mat-button [mat-dialog-close]="true">Delete</button> -->
+    </mat-dialog-actions>
+</div>

@@ -1,0 +1,69 @@
+<div class="container mt-5" id="studentReport">
+  <!-- Report Header -->
+  <div
+    class="d-flex justify-content-between align-items-center border-bottom pb-3 mb-4"
+  >
+    <div>
+      <h1 class="h4">Student Report</h1>
+      <p class="mb-0">Generated on: {{ currentDate }}</p>
+    </div>
+    <img
+      src="https://via.placeholder.com/100x100"
+      alt="Student Profile"
+      class="img-fluid"
+    />
+  </div>
+
+  <!-- Student Information -->
+  <div class="mb-4">
+    <h2 class="h5">Student Information</h2>
+    <table class="table table-bordered">
+      <tr>
+        <th>Name</th>
+        <td>{{ student.fullName }}</td>
+      </tr>
+      <tr>
+        <th>Age</th>
+        <td>{{ student.age }}</td>
+      </tr>
+      <tr>
+        <th>Class</th>
+        <td>{{ student.class }}</td>
+      </tr>
+      <tr>
+        <th>Roll Number</th>
+        <td>{{ student.rollNumber }}</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- Academic Performance -->
+  <div class="mb-4">
+    <h2 class="h5">Academic Performance</h2>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Subject</th>
+          <th>Marks Obtained</th>
+          <th>Total Marks</th>
+          <th>Percentage</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let subject of student.performance">
+          <td>{{ subject.name }}</td>
+          <td>{{ subject.marks }}</td>
+          <td>{{ subject.totalMarks }}</td>
+          <td>
+            {{ (subject.marks / subject.totalMarks) * 100 | number : "1.0-2" }}%
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Print Button -->
+  <button class="btn btn-primary" (click)="printReport('studentReport')">
+    <i class="bi bi-printer"></i> Print Report
+  </button>
+</div>

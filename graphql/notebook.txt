@@ -1,8 +1,15 @@
-      fullName: '',
-      shortName: '',
-      dateOfBirth: '',
-      sex: Sex.Male,
-      address: '',
-      mobileNo: '',
-      bcNo: '',
-      nicNo: '',
+public long NoOfStudentEnrollmentRequests { get; set; }
+public long NoOfApprovedStudentEnrollmentRequests { get; set; }
+public long NoOfRejectedStudentEnrollmentRequests { get; set; }
+
+public long NoOfStudentEnrollments { get; set; }
+public long NoOfActiveStudentEnrollments { get; set; }
+public long NoOfLeftStudentEnrollments { get; set; }
+public long NoOfCompletedStudentEnrollments { get; set; }
+public long NoOfCancelledStudentEnrollments { get; set; }
+
+public long NoOfTeacherEnrollments { get; set; }
+public long NoOfActiveTeacherEnrollments { get; set; }
+public long NoOfRetiredTeacherEnrollments { get; set; }
+public long NoOfResignedTeacherEnrollments { get; set; }
+public long NoOfCancelledTeacherEnrollments { get; set; }

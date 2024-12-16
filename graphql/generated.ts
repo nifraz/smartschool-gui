@@ -557,15 +557,6 @@ export type DistrictFilterInput = {
   zones?: InputMaybe<ListFilterInputTypeOfZoneFilterInput>;
 };
 
-export type DistrictSortInput = {
-  id?: InputMaybe<SortEnumType>;
-  name?: InputMaybe<SortEnumType>;
-  province?: InputMaybe<ProvinceSortInput>;
-  provinceId?: InputMaybe<SortEnumType>;
-  sinhalaName?: InputMaybe<SortEnumType>;
-  tamilName?: InputMaybe<SortEnumType>;
-};
-
 export type Division = {
   __typename?: 'Division';
   id: Scalars['Int']['output'];
@@ -614,15 +605,6 @@ export type DivisionModelSortInput = {
   name?: InputMaybe<SortEnumType>;
   sinhalaName?: InputMaybe<SortEnumType>;
   tamilName?: InputMaybe<SortEnumType>;
-};
-
-export type DivisionSortInput = {
-  id?: InputMaybe<SortEnumType>;
-  name?: InputMaybe<SortEnumType>;
-  sinhalaName?: InputMaybe<SortEnumType>;
-  tamilName?: InputMaybe<SortEnumType>;
-  zone?: InputMaybe<ZoneSortInput>;
-  zoneId?: InputMaybe<SortEnumType>;
 };
 
 /** A segment of a collection. */
@@ -1639,6 +1621,44 @@ export type PrincipalModelFilterInput = {
   shortName?: InputMaybe<StringOperationFilterInput>;
 };
 
+export type PrincipalModelSortInput = {
+  address?: InputMaybe<SortEnumType>;
+  age?: InputMaybe<AgeModelSortInput>;
+  bcNo?: InputMaybe<SortEnumType>;
+  createdTime?: InputMaybe<SortEnumType>;
+  createdUser?: InputMaybe<UserModelSortInput>;
+  createdUserId?: InputMaybe<SortEnumType>;
+  dateOfBirth?: InputMaybe<SortEnumType>;
+  deletedTime?: InputMaybe<SortEnumType>;
+  deletedUser?: InputMaybe<UserModelSortInput>;
+  deletedUserId?: InputMaybe<SortEnumType>;
+  email?: InputMaybe<SortEnumType>;
+  fullName?: InputMaybe<SortEnumType>;
+  id?: InputMaybe<SortEnumType>;
+  image?: InputMaybe<SortEnumType>;
+  label?: InputMaybe<SortEnumType>;
+  lastModifiedTime?: InputMaybe<SortEnumType>;
+  lastModifiedUser?: InputMaybe<UserModelSortInput>;
+  lastModifiedUserId?: InputMaybe<SortEnumType>;
+  mobileNo?: InputMaybe<SortEnumType>;
+  nicNo?: InputMaybe<SortEnumType>;
+  nickname?: InputMaybe<SortEnumType>;
+  notes?: InputMaybe<SortEnumType>;
+  passportNo?: InputMaybe<SortEnumType>;
+  sex?: InputMaybe<SortEnumType>;
+  shortName?: InputMaybe<SortEnumType>;
+};
+
+/** A segment of a collection. */
+export type PrincipalsCollectionSegment = {
+  __typename?: 'PrincipalsCollectionSegment';
+  /** A flattened list of the items. */
+  items?: Maybe<Array<PrincipalModel>>;
+  /** Information to aid in pagination. */
+  pageInfo: CollectionSegmentInfo;
+  totalCount: Scalars['Int']['output'];
+};
+
 export type Province = {
   __typename?: 'Province';
   districts: Array<District>;
@@ -1656,13 +1676,6 @@ export type ProvinceFilterInput = {
   or?: InputMaybe<Array<ProvinceFilterInput>>;
   sinhalaName?: InputMaybe<StringOperationFilterInput>;
   tamilName?: InputMaybe<StringOperationFilterInput>;
-};
-
-export type ProvinceSortInput = {
-  id?: InputMaybe<SortEnumType>;
-  name?: InputMaybe<SortEnumType>;
-  sinhalaName?: InputMaybe<SortEnumType>;
-  tamilName?: InputMaybe<SortEnumType>;
 };
 
 export type Qualification = {
@@ -1692,7 +1705,10 @@ export type Query = {
   personRelationship?: Maybe<PersonRelationshipModel>;
   personRelationships?: Maybe<PersonRelationshipsCollectionSegment>;
   persons?: Maybe<PersonsCollectionSegment>;
+  principal?: Maybe<PrincipalModel>;
+  principals?: Maybe<PrincipalsCollectionSegment>;
   school?: Maybe<SchoolModel>;
+  schoolReport: SchoolReportModel;
   schoolStudentEnrollment?: Maybe<SchoolStudentEnrollmentModel>;
   schoolStudentEnrollmentRequest?: Maybe<SchoolStudentEnrollmentRequestModel>;
   schoolStudentEnrollmentRequests?: Maybe<SchoolStudentEnrollmentRequestsCollectionSegment>;
@@ -1762,8 +1778,26 @@ export type QueryPersonsArgs = {
 };
 
 
+export type QueryPrincipalArgs = {
+  id: Scalars['Long']['input'];
+};
+
+
+export type QueryPrincipalsArgs = {
+  order?: InputMaybe<Array<PrincipalModelSortInput>>;
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  take?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<PrincipalModelFilterInput>;
+};
+
+
 export type QuerySchoolArgs = {
   id: Scalars['Long']['input'];
+};
+
+
+export type QuerySchoolReportArgs = {
+  input: SchoolReportInput;
 };
 
 
@@ -1939,7 +1973,7 @@ export type SchoolModel = {
   deletedTime?: Maybe<Scalars['DateTime']['output']>;
   deletedUser?: Maybe<UserModel>;
   deletedUserId?: Maybe<Scalars['Long']['output']>;
-  division?: Maybe<Division>;
+  division?: Maybe<DivisionModel>;
   divisionId?: Maybe<Scalars['Int']['output']>;
   email?: Maybe<Scalars['String']['output']>;
   id?: Maybe<Scalars['Long']['output']>;
@@ -1970,7 +2004,7 @@ export type SchoolModelFilterInput = {
   deletedTime?: InputMaybe<DateTimeOperationFilterInput>;
   deletedUser?: InputMaybe<UserModelFilterInput>;
   deletedUserId?: InputMaybe<LongOperationFilterInput>;
-  division?: InputMaybe<DivisionFilterInput>;
+  division?: InputMaybe<DivisionModelFilterInput>;
   divisionId?: InputMaybe<IntOperationFilterInput>;
   email?: InputMaybe<StringOperationFilterInput>;
   id?: InputMaybe<LongOperationFilterInput>;
@@ -2000,7 +2034,7 @@ export type SchoolModelSortInput = {
   deletedTime?: InputMaybe<SortEnumType>;
   deletedUser?: InputMaybe<UserModelSortInput>;
   deletedUserId?: InputMaybe<SortEnumType>;
-  division?: InputMaybe<DivisionSortInput>;
+  division?: InputMaybe<DivisionModelSortInput>;
   divisionId?: InputMaybe<SortEnumType>;
   email?: InputMaybe<SortEnumType>;
   id?: InputMaybe<SortEnumType>;
@@ -2109,6 +2143,35 @@ export type SchoolPrincipalEnrollmentModelFilterInput = {
   schoolId?: InputMaybe<LongOperationFilterInput>;
   status?: InputMaybe<NullableOfEnrollmentStatusOperationFilterInput>;
   time?: InputMaybe<DateTimeOperationFilterInput>;
+};
+
+export type SchoolReportInput = {
+  endTime?: InputMaybe<Scalars['DateTime']['input']>;
+  id: Scalars['Long']['input'];
+  startTime?: InputMaybe<Scalars['DateTime']['input']>;
+};
+
+export type SchoolReportModel = {
+  __typename?: 'SchoolReportModel';
+  currentDate: Scalars['DateTime']['output'];
+  endTime?: Maybe<Scalars['DateTime']['output']>;
+  noOfActiveStudentEnrollments: Scalars['Long']['output'];
+  noOfActiveTeacherEnrollments: Scalars['Long']['output'];
+  noOfApprovedStudentEnrollmentRequests: Scalars['Long']['output'];
+  noOfCancelledStudentEnrollmentRequests: Scalars['Long']['output'];
+  noOfCancelledStudentEnrollments: Scalars['Long']['output'];
+  noOfCancelledTeacherEnrollments: Scalars['Long']['output'];
+  noOfCompletedStudentEnrollments: Scalars['Long']['output'];
+  noOfLeftStudentEnrollments: Scalars['Long']['output'];
+  noOfRejectedStudentEnrollmentRequests: Scalars['Long']['output'];
+  noOfResignedTeacherEnrollments: Scalars['Long']['output'];
+  noOfRetiredTeacherEnrollments: Scalars['Long']['output'];
+  noOfStudentEnrollmentRequests: Scalars['Long']['output'];
+  noOfStudentEnrollments: Scalars['Long']['output'];
+  noOfTeacherEnrollments: Scalars['Long']['output'];
+  principal?: Maybe<PrincipalModel>;
+  school?: Maybe<SchoolModel>;
+  startTime?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export type SchoolStudentEnrollment = {
@@ -2419,6 +2482,8 @@ export type SchoolStudentEnrollmentsCollectionSegment = {
 export type SchoolSubscription = {
   __typename?: 'SchoolSubscription';
   classStudentEnrollmentProcessed: ClassStudentEnrollmentModel;
+  principalProcessed: PrincipalModel;
+  schoolProcessed: SchoolModel;
   schoolStudentEnrollmentProcessed: SchoolStudentEnrollmentModel;
   schoolStudentEnrollmentRequestProcessed: SchoolStudentEnrollmentRequestModel;
 };
@@ -3263,13 +3328,4 @@ export type ZoneFilterInput = {
   or?: InputMaybe<Array<ZoneFilterInput>>;
   sinhalaName?: InputMaybe<StringOperationFilterInput>;
   tamilName?: InputMaybe<StringOperationFilterInput>;
-};
-
-export type ZoneSortInput = {
-  district?: InputMaybe<DistrictSortInput>;
-  districtId?: InputMaybe<SortEnumType>;
-  id?: InputMaybe<SortEnumType>;
-  name?: InputMaybe<SortEnumType>;
-  sinhalaName?: InputMaybe<SortEnumType>;
-  tamilName?: InputMaybe<SortEnumType>;
 };

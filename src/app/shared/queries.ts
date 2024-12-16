@@ -282,6 +282,48 @@ export const GET_SCHOOL = gql`
   ${AGE_FIELDS}
 `;
 
+export const GET_SCHOOL_REPORT = gql`
+  query getSchoolReport($input: SchoolReportInput!) {
+    schoolReport(input: $input) {
+      currentDate
+      endTime
+      noOfActiveStudentEnrollments
+      noOfActiveTeacherEnrollments
+      noOfApprovedStudentEnrollmentRequests
+      noOfCancelledStudentEnrollments
+      noOfCancelledStudentEnrollmentRequests
+      noOfCancelledTeacherEnrollments
+      noOfCompletedStudentEnrollments
+      noOfLeftStudentEnrollments
+      noOfRejectedStudentEnrollmentRequests
+      noOfResignedTeacherEnrollments
+      noOfRetiredTeacherEnrollments
+      noOfStudentEnrollmentRequests
+      noOfStudentEnrollments
+      noOfTeacherEnrollments
+      principal {
+        id
+        fullName
+      }
+      school {
+        id
+        label
+        censusNo
+        name
+        location
+        address
+        email
+        phoneNo
+        type
+        division {
+          label
+        }
+      }
+      startTime
+    }
+  }
+`;
+
 // export const GET_CLASS = gql`
 //   query getClass($id: Long!) {
 //     class(id: $id) {

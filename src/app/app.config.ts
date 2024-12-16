@@ -19,13 +19,25 @@ import { createClient } from 'graphql-ws';
 import { AutocompleteTypeComponent } from './shared/components/autocomplete-type/autocomplete-type.component';
 import { provideNativeDateAdapter } from '@angular/material/core';
 
+export const MY_FORMATS = {
+  parse: {
+    dateInput: 'LL',
+  },
+  display: {
+    dateInput: 'DD-MM-YYYY',
+    monthYearLabel: 'YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'YYYY',
+  },
+};
+
 export const appConfig: ApplicationConfig = {
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     provideRouter(routes), 
     provideClientHydration(), 
     provideAnimationsAsync(),
-    provideNativeDateAdapter(),
+    provideNativeDateAdapter(MY_FORMATS),
     importProvidersFrom(
       HttpClientModule,
       ToastrModule.forRoot(
